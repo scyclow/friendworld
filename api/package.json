@@ -5,12 +5,12 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "pg": "postgraphile -c \"postgres:///friendworld\" --schema friendworld --disable-default-mutations --simple-collections omit --enhance-graphiql --jwt-secret blah --jwt-token-identifier friendworld_private.jwt_token --default-role friendworld_anonymous  --append-plugins @graphile-contrib/pg-simplify-inflector --watch"
+    "pg": "postgraphile -c \"postgres:///friendworld\" --schema friendworld --disable-default-mutations --simple-collections both --enhance-graphiql --jwt-secret blah --jwt-token-identifier friendworld_private.jwt_token --default-role friendworld_anonymous  --append-plugins @graphile-contrib/pg-simplify-inflector --watch"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@graphile-contrib/pg-simplify-inflector": "^3.0.0",
+    "@graphile-contrib/pg-simplify-inflector": "https://github.com/graphile-contrib/pg-simplify-inflector.git",
     "postgraphile": "^4.2.0"
   }
 }

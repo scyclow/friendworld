@@ -33,8 +33,9 @@ grant friendworld_anonymous to friendworld_root;
 create role friendworld_user;
 grant friendworld_user to friendworld_root;
 
-alter default privileges revoke execute on functions from public;
+-- alter default privileges revoke execute on functions from public;
 grant usage on schema friendworld to friendworld_anonymous, friendworld_user;
+grant usage on schema friendworld_private to friendworld_anonymous, friendworld_user;
 
 
 -------------------
@@ -81,6 +82,8 @@ comment on column friendworld.users.updated_at is E'@omit';
 
 grant select on table friendworld.users to friendworld_anonymous, friendworld_user;
 grant update, delete on table friendworld.users to friendworld_user;
+grant select on table friendworld_private.accounts to friendworld_anonymous, friendworld_user;
+grant update, delete on table friendworld_private.accounts to friendworld_user;
 
 alter table friendworld.users enable row level security;
 create policy select_users on friendworld.users for select using (true);
@@ -88,8 +91,8 @@ create policy select_users on friendworld.users for select using (true);
 create policy update_users on friendworld.users for update to friendworld_user
   using (id = nullif(current_setting('jwt.claims.user_id', true), '')::uuid);
 
--- create policy delete_users on friendworld.users for delete to friendworld_user
---   using (id = nullif(current_setting('jwt.claims.user_id', true), '')::uuid);
+create policy delete_users on friendworld.users for delete to friendworld_user
+  using (id = nullif(current_setting('jwt.claims.user_id', true), '')::uuid);
 
 
 -- threads
@@ -106,10 +109,12 @@ create trigger thread_updated_at before update
   execute procedure friendworld_private.set_updated_at();
 
 grant select on table friendworld.threads to friendworld_anonymous, friendworld_user;
-grant update, delete on table friendworld.threads to friendworld_user;
+grant insert, update, delete on table friendworld.threads to friendworld_user;
 
-alter table friendworld.threads enable row level security;
-create policy select_threads on friendworld.threads for select using (true);
+-- alter table friendworld.threads enable row level security;
+-- create policy select_threads on friendworld.threads for select using (true);
+-- create policy update_users on friendworld.threads for update to friendworld_user
+--   using (id = nullif(current_setting('jwt.claims.user_id', true), '')::uuid);
 
 
 -- posts
@@ -128,11 +133,12 @@ create trigger post_updated_at before update
   execute procedure friendworld_private.set_updated_at();
 
 grant select on table friendworld.posts to friendworld_anonymous, friendworld_user;
-grant update, delete on table friendworld.posts to friendworld_user;
+grant insert, update, delete on table friendworld.posts to friendworld_user;
 
 
-alter table friendworld.posts enable row level security;
-create policy select_threads on friendworld.posts for select using (true);
+-- alter table friendworld.posts enable row level security;
+-- create policy select_threads on friendworld.posts for select using (true);
+
 /*
 create view friendworld.view_test as
   select tracking_info
@@ -159,19 +165,19 @@ create function friendworld.signup(
 , password text
 , email text default null
 ) returns friendworld.users as $$
-declare
-  u friendworld.users;
+  declare
+    u friendworld.users;
 
-begin
-  insert into friendworld.users (username, email)
-    values (username, email)
-    returning * into u;
+  begin
+    insert into friendworld.users (username, email)
+      values (username, email)
+      returning * into u;
 
-  insert into friendworld_private.accounts (user_id, password_hash)
-    values (u.id, crypt(password, gen_salt('bf')));
+    insert into friendworld_private.accounts (user_id, password_hash)
+      values (u.id, crypt(password, gen_salt('bf')));
 
-  return u;
-end;
+    return u;
+  end;
 $$ language plpgsql;
 
 grant execute on function friendworld.signup(username_domain, text, text) to friendworld_anonymous, friendworld_user;
@@ -182,24 +188,24 @@ create function friendworld.login(
   username      username_domain
 , password      text
 ) returns friendworld_private.jwt_token as $$
-#variable_conflict use_variable
+  #variable_conflict use_variable
 
-declare
-  account friendworld_private.accounts;
+  declare
+    account friendworld_private.accounts;
 
-begin
-  select friendworld_private.accounts.* into account
-  from friendworld.users
-  inner join friendworld_private.accounts
-    on friendworld.users.id = friendworld_private.accounts.user_id
-  where friendworld.users.username = username;
+  begin
+    select friendworld_private.accounts.* into account
+    from friendworld.users
+    inner join friendworld_private.accounts
+      on friendworld.users.id = friendworld_private.accounts.user_id
+    where friendworld.users.username = username;
 
-  if account.password_hash = crypt(password, account.password_hash) then
-    return ('friendworld_user', 'postgraphile', extract(epoch from now())::int + 7776000, account.user_id)::friendworld_private.jwt_token;
-  else
-    return null;
-  end if;
-end;
+    if account.password_hash = crypt(password, account.password_hash) then
+      return ('friendworld_user', 'postgraphile', extract(epoch from now())::int + 7776000, account.user_id)::friendworld_private.jwt_token;
+    else
+      return null;
+    end if;
+  end;
 $$ language plpgsql;
 
 grant execute on function friendworld.login(username_domain, text) to friendworld_anonymous, friendworld_user;
@@ -219,6 +225,48 @@ $$ language sql stable;
 grant execute on function friendworld.current_user() to friendworld_anonymous, friendworld_user;
 grant execute on function friendworld.current_user_id() to friendworld_anonymous, friendworld_user;
 
+-- create thread
+create function friendworld.create_thread(
+  title     text
+, content   text
+) returns friendworld.threads as $$
+  declare
+    thread friendworld.threads;
 
+  begin
+    insert into friendworld.threads (title)
+      values (title)
+      returning * into thread;
+
+    perform friendworld.create_post(content, thread.id);
+
+    return thread;
+  end;
+$$ language plpgsql;
+
+grant execute on function friendworld.create_thread(text, text) to friendworld_user;
+
+-- create post
+create function friendworld.create_post(
+  content     text
+, thread_id   uuid default null
+) returns friendworld.posts as $$
+  declare
+    post friendworld.posts;
+
+  begin
+    insert into friendworld.posts (author_id, content, thread_id)
+      values (
+        nullif(current_setting('jwt.claims.user_id', true), '')::uuid
+      , content
+      , thread_id
+      )
+      returning * into post;
+
+    return post;
+  end;
+$$ language plpgsql;
+
+grant execute on function friendworld.create_post(text, uuid) to friendworld_user;
 
 commit;
