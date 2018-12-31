@@ -1,0 +1,66 @@
+$height: 42px;
+
+.spaceHolder {
+  height: $height;
+}
+
+.container {
+  width: 100%;
+  border: 2px solid;
+  border-left: 0;
+  border-right: 0;
+  position: fixed;
+}
+
+.content {
+  height: $height;
+  width: 1025px;
+  margin: auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.title {
+  font-size: 20px;
+  display: inline-block;
+  border: 1px solid;
+  padding: 6px 10px;
+  padding-bottom: 0;
+}
+
+.links {
+  display: inline-block;
+}
+
+.link {
+  text-decoration: none;
+}
+
+.link:first-child::before {
+  content: ''
+}
+
+.link::before {
+  content: '|';
+  padding: 0 10px;
+}
+
+.alerts {
+  $size: 17px;
+  cursor: pointer;
+  width: $size;
+  height: $size;
+  margin-bottom: -3px;
+  margin-left: 10px;
+  border: 1px solid;
+  border-radius: 20px;
+  display: inline-block;
+}
+
+@media(max-width: 1012px) {
+  .content {
+    width: 100%;
+    padding: 0 8px;
+  }
+}
