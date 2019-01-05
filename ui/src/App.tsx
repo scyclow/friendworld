@@ -2,10 +2,12 @@ import * as React from 'react';
 import { withRouter, Route, Switch } from 'react-router-dom'
 import { Connect, query } from 'urql'
 import match, { DataProps } from './utils/match'
+import jwt from './utils/jwt'
 
-import Body from './containers/Body/ix';
-import Nav from './containers/Nav/ix';
-import Home from './containers/Home/ix';
+import Body from './containers/Body';
+import Nav from './containers/Nav';
+import Home from './containers/Home';
+import Landing from './containers/Landing';
 
 
 const Main: React.SFC<{}> = () => (
@@ -32,12 +34,6 @@ const Main: React.SFC<{}> = () => (
   </main>
 )
 
-// const Landing: React.SFC<{}> = () => (
-//   <div>
-//     Welcome to FriendWorld: The place to meet friends.
-//   </div>
-// )
-const Landing = Main
 
 
 const loginQuery = query(`{
@@ -47,15 +43,17 @@ const loginQuery = query(`{
   }
 }`)
 
+
 type LoginQuery = {
   currentUser: null | {
     id: string,
     username: string
   }
 }
+
 const App: React.SFC<{}> = () => (
   <Connect query={loginQuery}>
-    {match({
+    {match<LoginQuery>({
       loading: () => 'loading...',
       error: ({ error }) => JSON.stringify(error),
       data: ({ data }) => data && data.currentUser

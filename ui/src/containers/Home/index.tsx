@@ -33,14 +33,14 @@ const feedQuery = query(`{
 
 const Home: React.SFC<Props> = () => (
   <Connect query={feedQuery}>
-    {match({
-      error: ({ error }) => <div>{error}</div>,
+    {match<FeedQuery>({
+      error: ({ error }) => <div>{JSON.stringify(error)}</div>,
 
       loading: () => <div>loading...</div>,
 
-      data: ({ data }: DataProps<FeedQuery>) => (
+      data: ({ data }) => (
         data.postsList.map((post: Post) => (
-          <div>
+          <div key={post.id}>
             {post.author.username}: {post.content}
           </div>
         ))
