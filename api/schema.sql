@@ -82,11 +82,15 @@ comment on column friendworld.users.updated_at is E'@omit';
 
 grant select on table friendworld.users to friendworld_anonymous, friendworld_user;
 grant update, delete on table friendworld.users to friendworld_user;
-grant select on table friendworld_private.accounts to friendworld_anonymous, friendworld_user;
-grant update, delete on table friendworld_private.accounts to friendworld_user;
+grant insert on table friendworld.users to friendworld_anonymous, friendworld_user;
+
+grant select, insert on table friendworld_private.accounts to friendworld_anonymous, friendworld_user;
 
 alter table friendworld.users enable row level security;
 create policy select_users on friendworld.users for select using (true);
+
+create policy insert_users on friendworld.users for insert to friendworld_anonymous, friendworld_user
+  with check (true);
 
 create policy update_users on friendworld.users for update to friendworld_user
   using (id = nullif(current_setting('jwt.claims.user_id', true), '')::uuid);
