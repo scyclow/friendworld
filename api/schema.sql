@@ -113,7 +113,7 @@ create trigger thread_updated_at before update
   execute procedure friendworld_private.set_updated_at();
 
 grant select on table friendworld.threads to friendworld_anonymous, friendworld_user;
-grant insert, update, delete on table friendworld.threads to friendworld_user;
+grant insert on table friendworld.threads to friendworld_user;
 
 -- alter table friendworld.threads enable row level security;
 -- create policy select_threads on friendworld.threads for select using (true);
@@ -137,11 +137,53 @@ create trigger post_updated_at before update
   execute procedure friendworld_private.set_updated_at();
 
 grant select on table friendworld.posts to friendworld_anonymous, friendworld_user;
-grant insert, update, delete on table friendworld.posts to friendworld_user;
+grant insert on table friendworld.posts to friendworld_user;
 
 
 -- alter table friendworld.posts enable row level security;
 -- create policy select_threads on friendworld.posts for select using (true);
+
+
+-- messages/ DMs
+
+create table friendworld.messages (
+  id            uuid primary key unique default uuid_generate_v4()
+, created_at    timestamp default now()
+, updated_at    timestamp default now()
+, from_id       uuid not null references friendworld.users(id)
+, to_id         uuid not null references friendworld.users(id)
+, content       text not null
+);
+
+comment on constraint "messages_from_id_fkey" on friendworld.messages is E'@foreignFieldName messagesSent';
+comment on constraint "messages_to_id_fkey" on friendworld.messages is E'@foreignFieldName messagesRecieved';
+
+alter table friendworld.messages enable row level security;
+grant select on table friendworld.messages to friendworld_user;
+grant insert, update on table friendworld.messages to friendworld_user;
+
+create policy select_messages on friendworld.messages for select using (
+  from_id = nullif(current_setting('jwt.claims.user_id', true), '')::uuid
+  or to_id = nullif(current_setting('jwt.claims.user_id', true), '')::uuid
+);
+
+create policy insert_messages on friendworld.messages for insert with check (
+  from_id = nullif(current_setting('jwt.claims.user_id', true), '')::uuid
+);
+
+
+-- alerts
+
+-- create table friendworld.messages (
+--   id            uuid primary key unique default uuid_generate_v4()
+-- , created_at    timestamp default now()
+-- , updated_at    timestamp default now()
+-- , user_id       uuid not null references friendworld.users(id)
+-- , read          boolean not null
+-- , content       text not null
+-- );
+
+
 
 /*
 create view friendworld.view_test as
@@ -272,5 +314,29 @@ create function friendworld.create_post(
 $$ language plpgsql;
 
 grant execute on function friendworld.create_post(text, uuid) to friendworld_user;
+
+
+-- create post
+create function friendworld.create_message(
+  to_id         uuid
+, content       text
+) returns friendworld.messages as $$
+  declare
+    message friendworld.messages;
+
+  begin
+    insert into friendworld.messages (from_id, to_id, content)
+      values (
+        nullif(current_setting('jwt.claims.user_id', true), '')::uuid
+      , to_id::uuid
+      , content
+      )
+      returning * into message;
+
+    return message;
+  end;
+$$ language plpgsql;
+
+grant execute on function friendworld.create_message(uuid, text) to friendworld_user;
 
 commit;

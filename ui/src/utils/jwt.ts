@@ -5,6 +5,11 @@ type JwtMap = {
   [username: string]: string
 }
 
+type JwtUser = {
+  username: string,
+  jwt: string
+}
+
 const getMapping = (): JwtMap => {
   const stored = localStorage.getItem(JWT)
   return stored ? JSON.parse(stored) : { __currentUser__: '' }
@@ -15,8 +20,21 @@ const get = (): string| void => {
   return mapping[mapping.__currentUser__]
 }
 
-const getCurrentUserList = (): Array<string> => {
-  return Object.keys(getMapping()).filter(name => name !== '__currentUser__')
+const getInnactiveUserList = (): Array<JwtUser> => {
+  const mapping = getMapping()
+  return Object.keys(mapping)
+    .filter(username => (username !== '__currentUser__' && username !== mapping.__currentUser__))
+    .map(username => ({
+      username, jwt: mapping[username]
+    }))
+}
+
+const getCurrentUser = (): JwtUser => {
+  const mapping = getMapping()
+  return {
+    username: mapping.__currentUser__,
+    jwt: mapping[mapping.__currentUser__]
+  }
 }
 
 const set = (username: string, jwt: string): void => {
@@ -38,5 +56,10 @@ const clearCurrentUser = () => {
 }
 
 export default {
-  get, getCurrentUserList, set, setCurrentUser, clearCurrentUser
+  get,
+  getCurrentUser,
+  getInnactiveUserList,
+  set,
+  setCurrentUser,
+  clearCurrentUser
 }

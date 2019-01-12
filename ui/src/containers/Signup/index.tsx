@@ -73,7 +73,6 @@ class Signup extends React.Component<Props, State> {
 
       jwt.set(username, results.login.jwtToken)
       jwt.setCurrentUser(username)
-      debugger
       window.location.href = '/'
     } catch (e) {
       console.log(e)

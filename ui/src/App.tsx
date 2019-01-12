@@ -61,8 +61,8 @@ const App: React.SFC<UrqlProps<LoginQuery>> = ({ data, error }) => {
             <div>This is the profile!</div>
           </Route>
 
-          <Route path="/chat">
-            <div>Let's chat!</div>
+          <Route path="/messages">
+            <div>Let's DM!</div>
           </Route>
         </Switch>
 
