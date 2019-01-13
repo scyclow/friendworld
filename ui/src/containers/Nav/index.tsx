@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
 import styles from './styles.module.scss'
 import jwt from '../../utils/jwt'
+import styleVars from '../../styles'
 
 
 type Props = {
@@ -23,7 +24,11 @@ const switchUser = (username: string) => {
 }
 
 const Dropdown: React.SFC<DropdownProps> = ({ onClick }) => (
-  <div className={styles.dropdown} onClick={onClick}>
+  <div
+    className={styles.dropdown}
+    style={{ backgroundColor: styleVars.backgroundColor }}
+    onClick={onClick}
+  >
     <Link to="/profile">
       <div>
         <div>Go to active user profile</div>
@@ -47,7 +52,7 @@ const Dropdown: React.SFC<DropdownProps> = ({ onClick }) => (
 
 const NavBar: React.SFC<NavBarProps> = ({ loggedIn, dropdownVisible, toggleDropdownVisible }) => (
   <nav className={styles.spaceHolder}>
-    <div className={styles.container}>
+    <div className={styles.container} style={{ backgroundColor: styleVars.backgroundColor }}>
       <div className={styles.content}>
         <Link to="/">
           <div className={styles.title}>friendworld.social</div>

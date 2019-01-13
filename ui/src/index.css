@@ -4,8 +4,11 @@
   font-family: sans-serif;
   box-sizing: border-box;
 
-  background-color: white;
   color: black;
+}
+
+.solid {
+  background-color: white;
 }
 
 a {

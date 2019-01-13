@@ -2,37 +2,42 @@ import { UrqlProps } from 'urql'
 
 export type DataProps<Q, M> = UrqlProps<Q, M> & { data: Q };
 
+
 interface Handlers<Q, M> {
-  loading?: (q: UrqlProps<Q, M>) => React.ReactNode,
-  data: (q: DataProps<Q, M>) => React.ReactNode,
-  error: (q: UrqlProps<Q, M>) => React.ReactNode,
+  loading?: (props: UrqlProps<Q, M>) => React.ReactNode,
+  data: (props: DataProps<Q, M>) => React.ReactNode,
+  error: (props: UrqlProps<Q, M>) => React.ReactNode,
 }
 
 
-export default function match<Q, M = {}>({ loading: loadingHandler, data: dataHandler, error: errorHandler }: Handlers<Q, M>) {
 
-  return (args: UrqlProps<Q, M>) => {
-    if (!args) return
+export default function match<Q, M = {}>({
+  loading: loadingHandler,
+  data: dataHandler,
+  error: errorHandler
+}: Handlers<Q, M>): (props: UrqlProps<Q, M>) => React.ReactNode {
 
-    const { fetching, data, error, loaded } = args;
+  return (props: UrqlProps<Q, M>) => {
+    if (!props) return
+
+    const { fetching, data, error, loaded } = props;
 
     if (error) {
       return typeof errorHandler === 'function'
-        ? errorHandler(args)
+        ? errorHandler(props)
         : errorHandler
     }
 
     if (loadingHandler && (fetching || !loaded)) {
       return typeof loadingHandler === 'function'
-        ? loadingHandler(args)
+        ? loadingHandler(props)
         : loadingHandler
     }
 
     if (data || !loadingHandler) {
       return typeof dataHandler === 'function'
-        ? dataHandler(args as DataProps<Q, M>)
+        ? dataHandler(props as DataProps<Q, M>)
         : dataHandler
     }
   }
 }
-
