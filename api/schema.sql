@@ -6,6 +6,7 @@ begin;
 drop schema friendworld cascade;
 drop schema friendworld_private cascade;
 drop domain username_domain;
+drop domain tag_store;
 drop role friendworld_root;
 drop role friendworld_anonymous;
 drop role friendworld_user;
@@ -61,13 +62,15 @@ create table friendworld.users (
 , updated_at    timestamp default now()
 , username      username_domain not null unique
 , email         citext check (email ~* '^.+@.+\..+$')
-, tracking_info json
+, tracking_info jsonb
 );
 
 create table friendworld_private.accounts (
   user_id        uuid primary key references friendworld.users(id)
 , password_hash  text not null
 );
+
+create unique index username_index on friendworld.users(username);
 
 -- user triggers
 
@@ -104,7 +107,7 @@ create table friendworld.threads (
   id            uuid primary key unique default uuid_generate_v4()
 , created_at    timestamp default now()
 , updated_at    timestamp default now()
-, title         text not null
+, title         text not null check (title ~* '.+')
 );
 
 create trigger thread_updated_at before update
@@ -117,18 +120,24 @@ grant insert on table friendworld.threads to friendworld_user;
 
 -- alter table friendworld.threads enable row level security;
 -- create policy select_threads on friendworld.threads for select using (true);
--- create policy update_users on friendworld.threads for update to friendworld_user
+-- create policy update_threads on friendworld.threads for update to friendworld_user
 --   using (id = nullif(current_setting('jwt.claims.user_id', true), '')::uuid);
 
 
 -- posts
+create domain tag_store as jsonb check (
+  (jsonb_typeof(value -> 'hashtags') = 'array') and
+  (jsonb_typeof(value -> 'usernames') = 'array')
+);
+
 create table friendworld.posts (
   id            uuid primary key unique default uuid_generate_v4()
 , created_at    timestamp default now()
 , updated_at    timestamp default now()
 , author_id     uuid not null references friendworld.users(id)
 , thread_id     uuid references friendworld.threads(id)
-, content       text not null
+, content       text not null check (content ~* '.+')
+, tags          tag_store default '{ "hashtags": [], "usernames": [] }'
 );
 
 create trigger post_updated_at before update
@@ -140,8 +149,12 @@ grant select on table friendworld.posts to friendworld_anonymous, friendworld_us
 grant insert on table friendworld.posts to friendworld_user;
 
 
--- alter table friendworld.posts enable row level security;
--- create policy select_threads on friendworld.posts for select using (true);
+alter table friendworld.posts enable row level security;
+create policy select_posts on friendworld.posts for select using (true);
+
+create policy insert_posts on friendworld.posts for insert with check (
+  author_id = nullif(current_setting('jwt.claims.user_id', true), '')::uuid
+);
 
 
 -- messages/ DMs
@@ -152,7 +165,7 @@ create table friendworld.messages (
 , updated_at    timestamp default now()
 , from_id       uuid not null references friendworld.users(id)
 , to_id         uuid not null references friendworld.users(id)
-, content       text not null
+, content       text not null check (content ~* '.+')
 );
 
 comment on constraint "messages_from_id_fkey" on friendworld.messages is E'@foreignFieldName messagesSent';
@@ -174,15 +187,32 @@ create policy insert_messages on friendworld.messages for insert with check (
 
 -- alerts
 
--- create table friendworld.messages (
---   id            uuid primary key unique default uuid_generate_v4()
--- , created_at    timestamp default now()
--- , updated_at    timestamp default now()
--- , user_id       uuid not null references friendworld.users(id)
--- , read          boolean not null
--- , content       text not null
--- );
+create table friendworld.alerts (
+  id            uuid primary key unique default uuid_generate_v4()
+, created_at    timestamp default now()
+, updated_at    timestamp default now()
+, user_id       uuid not null references friendworld.users(id)
+, read          boolean default false
+, content       text not null
+);
 
+alter table friendworld.alerts enable row level security;
+grant select on table friendworld.alerts to friendworld_user;
+grant insert, update on table friendworld.alerts to friendworld_user;
+
+create policy select_alerts on friendworld.alerts for select using (
+  user_id = nullif(current_setting('jwt.claims.user_id', true), '')::uuid
+);
+
+
+create policy insert_alerts on friendworld.alerts for insert
+to friendworld_anonymous, friendworld_user
+  with check (true);
+
+create policy update_alerts on friendworld.alerts for update
+to friendworld_user using (
+  user_id = nullif(current_setting('jwt.claims.user_id', true), '')::uuid
+);
 
 
 /*
@@ -191,6 +221,9 @@ create view friendworld.view_test as
   from friendworld.users;
 */
 
+create table friendworld.tests (
+  thing citext
+);
 
 
 
@@ -295,25 +328,46 @@ grant execute on function friendworld.create_thread(text, text) to friendworld_u
 -- create post
 create function friendworld.create_post(
   content     text
+, tags        tag_store default null
 , thread_id   uuid default null
 ) returns friendworld.posts as $$
   declare
-    post friendworld.posts;
+    post        friendworld.posts;
+    author      friendworld.users;
 
   begin
-    insert into friendworld.posts (author_id, content, thread_id)
+    -- create the post
+    insert into friendworld.posts (author_id, content, tags, thread_id)
       values (
         nullif(current_setting('jwt.claims.user_id', true), '')::uuid
       , content
+      , tags
       , thread_id
       )
-      returning * into post;
+    returning * into post;
+
+    -- get the author
+    select friendworld.users.* into author
+    from friendworld.users
+    where friendworld.users.id = post.author_id;
+
+    -- if there are any users tagged, alert the user
+    insert into friendworld.alerts (user_id, content) (
+      select
+        friendworld.users.id as user_id
+      , format('You were mentioned by @%s in /posts/%s !', author.username, post.id::text) as content
+      from
+        jsonb_array_elements_text(tags -> 'usernames') as usernames
+        left join friendworld.users on usernames = friendworld.users.username
+      where
+        usernames = friendworld.users.username
+    );
 
     return post;
   end;
 $$ language plpgsql;
 
-grant execute on function friendworld.create_post(text, uuid) to friendworld_user;
+grant execute on function friendworld.create_post(text, tag_store, uuid) to friendworld_user;
 
 
 -- create post
