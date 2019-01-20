@@ -4,31 +4,37 @@ import styles from './styles.module.scss'
 import jwt from '../../utils/jwt'
 import styleVars from '../../styles'
 
-
-type Props = {
-  loggedIn?: boolean
-}
-
-type NavBarProps = Props & {
-  dropdownVisible: boolean,
-  toggleDropdownVisible: () => void
-}
-
-type DropdownProps = {
-  onClick: NavBarProps['toggleDropdownVisible']
-}
+import { LoginQuery } from '../../App'
 
 const switchUser = (username: string) => {
   jwt.setCurrentUser(username)
   window.location.href = "/"
 }
 
-const Dropdown: React.SFC<DropdownProps> = ({ onClick }) => (
+const logout = () => {
+  jwt.clearCurrentUser()
+  window.location.href = '/'
+}
+
+const userImgStub = { backgroundImage: "url(https://scontent-lga3-1.xx.fbcdn.net/v/t1.0-1/c3.0.24.24a/p24x24/983791_10204867785199299_8740536904686164238_n.jpg?_nc_cat=104&_nc_ht=scontent-lga3-1.xx&oh=91c238d01e1493eca93ff6f0004caaf9&oe=5CCFD78B)"}
+
+type DropdownProps = {
+  onClick: any,
+  children: any
+}
+
+const Dropdown: React.SFC<DropdownProps> = ({ onClick, children }) => (
   <div
     className={styles.dropdown}
-    style={{ backgroundColor: styleVars.backgroundColor }}
+    style={styleVars.bg}
     onClick={onClick}
   >
+    {children}
+  </div>
+)
+
+const UserDropdown: React.SFC<{}> = () => (
+  <>
     <Link to="/profile">
       <div>
         <div>Go to active user profile</div>
@@ -47,56 +53,83 @@ const Dropdown: React.SFC<DropdownProps> = ({ onClick }) => (
         </div>
        ))}
     </div>
-  </div>
+  </>
 )
 
-const NavBar: React.SFC<NavBarProps> = ({ loggedIn, dropdownVisible, toggleDropdownVisible }) => (
+const AlertCircle: React.SFC<{ unread: number, onClick: any }> = ({ unread, onClick }) => (
+  <div className={styles.circle} onClick={onClick} style={unread ? { backgroundColor: '#f00', color: '#fff' } : {}}>{unread || 0}</div>
+)
+
+type NavBarProps = Props & {
+  toggleDropdownVisible: (state: State['dropdownState']) => () => void
+}
+
+const NavBar: React.SFC<NavBarProps> = ({ currentUser, toggleDropdownVisible }) => (
   <nav className={styles.spaceHolder}>
-    <div className={styles.container} style={{ backgroundColor: styleVars.backgroundColor }}>
+    <div className={styles.container} style={styleVars.bg}>
       <div className={styles.content}>
         <Link to="/">
           <div className={styles.title}>friendworld.social</div>
         </Link>
+
         <div className={styles.links}>
-          <a href="#" onClick={() => {jwt.clearCurrentUser(); window.location.href = '/'}}>logout</a>
+          <a href="#" onClick={logout}>logout</a>
           <Link to="/" className={styles.link}>Home</Link>
           <Link to="/forum" className={styles.link}>Forum</Link>
-          {loggedIn && <>
-            <Link to="/messages" className={styles.link}>Messages</Link>
-            <div
-              className={styles.circle}
-              onClick={toggleDropdownVisible}
-              style={{
-                backgroundImage: "url(https://scontent-lga3-1.xx.fbcdn.net/v/t1.0-1/c3.0.24.24a/p24x24/983791_10204867785199299_8740536904686164238_n.jpg?_nc_cat=104&_nc_ht=scontent-lga3-1.xx&oh=91c238d01e1493eca93ff6f0004caaf9&oe=5CCFD78B)"
-              }}
-            />
-            <div className={styles.circle} />
-          </>}
+          {currentUser && <Link to="/messages" className={styles.link}>Messages</Link>}
+          {currentUser && <div className={styles.circle} onClick={toggleDropdownVisible('users')} style={userImgStub} /> }
+          {currentUser && <AlertCircle unread={currentUser.alerts.length} onClick={toggleDropdownVisible('alerts')} />}
         </div>
-        {dropdownVisible && <Dropdown onClick={toggleDropdownVisible}/>}
       </div>
     </div>
   </nav>
 )
 
+type Props = {
+  currentUser: LoginQuery['currentUser']
+}
+
 type State = {
-  dropdownVisible: boolean
+  dropdownState: null | 'users' | 'alerts'
 }
 
 class Nav extends React.Component<Props, State> {
   state = {
-    dropdownVisible: false
+    dropdownState: null
   }
 
-  toggleDropdownVisible = () => this.setState(state => ({ ...state, dropdownVisible: !state.dropdownVisible}))
+  changeDropdownState = (dropdownState: State['dropdownState']) => () => {
+    this.setState(state => ({
+      ...state,
+      dropdownState: state.dropdownState ? null : dropdownState
+    }))
+  }
+
+  renderDropdownContent = (contentType: State['dropdownState']) => {
+    const { currentUser } = this.props
+    if (!currentUser) return
+
+    switch (contentType) {
+      case 'users': return <UserDropdown />
+      case 'alerts': return <>{currentUser.alerts.map(alert => <div>{alert.content}</div>)}</>
+      default: return <></>
+    }
+  }
 
   render() {
+    const { dropdownState } = this.state
     return (
-      <NavBar
-        {...this.props}
-        dropdownVisible={this.state.dropdownVisible}
-        toggleDropdownVisible={this.toggleDropdownVisible}
-      />
+      <>
+        <NavBar
+          {...this.props}
+          toggleDropdownVisible={this.changeDropdownState}
+        />
+        {dropdownState &&
+          <Dropdown onClick={this.changeDropdownState(null)}>
+            {this.renderDropdownContent(dropdownState)}
+          </Dropdown>
+        }
+      </>
     )
   }
 }

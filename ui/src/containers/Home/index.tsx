@@ -3,21 +3,13 @@ import { Link } from 'react-router-dom'
 import styles from './styles.module.scss';
 import { Connect, ConnectHOC, UrqlProps, query, mutation } from 'urql'
 import match, { DataProps } from '../../utils/match'
+import { getUsernames, getHashtags } from '../../utils/parsers'
 import TextInput from '../../components/TextInput'
+import Post, { PostType } from '../../components/Post'
 
-
-
-interface Post {
-  id: string,
-  content: string,
-  createdAt: string,
-  author: {
-    username: string
-  }
-}
 
 interface FeedQuery {
-  posts: Array<Post>
+  posts: Array<PostType>
 }
 
 const feedQuery = query(`{
@@ -29,7 +21,12 @@ const feedQuery = query(`{
     content
     createdAt
     author {
+      id
       username
+    }
+    thread {
+      id
+      title
     }
   }
 }`)
@@ -49,7 +46,15 @@ mutation createPost($input: CreatePostInput!) {
 }`)
 
 export type CreatePostMutation = {
-  createPost: (args: { input: { content: string } }) => Promise<{ createPost: { post: Post } }>
+  createPost: (args: {
+    input: {
+      content: string,
+      // tags: {
+      //   hashtags: Array<string>,
+      //   usernames: Array<string>
+      // }
+    }
+  }) => Promise<{ createPost: { post: PostType } }>
 }
 
 type Props = UrqlProps<FeedQuery, CreatePostMutation>
@@ -61,9 +66,9 @@ const Feed: any = (props: Props) => match<FeedQuery, CreatePostMutation>({
   loading: () => <div>loading...</div>,
 
   data: ({ data }) => (
-    data.posts.map((post: Post) => (
-      <div key={post.id}>
-        {post.author.username}: {post.content}
+    data.posts.map(post => (
+      <div key={post.id} className={styles.buffer}>
+        <Post post={post} />
       </div>
     ))
   )
@@ -73,13 +78,36 @@ const Feed: any = (props: Props) => match<FeedQuery, CreatePostMutation>({
 
 // )
 
+function getTags(content: string) {
+  return {
+    hashtags: getHashtags(content),
+    usernames: getUsernames(content)
+  }
+}
 
 class Home extends React.Component<Props> {
+  createPost = (content: string) => {
+    const tags = getTags(content)
+    this.props.createPost({
+      input: {
+        content,
+        // tags
+      }
+    })
+    this.props.refetch({ skipFetch: false })
+  }
+
   render() {
     return (
-      <div>
-        <TextInput submit={content => this.props.createPost({ input: { content } })}/>
-        <Feed {...this.props} />
+      <div className={styles.container}>
+        <div className={styles.left}>
+          <TextInput submit={this.createPost}/>
+          <Feed {...this.props} />
+        </div>
+
+        <div className={styles.right}>
+          BUY FASTCASH NOW!
+        </div>
       </div>
     )
   }

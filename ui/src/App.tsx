@@ -13,10 +13,13 @@ import Signup from './containers/Signup'
 
 
 
-type LoginQuery = {
+export type LoginQuery = {
   currentUser: null | {
     id: string,
-    username: string
+    username: string,
+    alerts: Array<{
+      content: string
+    }>
   }
 }
 
@@ -33,18 +36,18 @@ type LoginQuery = {
 // )
 
 const App: React.SFC<UrqlProps<LoginQuery>> = ({ data, error }) => {
-  const loggedIn = !!(data && data.currentUser)
+  const currentUser = data && data.currentUser
 
   return (
     <main className="App">
       <Route exact path="/">
-        {loggedIn &&<Nav loggedIn={loggedIn} />}
+        {currentUser &&<Nav currentUser={currentUser} />}
       </Route>
 
       <Body>
         <Switch>
           <Route exact path="/">
-            {loggedIn
+            {currentUser
               ? <Home />
               : <Landing/>
             }
@@ -75,6 +78,9 @@ const loginQuery = query(`{
   currentUser {
     id
     username
+    alerts: alertsList (condition: { read: false }) {
+      content
+    }
   }
 }`)
 

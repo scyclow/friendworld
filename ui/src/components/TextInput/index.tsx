@@ -1,5 +1,7 @@
 import * as React from 'react'
 import styles from './styles.module.scss'
+import profanityFilter from '../../utils/profanityFilter'
+
 
 type Props = {
   submit: (content: string) => unknown,
@@ -18,7 +20,9 @@ class TextInput extends React.Component<Props, State> {
   }
 
   submit = () => {
-    this.props.submit(this.state.content)
+    const { content } = this.state
+    if (!content) return
+    this.props.submit(profanityFilter(content))
     this.setState({ content: '' })
   }
 
@@ -27,7 +31,8 @@ class TextInput extends React.Component<Props, State> {
     const { content } = this.state
 
     return (
-      <div>
+      <div className={styles.container}>
+        <div className={styles.inner}>
         <textarea
           className={styles.contentInput}
           placeholder={placeholder || defaultPlaceholder}
@@ -40,6 +45,7 @@ class TextInput extends React.Component<Props, State> {
         >
           Submit
         </button>
+        </div>
       </div>
     )
   }

@@ -1,0 +1,38 @@
+.container {
+  border: 1px solid;
+}
+
+.avatar {
+  border: 1px solid;
+  border-radius: 3px;
+  height: 45px;
+  width: 45px;
+  margin-bottom: 5px;
+}
+
+.header {
+  border-bottom: 1px solid;
+  font-size: 12px;
+  padding: 0.5em;
+}
+
+.main {
+  display: flex;
+}
+
+.panel {
+  padding: 10px;
+  border-right: 1px solid;
+}
+
+.content {
+  padding: 10px;
+  line-height: 1.4;
+}
+
+.postedAt {
+  width: 100%;
+  border-top: 1px solid;
+  font-size: 12px;
+  padding: 2px;
+}
