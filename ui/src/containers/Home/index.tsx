@@ -49,7 +49,8 @@ export type CreatePostMutation = {
   createPost: (args: {
     input: {
       content: string,
-      // tags: {
+      tags: string
+      // {
       //   hashtags: Array<string>,
       //   usernames: Array<string>
       // }
@@ -79,10 +80,10 @@ const Feed: any = (props: Props) => match<FeedQuery, CreatePostMutation>({
 // )
 
 function getTags(content: string) {
-  return {
+  return JSON.stringify({
     hashtags: getHashtags(content),
     usernames: getUsernames(content)
-  }
+  })
 }
 
 class Home extends React.Component<Props> {
@@ -91,7 +92,7 @@ class Home extends React.Component<Props> {
     this.props.createPost({
       input: {
         content,
-        // tags
+        tags
       }
     })
     this.props.refetch({ skipFetch: false })

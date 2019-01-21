@@ -104,7 +104,7 @@ create policy delete_users on friendworld.users for delete to friendworld_user
 
 -- threads
 create table friendworld.threads (
-  id            uuid primary key unique default uuid_generate_v4()
+  id            serial primary key
 , created_at    timestamp default now()
 , updated_at    timestamp default now()
 , title         text not null check (title ~* '.+')
@@ -117,6 +117,8 @@ create trigger thread_updated_at before update
 
 grant select on table friendworld.threads to friendworld_anonymous, friendworld_user;
 grant insert on table friendworld.threads to friendworld_user;
+
+
 
 -- alter table friendworld.threads enable row level security;
 -- create policy select_threads on friendworld.threads for select using (true);
@@ -131,11 +133,11 @@ create domain tag_store as jsonb check (
 );
 
 create table friendworld.posts (
-  id            uuid primary key unique default uuid_generate_v4()
+  id            serial primary key
 , created_at    timestamp default now()
 , updated_at    timestamp default now()
 , author_id     uuid not null references friendworld.users(id)
-, thread_id     uuid references friendworld.threads(id)
+, thread_id     int references friendworld.threads(id)
 , content       text not null check (content ~* '.+')
 , tags          tag_store default '{ "hashtags": [], "usernames": [] }'
 );
@@ -147,6 +149,7 @@ create trigger post_updated_at before update
 
 grant select on table friendworld.posts to friendworld_anonymous, friendworld_user;
 grant insert on table friendworld.posts to friendworld_user;
+grant usage, select on all sequences in schema friendworld to friendworld_user;
 
 
 alter table friendworld.posts enable row level security;
@@ -329,7 +332,7 @@ grant execute on function friendworld.create_thread(text, text) to friendworld_u
 create function friendworld.create_post(
   content     text
 , tags        tag_store default null
-, thread_id   uuid default null
+, thread_id   int default null
 ) returns friendworld.posts as $$
   declare
     post        friendworld.posts;
@@ -367,7 +370,7 @@ create function friendworld.create_post(
   end;
 $$ language plpgsql;
 
-grant execute on function friendworld.create_post(text, tag_store, uuid) to friendworld_user;
+grant execute on function friendworld.create_post(text, tag_store, int) to friendworld_user;
 
 
 -- create post

@@ -1,12 +1,19 @@
 import * as React from 'react'
 import { replace } from 'lodash'
 import { Link } from 'react-router-dom'
-import { isExternalLink, isImage, isHashtag, isUsername, cleanFragment } from '../utils/parsers'
+import {
+  isExternalLink,
+  isImage,
+  isHashtag,
+  isUsername,
+  isPostRef,
+  isThreadRef,
+  cleanFragment,
+} from '../utils/parsers'
 
 type Fragment = string | React.ReactNode;
 
 const last = (arr: Array<Fragment>): Fragment => arr[arr.length - 1]
-
 
 const parseFragment = (fragment: string): Fragment => {
   if (isImage(fragment)) {
@@ -23,28 +30,19 @@ const parseFragment = (fragment: string): Fragment => {
     const hashtag = cleanFragment(fragment, /^#/)
     return <Link to={`/hashtag/${hashtag}`}>{fragment}</Link>
 
-  // } else if (fragment.match(groupTest)) {
-  //   const [groupId, threadId] = cleanFragment(fragment, /^\+/).split('/')
+  } else if (isPostRef(fragment)) {
+    const postId = cleanFragment(fragment, /^\/posts\//)
+    return <Link to={`/posts/${postId}`}>{fragment}</Link>
 
-  //   const route = threadId
-  //     ? `/groups/${groupId}/threads/${threadId}`
-  //     : `/groups/${groupId}`
-  //   return <Link to={route}>{fragment}</Link>
+  } else if (isThreadRef(fragment)) {
+    const threadId = cleanFragment(fragment, /^\/threads\//)
+    return <Link to={`/threads/${threadId}`}>{fragment}</Link>
 
   } else {
     return fragment
   }
 }
 
-// const parseString: ParserFn = fragment => {
-//   if (typeof fragment !== 'string') return fragment
-
-//   return fragment
-//     .split(' ')
-//     .map(fragment => {
-
-//     })
-// }
 
 const combineFragments = (fragments: Array<Fragment>, f: string): Array<Fragment> => {
   const fragment = parseFragment(f);

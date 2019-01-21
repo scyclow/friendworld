@@ -4,6 +4,7 @@ import cx from 'classnames'
 import styles from './styles.module.scss'
 import jwt from '../../utils/jwt'
 import styleVars from '../../styles'
+import ParsedText from '../../components/ParsedText'
 
 import { LoginQuery } from '../../App'
 
@@ -138,7 +139,11 @@ class Nav extends React.Component<Props, State> {
 
     switch (contentType) {
       case 'users': return <UserDropdown />
-      case 'alerts': return <>{currentUser.alerts.map(alert => <div>{alert.content}</div>)}</>
+      case 'alerts': return <>{currentUser.alerts.map((alert, i) =>
+        <div key={i}>
+          <ParsedText content={alert.content} />
+        </div>
+      )}</>
       default: return <></>
     }
   }

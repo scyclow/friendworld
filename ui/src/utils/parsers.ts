@@ -2,6 +2,8 @@ const externalLinkTest = /^(http|https):\/\/.+\..+/
 const imageTest = /(\.jpg$)|(\.jpeg$)|(\.png$)|(\.gif$)|(\.svg$)/
 const userTest = /^@.+/
 const hashtagTest = /^#.+/
+const postTest = /^\/posts\/.+/
+const threadTest = /^\/threads\/.+/
 
 export function isImage(str: string) {
   str = cleanFragment(str)
@@ -23,6 +25,16 @@ export function isHashtag(str: string) {
   return str.match(hashtagTest)
 }
 
+export function isPostRef(str: string) {
+  str = cleanFragment(str)
+  return str.match(postTest)
+}
+
+export function isThreadRef(str: string) {
+  str = cleanFragment(str)
+  return str.match(threadTest)
+}
+
 export function getUsernames(str: string) {
   return str
     .split(' ')
@@ -40,5 +52,6 @@ export function getHashtags(str: string) {
 export function cleanFragment(fragment: string, test?: RegExp) {
   return fragment
     .replace(test ? new RegExp(test, 'g') : '', '')
-    .replace(/(\.$)|(\?$)|(!$)|(:$)/, '')
+    .replace(/(\.$)|(\?$)|(!$)|(:$)|(;$)/, '')
 }
+
