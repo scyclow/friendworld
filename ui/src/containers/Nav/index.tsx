@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
+import cx from 'classnames'
 import styles from './styles.module.scss'
 import jwt from '../../utils/jwt'
 import styleVars from '../../styles'
@@ -23,15 +24,38 @@ type DropdownProps = {
   children: any
 }
 
-const Dropdown: React.SFC<DropdownProps> = ({ onClick, children }) => (
-  <div
-    className={styles.dropdown}
-    style={styleVars.bg}
-    onClick={onClick}
-  >
-    {children}
-  </div>
-)
+class Dropdown extends React.Component<DropdownProps> {
+  id = '__dropdown_component__'
+
+  hideDropdown = (e: any) => {
+    const dropdown = document.getElementById(this.id)
+    if (dropdown && e.target !== dropdown && !dropdown.contains(e.target)) {
+      this.props.onClick()
+    }
+  }
+
+  componentDidMount() {
+    document.addEventListener('click', this.hideDropdown)
+  }
+
+  componentWillUnmount() {
+    document.removeEventListener('click', this.hideDropdown)
+  }
+
+  render() {
+    const { onClick, children } = this.props
+    return (
+      <div
+        id={this.id}
+        className={styles.dropdown}
+        style={styleVars.bg}
+        onClick={onClick}
+      >
+        {children}
+      </div>
+    )
+  }
+}
 
 const UserDropdown: React.SFC<{}> = () => (
   <>
@@ -57,8 +81,11 @@ const UserDropdown: React.SFC<{}> = () => (
 )
 
 const AlertCircle: React.SFC<{ unread: number, onClick: any }> = ({ unread, onClick }) => (
-  <div className={styles.circle} onClick={onClick} style={unread ? { backgroundColor: '#f00', color: '#fff' } : {}}>{unread || 0}</div>
+  <div className={cx(styles.circle, { [styles.unread]: unread })} onClick={onClick}>
+    {unread || 0}
+  </div>
 )
+
 
 type NavBarProps = Props & {
   toggleDropdownVisible: (state: State['dropdownState']) => () => void

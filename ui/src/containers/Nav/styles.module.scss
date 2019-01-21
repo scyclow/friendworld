@@ -10,6 +10,7 @@ $height: 42px;
   border-left: 0;
   border-right: 0;
   position: fixed;
+  user-select: none;
 }
 
 .content {
@@ -61,6 +62,12 @@ $height: 42px;
   font-size: 12px;
 }
 
+.unread {
+  background-color: #ff0000;
+  color: #ffffff;
+  padding: 10px;
+}
+
 .dropdown {
   position: absolute;
   right: 0;
@@ -69,6 +76,7 @@ $height: 42px;
   min-height: 50px;
   border: 2px solid;
 }
+
 
 @media(max-width: 1012px) {
   .content {
