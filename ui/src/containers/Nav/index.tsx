@@ -82,6 +82,7 @@ const UserDropdown: React.SFC<{}> = () => (
 )
 
 const AlertCircle: React.SFC<{ unread: number, onClick: any }> = ({ unread, onClick }) => (
+  // TODO make padding a a function of unread
   <div className={cx(styles.circle, { [styles.unread]: unread })} onClick={onClick}>
     {unread || 0}
   </div>

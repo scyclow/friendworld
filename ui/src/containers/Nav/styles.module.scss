@@ -31,7 +31,8 @@ $height: 42px;
 }
 
 .links {
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
 }
 
 .link {
@@ -66,6 +67,7 @@ $height: 42px;
   background-color: #ff0000;
   color: #ffffff;
   padding: 10px;
+  border: 1px solid black;
 }
 
 .dropdown {
