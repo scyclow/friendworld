@@ -1,12 +1,15 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
 import cx from 'classnames'
+import { Connect, UrqlProps, mutation } from 'urql'
+
 import styles from './styles.module.scss'
 import jwt from '../../utils/jwt'
 import styleVars from '../../styles'
 import ParsedText from '../../components/ParsedText'
+import X from '../../components/X'
 
-import { LoginQuery } from '../../App'
+import { CurrentUser } from '../../App'
 
 const switchUser = (username: string) => {
   jwt.setCurrentUser(username)
@@ -21,7 +24,7 @@ const logout = () => {
 const userImgStub = { backgroundImage: "url(https://scontent-lga3-1.xx.fbcdn.net/v/t1.0-1/c3.0.24.24a/p24x24/983791_10204867785199299_8740536904686164238_n.jpg?_nc_cat=104&_nc_ht=scontent-lga3-1.xx&oh=91c238d01e1493eca93ff6f0004caaf9&oe=5CCFD78B)"}
 
 type DropdownProps = {
-  onClick: any,
+  hide: Function,
   children: any
 }
 
@@ -30,8 +33,9 @@ class Dropdown extends React.Component<DropdownProps> {
 
   hideDropdown = (e: any) => {
     const dropdown = document.getElementById(this.id)
+    console.log(dropdown, e.target !== dropdown, dropdown && !dropdown.contains(e.target))
     if (dropdown && e.target !== dropdown && !dropdown.contains(e.target)) {
-      this.props.onClick()
+      this.props.hide()
     }
   }
 
@@ -44,13 +48,12 @@ class Dropdown extends React.Component<DropdownProps> {
   }
 
   render() {
-    const { onClick, children } = this.props
+    const { children } = this.props
     return (
       <div
         id={this.id}
         className={styles.dropdown}
         style={styleVars.bg}
-        onClick={onClick}
       >
         {children}
       </div>
@@ -79,6 +82,49 @@ const UserDropdown: React.SFC<{}> = () => (
        ))}
     </div>
   </>
+)
+
+export type ReadAlertMutation = {
+  readAlert: (args: {
+    input: {
+      alertId: string
+    }
+  }) => Promise<{ readAlert: { alert: { id: string, read: boolean } } }>
+}
+
+const readAlertMutation = mutation(`
+mutation readAlert($input: ReadAlertInput!) {
+  readAlert(input: $input) {
+    alert {
+      id
+      read
+    }
+  }
+}`)
+
+type AlertDropdownProps = {
+  alerts: CurrentUser['alerts']
+}
+
+const AlertDropdown: React.SFC<AlertDropdownProps> = ({ alerts }) => (
+  <div className={styles.alertDropdown}>
+    {alerts.length ? (
+      <Connect mutation={{ readAlert: readAlertMutation }}>
+        {({ readAlert }: UrqlProps<null, ReadAlertMutation>) => (
+
+            alerts.map(alert =>
+              <div key={alert.id}>
+                <X ring onClick={() => readAlert({ input: { alertId: alert.id} })} />
+                <ParsedText content={alert.content} />
+              </div>
+            )
+
+        )}
+      </Connect>
+    ) : (
+      'No Alerts!'
+    )}
+  </div>
 )
 
 const AlertCircle: React.SFC<{ unread: number, onClick: any }> = ({ unread, onClick }) => (
@@ -115,7 +161,8 @@ const NavBar: React.SFC<NavBarProps> = ({ currentUser, toggleDropdownVisible }) 
 )
 
 type Props = {
-  currentUser: LoginQuery['currentUser']
+  currentUser: CurrentUser | null,
+  routeChange: Function
 }
 
 type State = {
@@ -125,6 +172,16 @@ type State = {
 class Nav extends React.Component<Props, State> {
   state = {
     dropdownState: null
+  }
+
+  unlisten: Function = () => {}
+
+  componentDidMount() {
+    this.unlisten = this.props.routeChange(this.changeDropdownState(null))
+  }
+
+  componentWillUnmount() {
+    this.unlisten()
   }
 
   changeDropdownState = (dropdownState: State['dropdownState']) => () => {
@@ -140,11 +197,7 @@ class Nav extends React.Component<Props, State> {
 
     switch (contentType) {
       case 'users': return <UserDropdown />
-      case 'alerts': return <>{currentUser.alerts.map((alert, i) =>
-        <div key={i}>
-          <ParsedText content={alert.content} />
-        </div>
-      )}</>
+      case 'alerts': return <AlertDropdown alerts={currentUser.alerts} />
       default: return <></>
     }
   }
@@ -158,7 +211,7 @@ class Nav extends React.Component<Props, State> {
           toggleDropdownVisible={this.changeDropdownState}
         />
         {dropdownState &&
-          <Dropdown onClick={this.changeDropdownState(null)}>
+          <Dropdown hide={this.changeDropdownState(null)}>
             {this.renderDropdownContent(dropdownState)}
           </Dropdown>
         }

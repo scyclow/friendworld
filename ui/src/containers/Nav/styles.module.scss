@@ -71,12 +71,17 @@ $height: 42px;
 }
 
 .dropdown {
-  position: absolute;
+  position: fixed;
   right: 0;
-  top: $height;
+  margin-right: -2px;
+  top: $height + 3;
   width: 320px;
   min-height: 50px;
   border: 2px solid;
+}
+
+.alertDropdown {
+  padding: 5px;
 }
 
 

@@ -1,11 +1,7 @@
 import * as React from 'react';
 import { Connect } from 'urql'
 import ParsedText from '../ParsedText'
-
-
 import styles from './styles.module.scss';
-
-
 
 
 export type PostType = {

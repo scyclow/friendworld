@@ -20,3 +20,12 @@ insert into friendworld_private.accounts (user_id, password_hash) values
 insert into friendworld.posts (author_id, content) values
   ('0a04ff42-a2c6-4e1f-bda9-80c493abefea'::uuid, 'Hello!')
 , ('0a04ff42-a2c6-4e1f-bda9-80c493abefea'::uuid, 'Heres an image: https://nursejournal.org/wp-content/uploads/2014/06/wow-left-yellow.png!')
+;
+
+insert into friendworld.alerts (id, user_id, content) values
+  (
+    '0a04ff42-a2c6-4e1f-bda9-80c493aaaaaa'::uuid
+  , '0a04ff42-a2c6-4e1f-bda9-80c493abefea'::uuid
+  , 'This is a test alert for test1'
+  )
+;

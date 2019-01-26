@@ -171,6 +171,11 @@ create table friendworld.messages (
 , content       text not null check (content ~* '.+')
 );
 
+create trigger message_updated_at before update
+  on friendworld.messages
+  for each row
+  execute procedure friendworld_private.set_updated_at();
+
 comment on constraint "messages_from_id_fkey" on friendworld.messages is E'@foreignFieldName messagesSent';
 comment on constraint "messages_to_id_fkey" on friendworld.messages is E'@foreignFieldName messagesRecieved';
 
@@ -199,6 +204,11 @@ create table friendworld.alerts (
 , content       text not null
 );
 
+create trigger alert_updated_at before update
+  on friendworld.alerts
+  for each row
+  execute procedure friendworld_private.set_updated_at();
+
 alter table friendworld.alerts enable row level security;
 grant select on table friendworld.alerts to friendworld_user;
 grant insert, update on table friendworld.alerts to friendworld_user;
@@ -206,7 +216,6 @@ grant insert, update on table friendworld.alerts to friendworld_user;
 create policy select_alerts on friendworld.alerts for select using (
   user_id = nullif(current_setting('jwt.claims.user_id', true), '')::uuid
 );
-
 
 create policy insert_alerts on friendworld.alerts for insert
 to friendworld_anonymous, friendworld_user
@@ -373,7 +382,7 @@ $$ language plpgsql;
 grant execute on function friendworld.create_post(text, tag_store, int) to friendworld_user;
 
 
--- create post
+-- create message
 create function friendworld.create_message(
   to_id         uuid
 , content       text
@@ -397,3 +406,22 @@ $$ language plpgsql;
 grant execute on function friendworld.create_message(uuid, text) to friendworld_user;
 
 commit;
+
+create function friendworld.read_alert(
+  alert_id        uuid
+) returns friendworld.alerts as $$
+
+  declare
+    alert friendworld.alerts;
+
+  begin
+    update friendworld.alerts
+    set read = true
+    where friendworld.alerts.id = alert_id
+    returning * into alert;
+
+    return alert;
+  end;
+$$ language plpgsql;
+
+grant execute on function friendworld.read_alert(uuid) to friendworld_user;

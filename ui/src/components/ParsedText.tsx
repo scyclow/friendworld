@@ -15,6 +15,7 @@ type Fragment = string | React.ReactNode;
 
 const last = (arr: Array<Fragment>): Fragment => arr[arr.length - 1]
 
+
 const parseFragment = (fragment: string): Fragment => {
   if (isImage(fragment)) {
     return <img src={fragment} style={{ maxWidth: '100%', maxHeight: 300 }}/>
@@ -24,19 +25,23 @@ const parseFragment = (fragment: string): Fragment => {
 
   } else if (isUsername(fragment)) {
     const userId = cleanFragment(fragment, /^@/)
-    return <Link to={`/users/${userId}`}>{fragment}</Link>
+    const dirt = fragment.replace(userId, '').replace(/^@/, '')
+    return <><Link to={`/users/${userId}`}>@{userId}</Link>{dirt}</>
 
   } else if (isHashtag(fragment)) {
     const hashtag = cleanFragment(fragment, /^#/)
-    return <Link to={`/hashtag/${hashtag}`}>{fragment}</Link>
+    const dirt = fragment.replace(hashtag, '').replace(/^#/, '')
+    return <><Link to={`/hashtag/${hashtag}`}>#{hashtag}</Link>{dirt}</>
 
   } else if (isPostRef(fragment)) {
     const postId = cleanFragment(fragment, /^\/posts\//)
-    return <Link to={`/posts/${postId}`}>{fragment}</Link>
+    const dirt = fragment.replace(postId, '').replace(/^\/posts\//, '')
+    return <><Link to={`/posts/${postId}`}>/posts/{postId}</Link>{dirt}</>
 
   } else if (isThreadRef(fragment)) {
     const threadId = cleanFragment(fragment, /^\/threads\//)
-    return <Link to={`/threads/${threadId}`}>{fragment}</Link>
+    const dirt = fragment.replace(threadId, '').replace(/^\/threads\//, '')
+    return <><Link to={`/threads/${threadId}`}>/threads/{threadId}</Link>{dirt}</>
 
   } else {
     return fragment

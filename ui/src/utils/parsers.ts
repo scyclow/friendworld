@@ -52,6 +52,6 @@ export function getHashtags(str: string) {
 export function cleanFragment(fragment: string, test?: RegExp) {
   return fragment
     .replace(test ? new RegExp(test, 'g') : '', '')
-    .replace(/(\.$)|(\?$)|(!$)|(:$)|(;$)/, '')
+    .replace(/(\.|\?|!|:|;|,)+$/, '')
 }
 

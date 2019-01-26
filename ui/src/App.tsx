@@ -17,13 +17,16 @@ import User from './containers/User'
 import Messages from './containers/Messages'
 
 export type LoginQuery = {
-  currentUser: null | {
+  currentUser: null | CurrentUser
+}
+
+export type CurrentUser = {
+  id: string,
+  username: string,
+  alerts: Array<{
     id: string,
-    username: string,
-    alerts: Array<{
-      content: string
-    }>
-  }
+    content: string
+  }>
 }
 
 const loginQuery = query(`{
@@ -31,6 +34,7 @@ const loginQuery = query(`{
     id
     username
     alerts: alertsList (condition: { read: false }) {
+      id
       content
     }
   }
@@ -38,38 +42,33 @@ const loginQuery = query(`{
 
 const App: React.SFC<UrqlProps<LoginQuery>> = ({ data, error }) => {
   const currentUser = data && data.currentUser
+  const Main = currentUser ? Home : Landing
 
   return (
     <main className="App">
-      <Route exact path="/">
-        {currentUser &&<Nav currentUser={currentUser} />}
-      </Route>
+      <Route path="/" render={({ history }) =>
+        currentUser && <Nav currentUser={currentUser} routeChange={history.listen} />
+      }/>
 
       <Body>
         <Switch>
-          <Route exact path="/">
-            {currentUser
-              ? <Home />
-              : <Landing/>
-            }
-          </Route>
-
+          <Route exact path="/" component={Main} />
           <Route exact path="/login" component={Login} />
           <Route exact path="/signup" component={Signup} />
           <Route exact path="/profile" component={Profile} />
           <Route path="/messages" component={Messages} />
 
           <Route path="/users/:username" render={({ match }) =>
-            <User username={match.params.username}/>
+            <User username={match.params.username} />
           }/>
 
           <Route path="/posts/:id" render={({ match }) =>
-            <Posts id={match.params.id}/>
+            <Posts id={match.params.id} />
           }/>
 
           <Route path="/threads/:id" render={({ match }) =>
-            <Threads id={match.params.id}/>
-          } />
+            <Threads id={match.params.id} />
+          }/>
 
           <Route path="/forum">
             <div>This is the forum!</div>
