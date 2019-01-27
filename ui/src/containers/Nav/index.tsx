@@ -89,7 +89,14 @@ export type ReadAlertMutation = {
     input: {
       alertId: string
     }
-  }) => Promise<{ readAlert: { alert: { id: string, read: boolean } } }>
+  }) => Promise<{
+    readAlert: {
+      alert: {
+        id: string,
+        read: boolean
+      }
+    }
+  }>
 }
 
 const readAlertMutation = mutation(`
@@ -106,24 +113,25 @@ type AlertDropdownProps = {
   alerts: CurrentUser['alerts']
 }
 
+const Alerts: React.SFC<AlertDropdownProps> = ({ alerts }) => (
+  <Connect mutation={{ readAlert: readAlertMutation }}>
+    {({ readAlert }: UrqlProps<null, ReadAlertMutation>) => (
+      alerts.map(alert =>
+        <div key={alert.id}>
+          <X ring onClick={() => readAlert({ input: { alertId: alert.id} })} />
+          <ParsedText content={alert.content} />
+        </div>
+      )
+    )}
+  </Connect>
+)
+
 const AlertDropdown: React.SFC<AlertDropdownProps> = ({ alerts }) => (
   <div className={styles.alertDropdown}>
-    {alerts.length ? (
-      <Connect mutation={{ readAlert: readAlertMutation }}>
-        {({ readAlert }: UrqlProps<null, ReadAlertMutation>) => (
-
-            alerts.map(alert =>
-              <div key={alert.id}>
-                <X ring onClick={() => readAlert({ input: { alertId: alert.id} })} />
-                <ParsedText content={alert.content} />
-              </div>
-            )
-
-        )}
-      </Connect>
-    ) : (
-      'No Alerts!'
-    )}
+    {alerts.length
+      ? <Alerts alerts={alerts} />
+      : 'No Alerts!'
+    }
   </div>
 )
 
