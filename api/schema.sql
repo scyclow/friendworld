@@ -119,7 +119,6 @@ grant select on table friendworld.threads to friendworld_anonymous, friendworld_
 grant insert on table friendworld.threads to friendworld_user;
 
 
-
 -- alter table friendworld.threads enable row level security;
 -- create policy select_threads on friendworld.threads for select using (true);
 -- create policy update_threads on friendworld.threads for update to friendworld_user
@@ -159,6 +158,21 @@ create policy insert_posts on friendworld.posts for insert with check (
   author_id = nullif(current_setting('jwt.claims.user_id', true), '')::uuid
 );
 
+
+create function friendworld.threads_latest_post_time(t friendworld.threads)
+returns timestamp as $$
+
+  select friendworld.posts.created_at
+  from friendworld.posts
+  where friendworld.posts.thread_id = t.id
+  order by friendworld.posts.created_at desc
+  limit 1;
+
+$$ language sql stable;
+
+grant execute on function friendworld.threads_latest_post_time(friendworld.threads) to friendworld_user, friendworld_anonymous;
+
+comment on function friendworld.threads_latest_post_time(friendworld.threads) is E'@sortable';
 
 -- messages/ DMs
 
@@ -320,6 +334,7 @@ grant execute on function friendworld.current_user_id() to friendworld_anonymous
 create function friendworld.create_thread(
   title     text
 , content   text
+, tags      tag_store default null
 ) returns friendworld.threads as $$
   declare
     thread friendworld.threads;
@@ -329,13 +344,13 @@ create function friendworld.create_thread(
       values (title)
       returning * into thread;
 
-    perform friendworld.create_post(content, thread.id);
+    perform friendworld.create_post(content, tags, thread.id);
 
     return thread;
   end;
 $$ language plpgsql;
 
-grant execute on function friendworld.create_thread(text, text) to friendworld_user;
+grant execute on function friendworld.create_thread(text, text, tag_store) to friendworld_user;
 
 -- create post
 create function friendworld.create_post(

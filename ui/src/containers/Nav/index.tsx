@@ -152,7 +152,7 @@ const NavBar: React.SFC<NavBarProps> = ({ currentUser, toggleDropdownVisible }) 
     <div className={styles.container} style={styleVars.bg}>
       <div className={styles.content}>
         <Link to="/">
-          <div className={styles.title}>friendworld.social</div>
+          <div className={styles.title}>FriendWorld</div>
         </Link>
 
         <div className={styles.links}>

@@ -15,6 +15,7 @@ import Threads from './containers/Threads'
 import Profile from './containers/Profile'
 import User from './containers/User'
 import Messages from './containers/Messages'
+import Forum from './containers/Forum'
 
 export type LoginQuery = {
   currentUser: null | CurrentUser
@@ -53,6 +54,9 @@ const App: React.SFC<UrqlProps<LoginQuery>> = ({ data, error }) => {
       <Body>
         <Switch>
           <Route exact path="/" component={Main} />
+          <Route path="/forum" component={Forum} />
+
+          {/* TODOs: */}
           <Route exact path="/login" component={Login} />
           <Route exact path="/signup" component={Signup} />
           <Route exact path="/profile" component={Profile} />
@@ -70,9 +74,7 @@ const App: React.SFC<UrqlProps<LoginQuery>> = ({ data, error }) => {
             <Threads id={match.params.id} />
           }/>
 
-          <Route path="/forum">
-            <div>This is the forum!</div>
-          </Route>
+
         </Switch>
 
       </Body>
