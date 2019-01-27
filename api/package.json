@@ -11,6 +11,11 @@
   "license": "ISC",
   "dependencies": {
     "@graphile-contrib/pg-simplify-inflector": "https://github.com/graphile-contrib/pg-simplify-inflector.git",
-    "postgraphile": "^4.2.0"
+    "postgraphile": "^4.3.1"
+  },
+  "devDependencies": {
+    "@types/express": "^4.16.1",
+    "@types/node": "^10.12.18",
+    "typescript": "^3.2.4"
   }
 }
