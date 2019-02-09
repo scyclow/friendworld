@@ -12,6 +12,7 @@ import Login from './containers/Login'
 import Signup from './containers/Signup'
 import Posts from './containers/Posts'
 import Threads from './containers/Threads'
+import NewThread from './containers/NewThread'
 import Profile from './containers/Profile'
 import User from './containers/User'
 import Messages from './containers/Messages'
@@ -57,7 +58,7 @@ const App: React.SFC<UrqlProps<LoginQuery>> = ({ data, error }) => {
         <Switch>
           <Route exact path="/" component={Main} />
           <Route path="/forum" component={Forum} />
-          <Route exact path="/threads/new" render={() => <div/>} />
+          <Route exact path="/threads/new" component={NewThread} />
 
           <Route exact path="/threads/:id" render={({ match }) =>
             <Threads id={Number(match.params.id)} />

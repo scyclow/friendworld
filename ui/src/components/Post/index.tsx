@@ -14,7 +14,7 @@ export type PostType = {
     id: string,
     username: string
     avatarUrl?: string
-  },
+  } | null,
   thread?: {
     id: string,
     title: string
@@ -43,7 +43,7 @@ const Post: React.SFC<Props> = ({ post }) => (
       </div>
     </div>
     <div className={styles.postedAt}>
-      <div>Posted at: {post.createdAt}</div>
+      <div>Posted at: {new Date(post.createdAt).toISOString()}</div>
       {!!post.thread && (
         <div className={styles.threadLink}>
           In thread: <Link to={`/threads/${post.thread.id}`}>{post.thread.title}</Link>

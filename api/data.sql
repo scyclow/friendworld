@@ -43,6 +43,7 @@ insert into friendworld.posts (author_id, content, thread_id) values
 , ('0a04ff42-a2c6-4e1f-bda9-80c493abefea'::uuid, 'Green!', 5)
 , ('0a04ff42-a2c6-4e1f-bda9-80c493abefef'::uuid, 'purple', 5)
 , ('0a04ff42-a2c6-4e1f-bda9-80c493abefee'::uuid, 'Studies have shown that the average American is shown up to 500,000 advertisements a year! If that sounds like a lot... thats because it is!  ', 6)
+, ('0a04ff42-a2c6-4e1f-bda9-80c493abefee'::uuid, 'Did you know because I certainly did not!!!', 7)
 ;
 
 

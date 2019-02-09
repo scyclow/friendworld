@@ -5,7 +5,10 @@ import profanityFilter from '../../utils/profanityFilter'
 
 type Props = {
   submit: (content: string) => unknown,
-  placeholder?: string
+  onChange?: (content: string) => unknown,
+  buttonContent?: string,
+  placeholder?: string,
+  inputStyle?: Object
 }
 
 const defaultPlaceholder = "Join the conversation..."
@@ -27,7 +30,7 @@ class TextInput extends React.Component<Props, State> {
   }
 
   render() {
-    const { placeholder } = this.props
+    const { placeholder, buttonContent, inputStyle } = this.props
     const { content } = this.state
 
     return (
@@ -36,14 +39,18 @@ class TextInput extends React.Component<Props, State> {
         <textarea
           className={styles.contentInput}
           placeholder={placeholder || defaultPlaceholder}
-          onChange={e => this.setState({ content: e.target.value })}
+          onChange={e => {
+            this.setState({ content: e.target.value })
+            this.props.onChange && this.props.onChange(e.target.value)
+          }}
           value={content}
+          style={inputStyle}
         />
         <button
           className={styles.submitButton}
           onClick={this.submit}
         >
-          Submit
+          {buttonContent || 'Submit'}
         </button>
         </div>
       </div>

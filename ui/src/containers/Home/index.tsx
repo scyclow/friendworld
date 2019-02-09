@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import styles from './styles.module.scss';
 import { Connect, ConnectHOC, UrqlProps, query, mutation } from 'urql'
 import match, { DataProps } from '../../utils/match'
-import { getUsernames, getHashtags } from '../../utils/parsers'
+import { getTags } from '../../utils/parsers'
 import TextInput from '../../components/TextInput'
 import Post, { PostType } from '../../components/Post'
 
@@ -80,12 +80,6 @@ const Feed: any = (props: Props) => match<FeedQuery, CreatePostMutation>({
 
 // )
 
-function getTags(content: string) {
-  return JSON.stringify({
-    hashtags: getHashtags(content),
-    usernames: getUsernames(content)
-  })
-}
 
 class Home extends React.Component<Props> {
   createPost = (content: string) => {

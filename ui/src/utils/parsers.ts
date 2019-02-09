@@ -53,6 +53,13 @@ export function getHashtags(str: string) {
     .map(f => cleanFragment(f, /^#/))
 }
 
+export function getTags(content: string) {
+  return JSON.stringify({
+    hashtags: getHashtags(content),
+    usernames: getUsernames(content)
+  })
+}
+
 export function cleanFragment(fragment: string, test?: RegExp) {
   return fragment
     .replace(test ? new RegExp(test, 'g') : '', '')
