@@ -35,6 +35,10 @@ export function isThreadRef(str: string) {
   return str.match(threadTest)
 }
 
+export function hasNewline(str: string) {
+  return str.match('\n')
+}
+
 export function getUsernames(str: string) {
   return str
     .split(' ')
@@ -52,6 +56,6 @@ export function getHashtags(str: string) {
 export function cleanFragment(fragment: string, test?: RegExp) {
   return fragment
     .replace(test ? new RegExp(test, 'g') : '', '')
-    .replace(/(\.|\?|!|:|;|,)+$/, '')
+    .replace(/(\.|\?|!|:|;|,|'|")+$/, '')
 }
 

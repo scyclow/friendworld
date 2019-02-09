@@ -7,6 +7,7 @@ import styles from './styles.module.scss'
 import jwt from '../../utils/jwt'
 import styleVars from '../../styles'
 import ParsedText from '../../components/ParsedText'
+import { Width } from '../../components/Body'
 import X from '../../components/X'
 
 import { CurrentUser } from '../../App'
@@ -21,7 +22,6 @@ const logout = () => {
   window.location.href = '/'
 }
 
-const userImgStub = { backgroundImage: "url(https://scontent-lga3-1.xx.fbcdn.net/v/t1.0-1/c3.0.24.24a/p24x24/983791_10204867785199299_8740536904686164238_n.jpg?_nc_cat=104&_nc_ht=scontent-lga3-1.xx&oh=91c238d01e1493eca93ff6f0004caaf9&oe=5CCFD78B)"}
 
 type DropdownProps = {
   hide: Function,
@@ -150,20 +150,28 @@ type NavBarProps = Props & {
 const NavBar: React.SFC<NavBarProps> = ({ currentUser, toggleDropdownVisible }) => (
   <nav className={styles.spaceHolder}>
     <div className={styles.container} style={styleVars.bg}>
-      <div className={styles.content}>
-        <Link to="/">
-          <div className={styles.title}>FriendWorld</div>
-        </Link>
+      <Width>
+        <div className={styles.content}>
+          <Link to="/">
+            <div className={styles.title}>FriendWorld</div>
+          </Link>
 
-        <div className={styles.links}>
-          <a href="#" onClick={logout}>logout</a>
-          <Link to="/" className={styles.link}>Home</Link>
-          <Link to="/forum" className={styles.link}>Forum</Link>
-          {currentUser && <Link to="/messages" className={styles.link}>Messages</Link>}
-          {currentUser && <div className={styles.circle} onClick={toggleDropdownVisible('users')} style={userImgStub} /> }
-          {currentUser && <AlertCircle unread={currentUser.alerts.length} onClick={toggleDropdownVisible('alerts')} />}
+          <div className={styles.links}>
+            <a href="#" onClick={logout}>logout</a>
+            <Link to="/" className={styles.link}>Home</Link>
+            <Link to="/forum" className={styles.link}>Forum</Link>
+            {currentUser && <Link to="/messages" className={styles.link}>Messages</Link>}
+            {currentUser && (
+              <div
+                className={cx(styles.circle, styles.user)}
+                style={{ backgroundImage: `url(${currentUser.avatarUrl})` }}
+                onClick={toggleDropdownVisible('users')}
+              />
+            )}
+            {currentUser && <AlertCircle unread={currentUser.alerts.length} onClick={toggleDropdownVisible('alerts')} />}
+          </div>
         </div>
-      </div>
+      </Width>
     </div>
   </nav>
 )

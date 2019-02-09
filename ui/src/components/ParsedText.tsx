@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { replace } from 'lodash'
+import replace from 'lodash/replace'
 import { Link } from 'react-router-dom'
 import {
   isExternalLink,
@@ -8,6 +8,7 @@ import {
   isUsername,
   isPostRef,
   isThreadRef,
+  hasNewline,
   cleanFragment,
 } from '../utils/parsers'
 
@@ -15,10 +16,14 @@ type Fragment = string | React.ReactNode;
 
 const last = (arr: Array<Fragment>): Fragment => arr[arr.length - 1]
 
-
+const imgStyle = {
+  maxWidth: '100%',
+  maxHeight: 300,
+  filter: 'grayscale(25%)'
+}
 const parseFragment = (fragment: string): Fragment => {
   if (isImage(fragment)) {
-    return <img src={fragment} style={{ maxWidth: '100%', maxHeight: 300 }}/>
+    return <img src={fragment} style={imgStyle} />
 
   } else if (isExternalLink(fragment)) {
     return <a href={fragment} target="_blank" rel="noopener noreferrer">{fragment}</a>
@@ -42,6 +47,20 @@ const parseFragment = (fragment: string): Fragment => {
     const threadId = cleanFragment(fragment, /^\/threads\//)
     const dirt = fragment.replace(threadId, '').replace(/^\/threads\//, '')
     return <><Link to={`/threads/${threadId}`}>/threads/{threadId}</Link>{dirt}</>
+
+  } else if (hasNewline(fragment)) {
+    // @ts-ignore -- doing some weird shit here
+    return fragment.split('\n').reduce((out, str, i) => (
+      !!out[0] ? [
+        ...out,
+        <br key={i/2}/>,
+        <React.Fragment key={i+1}>{str}</React.Fragment>
+      ] : [
+        ...out,
+        <React.Fragment key={i+1}>{str}</React.Fragment>
+      ]
+    ), [])
+
 
   } else {
     return fragment
@@ -76,8 +95,10 @@ const parser = (content: string) => content
   .reduce(combineFragments, [])
   .map((f, i) => <React.Fragment key={i}>{f}</React.Fragment>)
 
-export default ({ content }: Props) => (
-  <>
-    {parser(content)}
-  </>
-)
+export default function ParsedText({ content }: Props) {
+  return (
+    <>
+      {parser(content)}
+    </>
+  )
+}

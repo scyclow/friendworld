@@ -5,15 +5,26 @@
 .avatar {
   border: 1px solid;
   border-radius: 3px;
-  height: 45px;
-  width: 45px;
+  height: 60px;
+  width: 60px;
   margin-bottom: 5px;
+  background-size: cover;
+  filter: grayscale(45%) contrast(125%);
 }
 
 .header {
   border-bottom: 1px solid;
   font-size: 12px;
   padding: 0.5em;
+}
+
+.threadLink {
+  font-size: 12px;
+}
+
+.username {
+  text-decoration: none;
+  font-size: 14px;
 }
 
 .main {
@@ -23,11 +34,15 @@
 .panel {
   padding: 10px;
   border-right: 1px solid;
+  width: 150px;
+  display: inline-block;
 }
 
 .content {
   padding: 10px;
   line-height: 1.4;
+  display: inline-block;
+  width: calc(100% - 150px);
 }
 
 .postedAt {

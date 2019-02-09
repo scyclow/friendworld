@@ -23,6 +23,7 @@ const feedQuery = query(`{
     author {
       id
       username
+      avatarUrl
     }
     thread {
       id

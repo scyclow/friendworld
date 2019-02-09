@@ -6,15 +6,23 @@ export default function profanityFilter (input: string): string {
     motherfucker: 'm0therf_cker',
     fuck: 'f_ck',
 
-
     shit: 'sh!t',
+    ' dick ': 'penis',
+    bitch: 'b&tch',
 
     cunt: 'c%nt',
     cocksuck: 'c*cks^ck',
     cock: 'c*ck',
 
     nigger: 'african-american',
-    ' god ': 'g-d'
+    nigga: 'pal',
+
+    ' fag ': 'homosexual',
+    faggot: 'homosexual',
+
+    tranny: 'transexual',
+    ' god ': 'g-d',
+    goddamn: 'goshdarn'
   }
 
   each(swap, (replaceTo, replaceFrom) => {

@@ -11,12 +11,12 @@ $height: 42px;
   border-right: 0;
   position: fixed;
   user-select: none;
+  z-index: 10;
 }
 
 .content {
   height: $height;
-  width: 1025px;
-  margin: auto;
+  width: 100%;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -48,6 +48,11 @@ $height: 42px;
   padding: 0 10px;
 }
 
+.user {
+  filter: grayscale(45%);
+  background-size: cover;
+}
+
 .circle {
   $size: 17px;
   cursor: pointer;
@@ -64,10 +69,9 @@ $height: 42px;
 }
 
 .unread {
-  background-color: #ff0000;
-  color: #ffffff;
+  border: 1px solid;
   padding: 10px;
-  border: 1px solid black;
+  animation: Unread 1.5s linear infinite;
 }
 
 .dropdown {
@@ -84,10 +88,17 @@ $height: 42px;
   padding: 5px;
 }
 
-
-@media(max-width: 1012px) {
-  .content {
-    width: 100%;
-    padding: 0 8px;
+@keyframes Unread {
+  0% {
+    background-color: #ffff00;
+    color: #0000ff;
+  }
+  50% {
+    background-color: #ff0000;
+    color: #00ffff;
+  }
+  100% {
+    background-color: #ffff00;
+    color: #0000ff;
   }
 }

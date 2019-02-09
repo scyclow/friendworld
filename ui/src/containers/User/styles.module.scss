@@ -1,0 +1,28 @@
+.profile {
+  border: 1px solid;
+  padding: 10px;
+}
+
+.content {
+  display: flex;
+}
+
+.left {
+  display: inline-block;
+}
+
+.right {
+  display: inline-block;
+  margin-left: 20px;
+}
+
+.avatar {
+  border: 1px solid;
+  border-radius: 3px;
+  height: 120px;
+  width: 120px;
+  margin-bottom: 5px;
+  background-size: cover;
+  filter: grayscale(45%) contrast(125%);
+  display: inline-block;
+}

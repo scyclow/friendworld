@@ -55,13 +55,14 @@ $$ language plpgsql;
 -------------------
 
 -- users
-create domain username_domain as citext check (value ~* '^[A-Za-z0-9._%-]+$');
+create domain username_domain as citext check (value ~* '^[A-Za-z0-9_\-~+^<>.*!$]{0,18}[A-Za-z0-9_\-<>~^]$');
 create table friendworld.users (
   id            uuid primary key unique default uuid_generate_v4()
 , created_at    timestamp default now()
 , updated_at    timestamp default now()
 , username      username_domain not null unique
 , email         citext check (email ~* '^.+@.+\..+$')
+, avatar_url    text
 , tracking_info jsonb
 );
 
@@ -385,9 +386,9 @@ create function friendworld.create_post(
       , format('You were mentioned by @%s in /posts/%s !', author.username, post.id::text) as content
       from
         jsonb_array_elements_text(tags -> 'usernames') as usernames
-        left join friendworld.users on usernames = friendworld.users.username
+        left join friendworld.users on usernames::citext = friendworld.users.username::citext
       where
-        usernames = friendworld.users.username
+        usernames::citext = friendworld.users.username::citext
     );
 
     return post;
@@ -403,7 +404,8 @@ create function friendworld.create_message(
 , content       text
 ) returns friendworld.messages as $$
   declare
-    message friendworld.messages;
+    message     friendworld.messages;
+    from_user   friendworld.users;
 
   begin
     insert into friendworld.messages (from_id, to_id, content)
@@ -413,6 +415,16 @@ create function friendworld.create_message(
       , content
       )
       returning * into message;
+
+    select friendworld.users.* into from_user
+    from friendworld.users
+    where friendworld.users.id = nullif(current_setting('jwt.claims.user_id', true), '')::uuid;
+
+
+    insert into friendworld.alerts (user_id, content) values (
+      to_id,
+      format('You received a message from @%s!', from_user.username)
+    );
 
     return message;
   end;
