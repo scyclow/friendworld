@@ -97,7 +97,7 @@ class Home extends React.Component<Props> {
     return (
       <div className={styles.container}>
         <div className={styles.left}>
-          <TextInput submit={this.createPost}/>
+          <TextInput onSubmit={this.createPost}/>
           <Feed {...this.props} />
         </div>
 

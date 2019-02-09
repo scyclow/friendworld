@@ -117,8 +117,8 @@ const Alerts: React.SFC<AlertDropdownProps> = ({ alerts }) => (
   <Connect mutation={{ readAlert: readAlertMutation }}>
     {({ readAlert }: UrqlProps<null, ReadAlertMutation>) => (
       alerts.map(alert =>
-        <div key={alert.id}>
-          <X ring onClick={() => readAlert({ input: { alertId: alert.id} })} />
+        <div key={alert.id} onClick={() => readAlert({ input: { alertId: alert.id} })}>
+          <X ring />
           <ParsedText content={alert.content} />
         </div>
       )

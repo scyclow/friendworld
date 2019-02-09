@@ -66,13 +66,13 @@ class NewThread extends React.Component<Props, State> {
   createThread = async () => {
     const { title, content } = this.state
     const tags = getTags(title + ' ' + content)
-    await this.props.createThread({ input: {
+    const { createThread: { thread } } = await this.props.createThread({ input: {
         title,
         content,
         tags,
       }
     })
-    window.location.href = '/forum'
+    window.location.href = `/threads/${thread.id}`
   }
 
   render() {
@@ -95,7 +95,7 @@ class NewThread extends React.Component<Props, State> {
         />
         <h2 className={styles.label}>Content</h2>
         <TextInput
-          submit={this.createThread}
+          onSubmit={this.createThread}
           onChange={content => this.setState({ content })}
           buttonContent="Start Thread"
           placeholder=""

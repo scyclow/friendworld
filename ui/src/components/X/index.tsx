@@ -2,7 +2,7 @@ import * as React from 'react';
 import styles from './styles.module.scss';
 
 type XProps = {
-  onClick: any,
+  onClick?: any,
   ring?: boolean
 }
 

@@ -4,7 +4,7 @@ import profanityFilter from '../../utils/profanityFilter'
 
 
 type Props = {
-  submit: (content: string) => unknown,
+  onSubmit: (content: string) => unknown,
   onChange?: (content: string) => unknown,
   buttonContent?: string,
   placeholder?: string,
@@ -22,10 +22,10 @@ class TextInput extends React.Component<Props, State> {
     content: ''
   }
 
-  submit = () => {
+  onSubmit = () => {
     const { content } = this.state
     if (!content) return
-    this.props.submit(profanityFilter(content))
+    this.props.onSubmit(profanityFilter(content))
     this.setState({ content: '' })
   }
 
@@ -48,7 +48,7 @@ class TextInput extends React.Component<Props, State> {
         />
         <button
           className={styles.submitButton}
-          onClick={this.submit}
+          onClick={this.onSubmit}
         >
           {buttonContent || 'Submit'}
         </button>
