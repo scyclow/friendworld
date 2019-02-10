@@ -3,6 +3,8 @@ import { Connect, UrqlProps, query } from 'urql'
 import { Link } from 'react-router-dom'
 import styles from './styles.module.scss'
 import match, { DataProps } from '../../utils/match'
+import ParsedText from '../../components/ParsedText'
+
 
 import { RouteProps } from 'react-router-dom'
 
@@ -49,27 +51,38 @@ const ThreadPost = ({ thread }: { thread: Thread }) => (
 const Forum: React.SFC<{}> = () => {
 
   return (
-    <Connect query={threadQuery}>
-      {match<ThreadQuery>({
-        error: ({ error }) => <div>Something went wrong: {JSON.stringify(error)}</div>,
+    <div className={styles.container}>
+      <div className={styles.left}>
+        <Connect query={threadQuery}>
+          {match<ThreadQuery>({
+            error: ({ error }) => <div>Something went wrong: {JSON.stringify(error)}</div>,
 
-        loading: () => <div>loading...</div>,
+            loading: () => <div>loading...</div>,
 
-        data: ({ data }) => (
-          <div className={styles.container}>
-            <div className={styles.header}>
-              <h2>Forum</h2>
-              <Link to={`/threads/new`}>Start A Thread!</Link>
-            </div>
-            {data.threads.map(thread =>
-              <React.Fragment key={thread.id}>
-                <ThreadPost thread={thread} />
-              </React.Fragment>
-            )}
-          </div>
-        )
-      })}
-    </Connect>
+            data: ({ data }) => (
+              <>
+                <div className={styles.header}>
+                  <h2>Forum</h2>
+                  <Link to={`/threads/new`}>Start A Thread!</Link>
+                </div>
+                {data.threads.map(thread =>
+                  <React.Fragment key={thread.id}>
+                    <ThreadPost thread={thread} />
+                  </React.Fragment>
+                )}
+              </>
+            )
+          })}
+        </Connect>
+      </div>
+      <div className={styles.right}>
+        <div><ParsedText content="https://www.washingtonpost.com/resizer/bmfQHooAGH6PmEv0qHjgf-ZUy-k=/480x0/arc-anglerfish-washpost-prod-washpost.s3.amazonaws.com/public/EBULPVFULQI6PG4TXFYEHZL2EI.jpg BUY FAST CASH NOW"/></div>
+        <div><ParsedText content="https://fartashphoto.files.wordpress.com/2010/12/funny-hillary-clinton-picture.jpg UH OH... WHAT DID SHILLARY DO THIS TIME?!"/></div>
+        <div><ParsedText content="https://www.thoughtco.com/thmb/_Wdk4z5X4uEhg4h88GTFPS8KQqw=/768x0/filters:no_upscale():max_bytes(150000):strip_icc()/h20-58e655f93df78c5162ea0a1f.jpg YOU'LL NEVER BELIEVE WHAT SCIENTISTS ARE FINDING IN YOUR FOOD"/></div>
+        <div><ParsedText content="https://targetedindividualscanada.files.wordpress.com/2011/01/psycho-electronic-weapon-effects-pic1.jpg THE GOVERNMENT JUST FREAKED ABOUT NEW INFO LEAKING"/></div>
+        <div><ParsedText content="https://targetedindividualscanada.files.wordpress.com/2011/11/brain-inplants.jpg WHAT YOU DON'T KNOW ABOUT YOUR BRAIN MAY KILL YOU"/></div>
+      </div>
+    </div>
 
   )
 }

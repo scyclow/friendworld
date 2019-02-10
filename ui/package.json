@@ -6,8 +6,8 @@
     "@types/classnames": "^2.2.7",
     "@types/lodash": "^4.14.119",
     "@types/node": "^10.12.18",
-    "@types/react": "^16.7.21",
-    "@types/react-dom": "^16.0.11",
+    "@types/react": "^16.8.2",
+    "@types/react-dom": "^16.8.0",
     "@types/react-router": "^4.4.3",
     "@types/react-router-dom": "^4.3.1",
     "node-sass": "^4.11.0",
@@ -17,8 +17,8 @@
   "dependencies": {
     "classnames": "^2.2.6",
     "lodash": "^4.17.11",
-    "react": "^16.7.0",
-    "react-dom": "^16.7.0",
+    "react": "^16.8.1",
+    "react-dom": "^16.8.1",
     "react-router-dom": "^4.3.1",
     "urql": "^0.2.2"
   },

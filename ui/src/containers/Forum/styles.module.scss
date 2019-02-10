@@ -19,3 +19,21 @@
 .threadPost {
   margin-bottom: 10px;
 }
+
+.container {
+  display: flex;
+  justify-content: space-between;
+}
+
+.left {
+  max-width: 700px;
+  width: 100%;
+}
+.right {
+  border: 1px solid;
+  width: 295px;
+  padding: 10px;
+  // display: flex;
+  // justify-content: center;
+  // align-items: center;
+}

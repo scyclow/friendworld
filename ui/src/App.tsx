@@ -18,77 +18,44 @@ import User from './containers/User'
 import Messages from './containers/Messages'
 import Forum from './containers/Forum'
 
-export type LoginQuery = {
-  currentUser: null | CurrentUser
-}
 
-export type CurrentUser = {
-  id: string,
-  username: string,
-  avatarUrl?: string
-  alerts: Array<{
-    id: string
-    content: string
-  }>
-}
 
-const loginQuery = query(`{
-  currentUser {
-    id
-    username
-    avatarUrl
-    alerts: alertsList (condition: { read: false }) {
-      id
-      content
-    }
-  }
-}`)
+const App: React.SFC<{}> = () => (
+  <main className="App">
+    <Route path="/" component={Nav} />
 
-const App: React.SFC<UrqlProps<LoginQuery>> = ({ data, error }) => {
-  const currentUser = data && data.currentUser
-  const Main = currentUser ? Home : Landing
+    <Body>
+      <Switch>
+        <Route exact path="/" component={Forum} />
+        <Route exact path="/threads/new" component={NewThread} />
 
-  return (
-    <main className="App">
-      <Route path="/" render={({ history }) =>
-        currentUser && <Nav currentUser={currentUser} routeChange={history.listen} />
-      }/>
+        <Route exact path="/threads/:id" render={({ match }) =>
+          <Threads id={Number(match.params.id)} />
+        }/>
 
-      <Body>
-        <Switch>
-          <Route exact path="/" component={Main} />
-          <Route path="/forum" component={Forum} />
-          <Route exact path="/threads/new" component={NewThread} />
+        {/* TODOs: */}
+        <Route exact path="/login" component={Login} />
+        <Route exact path="/signup" component={Signup} />
+        <Route exact path="/profile" component={Profile} />
+        <Route path="/messages" component={Messages} />
 
-          <Route exact path="/threads/:id" render={({ match }) =>
-            <Threads id={Number(match.params.id)} />
-          }/>
+        <Route path="/users/:username" render={({ match }) =>
+          <User username={match.params.username} />
+        }/>
 
-          {/* TODOs: */}
-          <Route exact path="/login" component={Login} />
-          <Route exact path="/signup" component={Signup} />
-          <Route exact path="/profile" component={Profile} />
-          <Route path="/messages" component={Messages} />
-
-          <Route path="/users/:username" render={({ match }) =>
-            <User username={match.params.username} />
-          }/>
-
-          <Route path="/posts/:id" render={({ match }) =>
-            <Posts id={match.params.id} />
-          }/>
+        <Route path="/posts/:id" render={({ match }) =>
+          <Posts id={match.params.id} />
+        }/>
 
 
 
-        </Switch>
+      </Switch>
 
-      </Body>
-    </main>
-  )
-}
+    </Body>
+  </main>
+)
 
 
-export default ConnectHOC({
-  query: loginQuery
-})(App)
+
+export default App
 

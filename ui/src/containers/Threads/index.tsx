@@ -11,7 +11,7 @@ import { getTags } from '../../utils/parsers'
 import { RouteChildrenProps } from 'react-router'
 
 type ThreadQuery = {
-  thread: {
+  thread?: {
     id: number
     title: string
     posts: Array<PostType>
@@ -104,7 +104,7 @@ const Threads: React.SFC<{ id: number }> = ({ id }) => {
 
             loading: () => <div>loading...</div>,
 
-            data: ({ createPost, data: { thread } }) => (
+            data: ({ createPost, data: { thread } }) => thread ? (
               <div className={styles.container}>
                 <h2 className={styles.threadTitle}>{thread.title}</h2>
                 <div>
@@ -116,7 +116,7 @@ const Threads: React.SFC<{ id: number }> = ({ id }) => {
                   <AddPost threadId={thread.id} createPost={createPost} />
                 </div>
               </div>
-            )
+            ) : 'This thread does not exist!'
           })}
         </Connect>
       </div>

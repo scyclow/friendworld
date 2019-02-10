@@ -5,6 +5,7 @@ import { Connect, ConnectHOC, UrqlProps, query, mutation } from 'urql'
 import match, { DataProps } from '../../utils/match'
 import { getTags } from '../../utils/parsers'
 import TextInput from '../../components/TextInput'
+import ParsedText from '../../components/ParsedText'
 import Post, { PostType } from '../../components/Post'
 
 
@@ -102,7 +103,8 @@ class Home extends React.Component<Props> {
         </div>
 
         <div className={styles.right}>
-          BUY FASTCASH NOW!
+          <div><ParsedText content="https://www.washingtonpost.com/resizer/bmfQHooAGH6PmEv0qHjgf-ZUy-k=/480x0/arc-anglerfish-washpost-prod-washpost.s3.amazonaws.com/public/EBULPVFULQI6PG4TXFYEHZL2EI.jpg BUY FAST CASH NOW"/></div>
+          <div><ParsedText content="http://hillarysquid.angelfire.com/hillary_clinton2.jpg UH OH... WHAT DID SHILLARY DO THIS TIME?!"/></div>
         </div>
       </div>
     )

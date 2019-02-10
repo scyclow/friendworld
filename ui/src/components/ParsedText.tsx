@@ -11,19 +11,18 @@ import {
   hasNewline,
   cleanFragment,
 } from '../utils/parsers'
+import Img from './Img'
 
 type Fragment = string | React.ReactNode;
 
 const last = (arr: Array<Fragment>): Fragment => arr[arr.length - 1]
 
 const imgStyle = {
-  maxWidth: '100%',
   maxHeight: 300,
-  filter: 'grayscale(25%)'
 }
 const parseFragment = (fragment: string): Fragment => {
   if (isImage(fragment)) {
-    return <img src={fragment} style={imgStyle} />
+    return <Img url={fragment} style={imgStyle} />
 
   } else if (isExternalLink(fragment)) {
     return <a href={fragment} target="_blank" rel="noopener noreferrer">{fragment}</a>
@@ -57,10 +56,9 @@ const parseFragment = (fragment: string): Fragment => {
         <React.Fragment key={i+1}>{str}</React.Fragment>
       ] : [
         ...out,
-        <React.Fragment key={i+1}>{str}</React.Fragment>
+        <React.Fragment key={i+1.1}>{str}</React.Fragment>
       ]
     ), [])
-
 
   } else {
     return fragment

@@ -1,187 +1,45 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
 import cx from 'classnames'
-import { Connect, UrqlProps, mutation } from 'urql'
+import { ConnectHOC, UrqlProps, query } from 'urql'
 
 import styles from './styles.module.scss'
-import jwt from '../../utils/jwt'
 import styleVars from '../../styles'
-import ParsedText from '../../components/ParsedText'
 import { Width } from '../../components/Body'
-import X from '../../components/X'
 
-import { CurrentUser } from '../../App'
+import { AlertDropdown, AlertCircle } from './Alerts'
+import { UserDropdown } from './User'
+import Dropdown from './Dropdown'
 
-const switchUser = (username: string) => {
-  jwt.setCurrentUser(username)
-  window.location.href = "/"
-}
+import { RouteChildrenProps } from 'react-router'
 
-const logout = () => {
-  jwt.clearCurrentUser()
-  window.location.href = '/'
-}
-
-
-type DropdownProps = {
-  hide: Function,
-  children: any
-}
-
-class Dropdown extends React.Component<DropdownProps> {
-  id = '__dropdown_component__'
-
-  hideDropdown = (e: any) => {
-    const dropdown = document.getElementById(this.id)
-    console.log(dropdown, e.target !== dropdown, dropdown && !dropdown.contains(e.target))
-    if (dropdown && e.target !== dropdown && !dropdown.contains(e.target)) {
-      this.props.hide()
-    }
-  }
-
-  componentDidMount() {
-    document.addEventListener('click', this.hideDropdown)
-  }
-
-  componentWillUnmount() {
-    document.removeEventListener('click', this.hideDropdown)
-  }
-
-  render() {
-    const { children } = this.props
-    return (
-      <div
-        id={this.id}
-        className={styles.dropdown}
-        style={styleVars.bg}
-      >
-        {children}
-      </div>
-    )
+export type LoginQuery = {
+  currentUser: {
+    id: string,
+    username: string,
+    avatarUrl?: string
+    alerts: Array<{
+      id: string
+      content: string
+    }>
   }
 }
 
-const UserDropdown: React.SFC<{}> = () => (
-  <>
-    <Link to="/profile">
-      <div>
-        <div>Go to active user profile</div>
-        <div>{jwt.getCurrentUser().username}</div>
-      </div>
-    </Link>
-
-    <div>
-      <div>Switch Account</div>
-      {jwt.getInnactiveUserList().map(({ username }) => (
-        <div
-          key={username}
-          onClick={() => switchUser(username)}
-        >
-          {username}
-        </div>
-       ))}
-    </div>
-  </>
-)
-
-export type ReadAlertMutation = {
-  readAlert: (args: {
-    input: {
-      alertId: string
-    }
-  }) => Promise<{
-    readAlert: {
-      alert: {
-        id: string,
-        read: boolean
-      }
-    }
-  }>
-}
-
-const readAlertMutation = mutation(`
-mutation readAlert($input: ReadAlertInput!) {
-  readAlert(input: $input) {
-    alert {
+const loginQuery = query(`{
+  currentUser {
+    id
+    username
+    avatarUrl
+    alerts: alertsList (condition: { read: false }) {
       id
-      read
+      content
     }
   }
 }`)
 
-type AlertDropdownProps = {
-  alerts: CurrentUser['alerts']
-}
+export type Props = RouteChildrenProps & UrqlProps<LoginQuery>
 
-const Alerts: React.SFC<AlertDropdownProps> = ({ alerts }) => (
-  <Connect mutation={{ readAlert: readAlertMutation }}>
-    {({ readAlert }: UrqlProps<null, ReadAlertMutation>) => (
-      alerts.map(alert =>
-        <div key={alert.id} onClick={() => readAlert({ input: { alertId: alert.id} })}>
-          <X ring />
-          <ParsedText content={alert.content} />
-        </div>
-      )
-    )}
-  </Connect>
-)
-
-const AlertDropdown: React.SFC<AlertDropdownProps> = ({ alerts }) => (
-  <div className={styles.alertDropdown}>
-    {alerts.length
-      ? <Alerts alerts={alerts} />
-      : 'No Alerts!'
-    }
-  </div>
-)
-
-const AlertCircle: React.SFC<{ unread: number, onClick: any }> = ({ unread, onClick }) => (
-  // TODO make padding a a function of unread
-  <div className={cx(styles.circle, { [styles.unread]: unread })} onClick={onClick}>
-    {unread || 0}
-  </div>
-)
-
-
-type NavBarProps = Props & {
-  toggleDropdownVisible: (state: State['dropdownState']) => () => void
-}
-
-const NavBar: React.SFC<NavBarProps> = ({ currentUser, toggleDropdownVisible }) => (
-  <nav className={styles.spaceHolder}>
-    <div className={styles.container} style={styleVars.bg}>
-      <Width>
-        <div className={styles.content}>
-          <Link to="/">
-            <div className={styles.title}>FriendWorld</div>
-          </Link>
-
-          <div className={styles.links}>
-            <a href="#" onClick={logout}>logout</a>
-            <Link to="/" className={styles.link}>Home</Link>
-            <Link to="/forum" className={styles.link}>Forum</Link>
-            {currentUser && <Link to="/messages" className={styles.link}>Messages</Link>}
-            {currentUser && (
-              <div
-                className={cx(styles.circle, styles.user)}
-                style={{ backgroundImage: `url(${currentUser.avatarUrl})` }}
-                onClick={toggleDropdownVisible('users')}
-              />
-            )}
-            {currentUser && <AlertCircle unread={currentUser.alerts.length} onClick={toggleDropdownVisible('alerts')} />}
-          </div>
-        </div>
-      </Width>
-    </div>
-  </nav>
-)
-
-type Props = {
-  currentUser: CurrentUser | null,
-  routeChange: Function
-}
-
-type State = {
+export type State = {
   dropdownState: null | 'users' | 'alerts'
 }
 
@@ -193,7 +51,8 @@ class Nav extends React.Component<Props, State> {
   unlisten: Function = () => {}
 
   componentDidMount() {
-    this.unlisten = this.props.routeChange(this.changeDropdownState(null))
+    const { history } = this.props
+    this.unlisten = history.listen(this.changeDropdownState(null))
   }
 
   componentWillUnmount() {
@@ -208,22 +67,24 @@ class Nav extends React.Component<Props, State> {
   }
 
   renderDropdownContent = (contentType: State['dropdownState']) => {
-    const { currentUser } = this.props
-    if (!currentUser) return
+    const { data } = this.props
+    if (!data) return
 
     switch (contentType) {
       case 'users': return <UserDropdown />
-      case 'alerts': return <AlertDropdown alerts={currentUser.alerts} />
+      case 'alerts': return <AlertDropdown alerts={data.currentUser.alerts} />
       default: return <></>
     }
   }
 
   render() {
     const { dropdownState } = this.state
+    const { data } = this.props
     return (
       <>
         <NavBar
           {...this.props}
+          currentUser={data && data.currentUser}
           toggleDropdownVisible={this.changeDropdownState}
         />
         {dropdownState &&
@@ -236,4 +97,44 @@ class Nav extends React.Component<Props, State> {
   }
 }
 
-export default Nav
+type NavBarProps = {
+  currentUser: LoginQuery['currentUser'] | null,
+  toggleDropdownVisible: (state: State['dropdownState']) => () => void
+}
+
+const NavBar: React.SFC<NavBarProps> = ({ currentUser, toggleDropdownVisible }) => (
+  <nav className={styles.spaceHolder}>
+    <div className={styles.container} style={styleVars.bg}>
+      <Width>
+        <div className={styles.content}>
+          <Link to="/">
+            <div className={styles.title}>FriendWorld</div>
+          </Link>
+
+          <div className={styles.links}>
+            <Link to="/" className={styles.link}>Home</Link>
+            <Link to="/forum" className={styles.link}>Forum</Link>
+            {currentUser && <Link to="/messages" className={styles.link}>Messages</Link>}
+            {currentUser && (
+              <div
+                className={cx(styles.circle, styles.user)}
+                style={{ backgroundImage: `url(${currentUser.avatarUrl})` }}
+                onClick={toggleDropdownVisible('users')}
+              />
+            )}
+            {currentUser && (
+              <AlertCircle
+                unread={currentUser.alerts.length}
+                onClick={toggleDropdownVisible('alerts')}
+              />
+            )}
+          </div>
+        </div>
+      </Width>
+    </div>
+  </nav>
+)
+
+export default ConnectHOC({
+  query: loginQuery
+})(Nav)

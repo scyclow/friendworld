@@ -67,7 +67,7 @@ const User: React.SFC<Props> = ({ username }) => (
             <div className={styles.right}>
               <h1 className={styles.intro}>Welcome to {user.username}'s Profile!</h1>
               <h4>{user.username} has been a member since {formatDate(user.createdAt)}</h4>
-              <Link to="/messages/new?id=${user.id}">Message {user.username}</Link>
+              <Link to={`/messages/new?id=${user.id}`}>Message {user.username}</Link>
               {/*
               <div>
                 <h3>Last {user.posts.length} posts:</h3>

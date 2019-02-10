@@ -1,6 +1,5 @@
 # TODOs
 
-- allow comment on thread
 - touchup user page
 - messages
   - send new message with autofill from url
@@ -12,6 +11,8 @@
   - shoutbox
   - badges/achievements
 - make each page mobile friendly
+- hashtags page/query
+- link to post
 
 
 harder:
@@ -25,6 +26,7 @@ harder:
 ## features
 
 ### unlockables
+- "YOU'VE UNLOCKED A NEW SPONSOR!"
 - alert "UNLOCK A COOL NEW FEATURE AFTER YOU MAKE 10 POSTS"
 - unlock ability to create sock puppet accounts
 
@@ -35,6 +37,23 @@ harder:
 - "Click the puppy to continue"
 - robotic voice reading instructions
 - verified signup and express signup
+
+## ads
+- fastcash
+- fake news
+- aliens
+- TI
+- identity recovery
+- self help/pickup artist
+- cult
+- pharmacuticals
+- virus/technical support
+
+## ad delivery
+- all ads stored in db, tagged with theme
+- front end asks for # of each ad type; partially random, partially based on metrics
+  - ex: user { fastcash: 0.5, news: 0.2, aliens: 0.1, TI: 0.1. cult: 0.05, pharma: 0.05 }
+  - ads to show: 8 => { fastcash: 3, news: 2, aliens: 1, TI: 1, cult: 1}
 
 
 ## posts
@@ -66,13 +85,3 @@ harder:
 
 
 
-The last couple of months has really been a roller coster ride for me.
-
-
-It's been a pretty insane couple of months for me, but I think I'm finally
-
-Over the last couple months I've been the subject of highly coordinated targetting campaign by the US government. I'm sure I sound totally batshit crazy, but completely true.
-
-I haven't had the I've read accounts from other individuals who believe
-
-I'm using a throwaway account to write this post. These are the sorts of precautions I've needed to take over the last
