@@ -61,9 +61,9 @@ export const AlertDropdown: React.SFC<AlertDropdownProps> = ({ alerts }) => (
   </div>
 )
 
-export const AlertCircle: React.SFC<{ unread: number, onClick: any }> = ({ unread, onClick }) => (
+export const AlertCircle: React.SFC<{ unread: number }> = ({ unread }) => (
   // TODO make padding a a function of unread
-  <div className={cx(styles.circle, { [styles.unread]: unread })} onClick={onClick}>
+  <div className={cx(styles.circle, { [styles.unread]: unread })}>
     {unread || 0}
   </div>
 )

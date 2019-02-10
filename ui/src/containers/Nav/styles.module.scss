@@ -1,4 +1,6 @@
 $height: 42px;
+$link-spacing: 12px;
+$link-spacing-mobile: 10px;
 
 .spaceHolder {
   height: $height;
@@ -37,6 +39,15 @@ $height: 42px;
 
 .link {
   text-decoration: none;
+  cursor: pointer;
+  padding-right: $link-spacing;
+  display: flex;
+  align-items: center;
+}
+
+
+.link:last-child {
+  padding-right: 0;
 }
 
 .link:first-child::before {
@@ -45,7 +56,7 @@ $height: 42px;
 
 .link::before {
   content: '|';
-  padding: 0 10px;
+  padding-right: $link-spacing;
 }
 
 .user {
@@ -58,14 +69,36 @@ $height: 42px;
   cursor: pointer;
   width: $size;
   height: $size;
-  margin-bottom: -3px;
-  margin-left: 10px;
+  margin-left: 7px;
   border: 1px solid;
   border-radius: 20px;
   display: inline-flex;
   justify-content: center;
   align-items: center;
   font-size: 12px;
+}
+
+.label {
+  font-size: 12px;
+}
+
+@media(max-width: 450px) {
+  .title {
+    font-size: 17px;
+    padding: 5px 8px;
+  }
+  .link {
+    font-size: 13px;
+    padding-right: $link-spacing-mobile;
+  }
+
+  .link::before {
+    padding-right: $link-spacing-mobile;
+  }
+
+  .circle {
+    margin-left: 5px;
+  }
 }
 
 .unread {

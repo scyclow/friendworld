@@ -1,42 +1,35 @@
-import React, { Component } from 'react'
+import React, { Component, useEffect } from 'react'
 
 import styles from './styles.module.scss'
 import styleVars from '../../styles'
 
-type DropdownProps = {
+type Props = {
   hide: Function,
   children: any
 }
 
-export default class Dropdown extends React.Component<DropdownProps> {
-  id = '__dropdown_component__'
+const ELEMENT_ID = '__dropdown_component__'
 
-  hideDropdown = (e: any) => {
-    const dropdown = document.getElementById(this.id)
-    console.log(dropdown, e.target !== dropdown, dropdown && !dropdown.contains(e.target))
+export default function Dropdown({ children, hide }: Props) {
+  const hideDropdown = (e: any) => {
+    const dropdown = document.getElementById(ELEMENT_ID)
     if (dropdown && e.target !== dropdown && !dropdown.contains(e.target)) {
-      this.props.hide()
+      hide()
     }
   }
 
-  componentDidMount() {
-    document.addEventListener('click', this.hideDropdown)
-  }
+  useEffect(() => {
+    document.addEventListener('click', hideDropdown)
+    return () => document.removeEventListener('click', hideDropdown)
+  })
 
-  componentWillUnmount() {
-    document.removeEventListener('click', this.hideDropdown)
-  }
-
-  render() {
-    const { children } = this.props
-    return (
-      <div
-        id={this.id}
-        className={styles.dropdown}
-        style={styleVars.bg}
-      >
-        {children}
-      </div>
-    )
-  }
+  return (
+    <div
+      id={ELEMENT_ID}
+      className={styles.dropdown}
+      style={styleVars.bg}
+    >
+      {children}
+    </div>
+  )
 }

@@ -84,7 +84,7 @@ class NewThread extends React.Component<Props, State> {
     return (
       <div className={styles.body}>
         <div className={styles.back}>
-          <Link to="/forum">{'< Back to forum'}</Link>
+          <Link to="/">{'< Back to forum'}</Link>
         </div>
         <h1 className={styles.sectionTitle}>New Thread</h1>
         <h2 className={styles.label}>Title</h2>

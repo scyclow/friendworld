@@ -91,7 +91,7 @@ const Threads: React.SFC<{ id: number }> = ({ id }) => {
   return (
     <div>
       <div className={styles.back}>
-        <Link to="/forum">{'< Back to forum'}</Link>
+        <Link to="/">{'< Back to forum'}</Link>
       </div>
 
       <div className={styles.left}>

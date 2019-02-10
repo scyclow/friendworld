@@ -9,7 +9,7 @@ const switchUser = (username: string) => {
 
 const logout = () => {
   jwt.clearCurrentUser()
-  window.location.href = '/'
+  location.reload()
 }
 
 export const UserDropdown: React.SFC<{}> = () => (

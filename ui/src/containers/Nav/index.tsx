@@ -112,22 +112,31 @@ const NavBar: React.SFC<NavBarProps> = ({ currentUser, toggleDropdownVisible }) 
           </Link>
 
           <div className={styles.links}>
+            {/*
             <Link to="/" className={styles.link}>Home</Link>
             <Link to="/forum" className={styles.link}>Forum</Link>
-            {currentUser && <Link to="/messages" className={styles.link}>Messages</Link>}
-            {currentUser && (
-              <div
-                className={cx(styles.circle, styles.user)}
-                style={{ backgroundImage: `url(${currentUser.avatarUrl})` }}
-                onClick={toggleDropdownVisible('users')}
-              />
-            )}
-            {currentUser && (
-              <AlertCircle
-                unread={currentUser.alerts.length}
-                onClick={toggleDropdownVisible('alerts')}
-              />
-            )}
+            */}
+            {currentUser
+            ? <>
+                {/*<Link to="/messages" className={styles.link}>Messages</Link>*/}
+                <div className={styles.link} onClick={toggleDropdownVisible('users')}>
+                  Profile
+                  <div
+                    className={cx(styles.circle, styles.user)}
+                    style={{ backgroundImage: `url(${currentUser.avatarUrl})` }}
+                  />
+                </div>
+                <div className={styles.link} onClick={toggleDropdownVisible('alerts')}>
+                  Alerts
+                  <AlertCircle unread={currentUser.alerts.length} />
+                </div>
+              </>
+
+            : <>
+                <Link to="/login" className={styles.link}>Login</Link>
+                <Link to="/signup" className={styles.link}>Create Account</Link>
+              </>
+            }
           </div>
         </div>
       </Width>
