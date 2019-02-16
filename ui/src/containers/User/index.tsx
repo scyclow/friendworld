@@ -3,6 +3,7 @@ import { Connect, UrqlProps, query } from 'urql'
 import match from '../../utils/match'
 import styles from './styles.module.scss'
 import { Link } from 'react-router-dom'
+import Post from '../../components/Post'
 
 
 
@@ -13,10 +14,17 @@ query threadById ($username: UsernameDomain!){
     username
     createdAt
     avatarUrl
+    postStats: authoredPosts {
+      totalCount
+    }
     posts: authoredPostsList (first: 10, orderBy: [CREATED_AT_DESC]) {
       id
       content
-      threadId
+      createdAt
+      thread {
+        id
+        title
+      }
     }
   }
 }`
@@ -27,10 +35,18 @@ type UserQuery = {
     username: string
     createdAt: string
     avatarUrl: string
+    postStats: {
+      totalCount: number
+    }
     posts: Array<{
       id: string
-      threadId: string
       content: string
+      createdAt: string
+      thread: {
+        id: string
+        title: string
+      }
+
     }>
   }
 }
@@ -63,21 +79,27 @@ const User: React.SFC<Props> = ({ username }) => (
           <div className={styles.content}>
             <div className={styles.left}>
               <div className={styles.avatar} style={{ backgroundImage: `url(${user.avatarUrl})` }} />
+              <div><strong>Posts:</strong> {user.postStats.totalCount}</div>
+              <Link to={`/messages/new?id=${user.id}`}>Message {user.username}</Link>
             </div>
+
             <div className={styles.right}>
               <h1 className={styles.intro}>Welcome to {user.username}'s Profile!</h1>
-              <h4>{user.username} has been a member since {formatDate(user.createdAt)}</h4>
-              <Link to={`/messages/new?id=${user.id}`}>Message {user.username}</Link>
-              {/*
-              <div>
-                <h3>Last {user.posts.length} posts:</h3>
-                {user.posts.map(post => (
-                  <div key={post.id}>
-                    <Link to={`/threads/{post.threadId}`}>{post.content}</Link>
-                  </div>
-                ))}
+              <h4 className={styles.memberSince}>{user.username} has been a member since {formatDate(user.createdAt)}</h4>
+
+              <div className={styles.recentPosts}>
+                {user.posts.length ? (<>
+                  <h3>Last {user.posts.length} posts:</h3>
+                  {user.posts.map(post => (
+                    <div className={styles.postContainer} key={post.id}>
+                      <Post post={post} />
+                    </div>
+                  ))}
+                </>) : (
+                  <h3>This user has not made any posts yet.</h3>
+                )}
               </div>
-              */}
+
             </div>
 
           </div>

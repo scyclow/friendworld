@@ -104,7 +104,7 @@ class Home extends React.Component<Props> {
 
         <div className={styles.right}>
           <div><ParsedText content="https://www.washingtonpost.com/resizer/bmfQHooAGH6PmEv0qHjgf-ZUy-k=/480x0/arc-anglerfish-washpost-prod-washpost.s3.amazonaws.com/public/EBULPVFULQI6PG4TXFYEHZL2EI.jpg BUY FAST CASH NOW"/></div>
-          <div><ParsedText content="http://hillarysquid.angelfire.com/hillary_clinton2.jpg UH OH... WHAT DID SHILLARY DO THIS TIME?!"/></div>
+          <div><ParsedText content="https://i.imgur.com/94L6Q6X.jpg UH OH... WHAT DID SHILLARY DO THIS TIME?!"/></div>
         </div>
       </div>
     )

@@ -8,51 +8,34 @@ import Post, { PostType } from '../../components/Post'
 
 import { RouteChildrenProps } from 'react-router'
 
-type PostQuery = {
-  post?: PostType
+type CurrentUserQuery = {
+  currentUser: {
+    id: string
+    username: string
+    avatarUrl?: string
+  }
 }
 
-const postQuery = `
-query postById ($id: Int!){
-  post: postById (id: $id) {
+const currentUserQuery = query(`{
+  currentUser {
     id
-    createdAt
-    content
-    author {
-      id
-      username
-      avatarUrl
-      postStats: authoredPosts {
-        totalCount
-      }
-    }
-    thread {
-      id
-      title
-    }
+    username
+    avatarUrl
   }
-}`
+}`)
 
 
 const Posts: React.SFC<{ id: number }> = ({ id }) => {
   return (
     <div>
-      <div className={styles.back}>
-        <Link to="/">{'< Back to forum'}</Link>
-      </div>
-
       <div className={styles.left}>
-        <Connect query={query(postQuery, { id })}>
-          {match<PostQuery>({
+        <Connect query={currentUserQuery}>
+          {match<CurrentUserQuery>({
             error: ({ error }) => <div>Something went wrong: {JSON.stringify(error)}</div>,
 
             loading: () => <div>loading...</div>,
 
-            data: ({ data: { post } }) => post ? (
-
-                <Post post={post}/>
-
-            ) : 'This post does not exist!'
+            data: ({ data: { currentUser } }) => (JSON.stringify(currentUser))
           })}
         </Connect>
       </div>

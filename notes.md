@@ -1,18 +1,14 @@
 # TODOs
 
-- touchup user page
+<!--
 - messages
   - send new message with autofill from url
   - message panel on side
   - read messages
-- personal profile stuff
-- home page
-  - recent threads
-  - shoutbox
-  - badges/achievements
+-->
+- user dashboard
 - make each page mobile friendly
 - hashtags page/query
-- link to post
 
 
 harder:

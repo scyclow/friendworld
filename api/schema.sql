@@ -248,9 +248,21 @@ create view friendworld.view_test as
   from friendworld.users;
 */
 
-create table friendworld.tests (
-  thing citext
+create table friendworld.ads (
+  id            uuid primary key unique default uuid_generate_v4()
+, created_at    timestamp default now()
+, updated_at    timestamp default now()
+, url           text
+, img           text default null
+, content       text default null
 );
+
+create trigger ad_updated_at before update
+  on friendworld.ads
+  for each row
+  execute procedure friendworld_private.set_updated_at();
+
+grant select on table friendworld.ads to friendworld_anonymous, friendworld_user;
 
 
 

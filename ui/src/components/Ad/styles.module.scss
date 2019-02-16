@@ -1,0 +1,11 @@
+
+.ad {
+  padding: 10px;
+  a {
+    text-decoration: none;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}

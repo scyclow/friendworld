@@ -1,7 +1,7 @@
 import React, { Component, useEffect } from 'react'
-
+import cx from 'classnames'
 import styles from './styles.module.scss'
-import styleVars from '../../styles'
+
 
 type Props = {
   hide: Function,
@@ -26,8 +26,7 @@ export default function Dropdown({ children, hide }: Props) {
   return (
     <div
       id={ELEMENT_ID}
-      className={styles.dropdown}
-      style={styleVars.bg}
+      className={cx(styles.dropdown, 'solid')}
     >
       {children}
     </div>

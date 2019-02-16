@@ -3,7 +3,10 @@ import { Connect, UrqlProps, query } from 'urql'
 import { Link } from 'react-router-dom'
 import styles from './styles.module.scss'
 import match, { DataProps } from '../../utils/match'
+import useResponsive from '../../utils/useResponsive'
+
 import ParsedText from '../../components/ParsedText'
+import AdContainer from '../AdContainer'
 
 
 import { RouteProps } from 'react-router-dom'
@@ -39,16 +42,27 @@ type ThreadQuery = {
   threads: Array<Thread>
 }
 
-const ThreadPost = ({ thread }: { thread: Thread }) => (
-  <div key={thread.id} className={styles.threadPost}>
-    <Link to={`/threads/${thread.id}`}>{thread.title}</Link>
-    <div className={styles.info}><strong>LAST POST:</strong> [{thread.latestPostTime}]</div>
-    <div className={styles.info}><strong>by:</strong> {thread.posts[0] && thread.posts[0].author.username}</div>
-    <div className={styles.info}><strong>POSTS:</strong> {thread.postStats.totalCount}</div>
-  </div>
-)
+const ThreadPost = ({ thread }: { thread: Thread }) => {
+  const userName = thread.posts[0] && thread.posts[0].author.username
+  const title = thread.title.length > 297
+    ? thread.title.substring(0, 297) + '...'
+    : thread.title
+  return (
+    <div key={thread.id} className={styles.threadPost}>
+      <Link to={`/threads/${thread.id}`}>{title}</Link>
+      <div className={styles.info}><strong>LAST POST:</strong> [{thread.latestPostTime}]</div>
+      <div className={styles.info}><strong>by: </strong>
+        <Link to={`/users/${userName}`}>{userName}</Link>
+      </div>
+      <div className={styles.info}><strong>POSTS:</strong> {thread.postStats.totalCount}</div>
+    </div>
+  )
+}
 
 const Forum: React.SFC<{}> = () => {
+  const { isMobile, isDesktop } = useResponsive(540)
+  const showAd = (i: number) => isMobile && !((i + 1) % 6)
+
 
   return (
     <div className={styles.container}>
@@ -65,8 +79,9 @@ const Forum: React.SFC<{}> = () => {
                   <h2>Forum</h2>
                   <Link to={`/threads/new`}>Start A Thread!</Link>
                 </div>
-                {data.threads.map(thread =>
+                {data.threads.map((thread, i) =>
                   <React.Fragment key={thread.id}>
+                    {showAd(i) && <div className={styles.adContainer}><AdContainer n={1} /></div>}
                     <ThreadPost thread={thread} />
                   </React.Fragment>
                 )}
@@ -75,13 +90,7 @@ const Forum: React.SFC<{}> = () => {
           })}
         </Connect>
       </div>
-      <div className={styles.right}>
-        <div><ParsedText content="https://www.washingtonpost.com/resizer/bmfQHooAGH6PmEv0qHjgf-ZUy-k=/480x0/arc-anglerfish-washpost-prod-washpost.s3.amazonaws.com/public/EBULPVFULQI6PG4TXFYEHZL2EI.jpg BUY FAST CASH NOW"/></div>
-        <div><ParsedText content="https://fartashphoto.files.wordpress.com/2010/12/funny-hillary-clinton-picture.jpg UH OH... WHAT DID SHILLARY DO THIS TIME?!"/></div>
-        <div><ParsedText content="https://www.thoughtco.com/thmb/_Wdk4z5X4uEhg4h88GTFPS8KQqw=/768x0/filters:no_upscale():max_bytes(150000):strip_icc()/h20-58e655f93df78c5162ea0a1f.jpg YOU'LL NEVER BELIEVE WHAT SCIENTISTS ARE FINDING IN YOUR FOOD"/></div>
-        <div><ParsedText content="https://targetedindividualscanada.files.wordpress.com/2011/01/psycho-electronic-weapon-effects-pic1.jpg THE GOVERNMENT JUST FREAKED ABOUT NEW INFO LEAKING"/></div>
-        <div><ParsedText content="https://targetedindividualscanada.files.wordpress.com/2011/11/brain-inplants.jpg WHAT YOU DON'T KNOW ABOUT YOUR BRAIN MAY KILL YOU"/></div>
-      </div>
+      {isDesktop && <AdContainer />}
     </div>
 
   )

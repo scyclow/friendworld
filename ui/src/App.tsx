@@ -13,7 +13,7 @@ import Signup from './containers/Signup'
 import Posts from './containers/Posts'
 import Threads from './containers/Threads'
 import NewThread from './containers/NewThread'
-import Profile from './containers/Profile'
+import Dashboard from './containers/Dashboard'
 import User from './containers/User'
 import Messages from './containers/Messages'
 import Forum from './containers/Forum'
@@ -36,7 +36,7 @@ const App: React.SFC<{}> = () => (
         {/* TODOs: */}
         <Route exact path="/login" component={Login} />
         <Route exact path="/signup" component={Signup} />
-        <Route exact path="/profile" component={Profile} />
+        <Route exact path="/dashboard" component={Dashboard} />
         <Route path="/messages" component={Messages} />
 
         <Route path="/users/:username" render={({ match }) =>
@@ -44,7 +44,7 @@ const App: React.SFC<{}> = () => (
         }/>
 
         <Route path="/posts/:id" render={({ match }) =>
-          <Posts id={match.params.id} />
+          <Posts id={Number(match.params.id)} />
         }/>
 
 

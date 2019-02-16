@@ -4,7 +4,6 @@ import cx from 'classnames'
 import { ConnectHOC, UrqlProps, query } from 'urql'
 
 import styles from './styles.module.scss'
-import styleVars from '../../styles'
 import { Width } from '../../components/Body'
 
 import { AlertDropdown, AlertCircle } from './Alerts'
@@ -72,7 +71,12 @@ class Nav extends React.Component<Props, State> {
 
     switch (contentType) {
       case 'users': return <UserDropdown />
-      case 'alerts': return <AlertDropdown alerts={data.currentUser.alerts} />
+      case 'alerts': return (
+        <AlertDropdown
+          alerts={data.currentUser.alerts}
+          onEmptyClick={this.changeDropdownState(null)}
+        />
+      )
       default: return <></>
     }
   }
@@ -104,7 +108,7 @@ type NavBarProps = {
 
 const NavBar: React.SFC<NavBarProps> = ({ currentUser, toggleDropdownVisible }) => (
   <nav className={styles.spaceHolder}>
-    <div className={styles.container} style={styleVars.bg}>
+    <div className={cx(styles.container, 'solid')}>
       <Width>
         <div className={styles.content}>
           <Link to="/">
@@ -120,7 +124,7 @@ const NavBar: React.SFC<NavBarProps> = ({ currentUser, toggleDropdownVisible }) 
             ? <>
                 {/*<Link to="/messages" className={styles.link}>Messages</Link>*/}
                 <div className={styles.link} onClick={toggleDropdownVisible('users')}>
-                  Profile
+                  {currentUser.username}
                   <div
                     className={cx(styles.circle, styles.user)}
                     style={{ backgroundImage: `url(${currentUser.avatarUrl})` }}

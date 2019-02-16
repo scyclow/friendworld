@@ -11,9 +11,12 @@ import Post from '../../components/Post'
 
 type UserQuery = {
   currentUser: {
-    id: string,
-    username: string,
+    id: string
+    username: string
     avatarUrl: string
+    postStats: {
+      totalCount: number
+    }
   }
 }
 
@@ -22,6 +25,9 @@ const userQuery = query(`{
     id
     username
     avatarUrl
+    postStats: authoredPosts {
+      totalCount
+    }
   }
 }`)
 
@@ -81,6 +87,13 @@ class NewThread extends React.Component<Props, State> {
 
     if (fetching) return 'loading...'
 
+    const author = data && {
+      ...data.currentUser,
+      postStats: {
+        totalCount: data.currentUser.postStats.totalCount + 1
+      }
+    }
+
     return (
       <div className={styles.body}>
         <div className={styles.back}>
@@ -106,10 +119,10 @@ class NewThread extends React.Component<Props, State> {
             <h2 className={styles.label}>[PREVIEW] {title}</h2>
             <Post
               post={{
-                id: 'XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX',
+                id: 'XX',
                 createdAt: new Date().toString(),
                 content,
-                author: data && data.currentUser,
+                author,
               }}
             />
           </>

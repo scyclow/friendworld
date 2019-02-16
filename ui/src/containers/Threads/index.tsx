@@ -2,10 +2,12 @@ import * as React from 'react';
 import { Connect, UrqlProps, query, mutation } from 'urql'
 import { Link } from 'react-router-dom'
 import styles from './styles.module.scss'
+import AdContainer from '../AdContainer'
 import match from '../../utils/match'
 import Post, { PostType } from '../../components/Post'
 import TextInput from '../../components/TextInput'
 import { getTags } from '../../utils/parsers'
+import useResponsive from '../../utils/useResponsive'
 
 
 import { RouteChildrenProps } from 'react-router'
@@ -31,6 +33,9 @@ query threadById ($id: Int!){
         id
         username
         avatarUrl
+        postStats: authoredPosts {
+          totalCount
+        }
       }
     }
   }
@@ -88,12 +93,16 @@ const AddPost: React.SFC<AddPostProps> = ({ threadId, createPost }) => {
 }
 
 const Threads: React.SFC<{ id: number }> = ({ id }) => {
+  const { isMobile, isDesktop } = useResponsive(820)
+  const showAd = (i: number) => isMobile && !((i + 1) % 4)
+
   return (
     <div>
       <div className={styles.back}>
         <Link to="/">{'< Back to forum'}</Link>
       </div>
 
+    <div className={styles.threadContainer}>
       <div className={styles.left}>
         <Connect
           query={query(threadQuery, { id })}
@@ -108,8 +117,11 @@ const Threads: React.SFC<{ id: number }> = ({ id }) => {
               <div className={styles.container}>
                 <h2 className={styles.threadTitle}>{thread.title}</h2>
                 <div>
-                  {thread.posts.map(post =>
+                  {thread.posts.map((post, i) =>
                     <React.Fragment key={post.id}>
+                      {showAd(i) && (
+                        <div className={styles.ad}><AdContainer n={1}/></div>
+                      )}
                       <Post post={post} />
                     </React.Fragment>
                   )}
@@ -118,7 +130,10 @@ const Threads: React.SFC<{ id: number }> = ({ id }) => {
               </div>
             ) : 'This thread does not exist!'
           })}
-        </Connect>
+          </Connect>
+        </div>
+
+        {isDesktop && <div style={{ marginTop: '10px' }}><AdContainer /></div>}
       </div>
     </div>
 
@@ -126,7 +141,4 @@ const Threads: React.SFC<{ id: number }> = ({ id }) => {
 }
 
 export default Threads
-
-
-// const Thread: React.SFC<Props> = ({ id }) => <div>this is thread: {id}</div>
 

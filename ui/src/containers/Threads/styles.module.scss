@@ -3,7 +3,6 @@
 }
 
 .left {
-  max-width: 700px;
   width: 100%;
 }
 
@@ -13,4 +12,22 @@
 
 .addPost {
   margin-top: 10px;
+}
+
+.ad {
+  display: flex;
+  justify-content: center;
+  margin: 15px;
+  margin-left: -10px;
+}
+
+.threadContainer {
+  display: flex;
+  justify-content: space-between;
+}
+
+@media(max-width: 540px) {
+  .threadContainer {
+    display: block;
+  }
 }

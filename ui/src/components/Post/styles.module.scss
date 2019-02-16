@@ -1,5 +1,7 @@
 .container {
   border: 1px solid;
+  border-bottom: 2px solid;
+  margin-bottom: 1px;
 }
 
 .avatar {
@@ -23,9 +25,14 @@
 }
 
 .username {
-  text-decoration: none;
-  font-size: 14px;
+  text-decoration: underline;
 }
+
+.username, .totalPosts {
+  font-size: 14px;
+  margin-bottom: 4px;
+}
+
 
 .main {
   display: flex;
@@ -35,19 +42,62 @@
   padding: 10px;
   border-right: 1px solid;
   width: 150px;
-  display: inline-block;
+  text-decoration: none;
+}
+
+.panelContainer {
+  width: 150px;
+  background: no-repeat;
+}
+
+.userInfo, .userInfo * {
+  background: no-repeat;
 }
 
 .content {
   padding: 10px;
   line-height: 1.4;
-  display: inline-block;
-  width: calc(100% - 150px);
 }
 
-.postedAt {
+.footer {
   width: 100%;
   border-top: 1px solid;
   font-size: 12px;
   padding: 2px;
+}
+
+.postedAt {
+  display: flex;
+  justify-content: space-between;
+}
+
+@media(max-width: 520px) {
+  .main {
+    display: block;
+  }
+
+  .panel {
+    border-right: 0;
+    border-bottom: 1px solid;
+    width: 100%;
+    display: flex;
+
+    .avatar {
+      height: 30px;
+      width: 30px;
+      display: inline-block;
+      margin-bottom: 0;
+      margin-right: 10px;
+    }
+  }
+
+  .panelContainer {
+    width: 100%;
+    display: flex;
+    align-items: center;
+  }
+
+  .totalPosts {
+    font-size: 10px;
+  }
 }

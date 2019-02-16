@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
 import jwt from '../../utils/jwt'
+import styles from './styles.module.scss'
 
 const switchUser = (username: string) => {
   jwt.setCurrentUser(username)
@@ -13,26 +14,30 @@ const logout = () => {
 }
 
 export const UserDropdown: React.SFC<{}> = () => (
-  <>
-    <a href="#" onClick={logout}>logout</a>
+  <ul className={styles.userDropdown}>
 
-    <Link to="/profile">
-      <div>
-        <div>Go to active user profile</div>
-        <div>{jwt.getCurrentUser().username}</div>
-      </div>
+    <a href="#" onClick={logout}>
+      <li>Logout</li>
+    </a>
+
+    <Link to="/dashboard">
+      <li>
+        <div>User Dashboard</div>
+      </li>
     </Link>
 
-    <div>
-      <div>Switch Account</div>
-      {jwt.getInnactiveUserList().map(({ username }) => (
-        <div
-          key={username}
-          onClick={() => switchUser(username)}
-        >
-          {username}
-        </div>
-       ))}
+    <div className={styles.switchAccounts}>
+      <strong>Switch Account</strong>
+      <ul>
+        {jwt.getInnactiveUserList().map(({ username }) => (
+          <li
+            key={username}
+            onClick={() => switchUser(username)}
+          >
+            {username}
+          </li>
+         ))}
+      </ul>
     </div>
-  </>
+  </ul>
 )

@@ -1,9 +1,10 @@
 $height: 42px;
+$height-mobile: 36px;
 $link-spacing: 12px;
 $link-spacing-mobile: 10px;
 
 .spaceHolder {
-  height: $height;
+  // height: $height;
 }
 
 .container {
@@ -11,7 +12,7 @@ $link-spacing-mobile: 10px;
   border: 2px solid;
   border-left: 0;
   border-right: 0;
-  position: fixed;
+  // position: fixed;
   user-select: none;
   z-index: 10;
 }
@@ -35,6 +36,7 @@ $link-spacing-mobile: 10px;
 .links {
   display: inline-flex;
   align-items: center;
+  overflow: auto;
 }
 
 .link {
@@ -43,6 +45,8 @@ $link-spacing-mobile: 10px;
   padding-right: $link-spacing;
   display: flex;
   align-items: center;
+  padding-top: 10px;
+  padding-bottom: 10px;
 }
 
 
@@ -51,7 +55,8 @@ $link-spacing-mobile: 10px;
 }
 
 .link:first-child::before {
-  content: ''
+  content: '';
+  padding: 0;
 }
 
 .link::before {
@@ -75,35 +80,18 @@ $link-spacing-mobile: 10px;
   display: inline-flex;
   justify-content: center;
   align-items: center;
-  font-size: 12px;
+  font-size: 11px;
+  padding: 8px;
 }
 
 .label {
   font-size: 12px;
 }
 
-@media(max-width: 450px) {
-  .title {
-    font-size: 17px;
-    padding: 5px 8px;
-  }
-  .link {
-    font-size: 13px;
-    padding-right: $link-spacing-mobile;
-  }
-
-  .link::before {
-    padding-right: $link-spacing-mobile;
-  }
-
-  .circle {
-    margin-left: 5px;
-  }
-}
-
 .unread {
   border: 1px solid;
   padding: 10px;
+  font-size: 12px;
   animation: Unread 1.5s linear infinite;
 }
 
@@ -114,12 +102,22 @@ $link-spacing-mobile: 10px;
   top: $height + 3;
   width: 320px;
   min-height: 50px;
+  max-height: calc(100vh - 48px);
+  overflow: scroll;
   border: 2px solid;
   z-index: 1;
 }
 
 .alertDropdown {
   padding: 5px;
+}
+
+.noAlerts {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  height: 50px;
 }
 
 @keyframes Unread {
@@ -134,5 +132,50 @@ $link-spacing-mobile: 10px;
   100% {
     background-color: #ffff00;
     color: #0000ff;
+  }
+}
+
+.userDropdown li {
+  border-bottom: 1px solid;
+  padding: 5px;
+}
+.userDropdown a {
+  text-decoration: none
+}
+
+.userDropdown li:hover {
+  text-decoration: underline;
+}
+
+.switchAccounts {
+  padding: 5px;
+}
+
+.switchAccounts li {
+  border: 0;
+  cursor: pointer;
+}
+
+
+@media(max-width: 450px) {
+  .spaceHolder, .content {
+    height: $height-mobile;
+  }
+
+  .title {
+    font-size: 16px;
+    padding: 3px 6px;
+  }
+  .link {
+    font-size: 13px;
+    padding-right: $link-spacing-mobile;
+  }
+
+  .link::before {
+    padding-right: $link-spacing-mobile;
+  }
+
+  .circle {
+    margin-left: 5px;
   }
 }

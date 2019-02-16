@@ -4,11 +4,20 @@
   font-family: sans-serif;
   box-sizing: border-box;
 
-  color: black;
+  color: #000;
 }
 
 .solid {
-  background-color: white;
+  background-color: #fff;
+}
+
+.nightmode * {
+  color: #fff;
+  background-color: #000;
+}
+
+.nightmode .solid {
+  background-color: #000
 }
 
 a {

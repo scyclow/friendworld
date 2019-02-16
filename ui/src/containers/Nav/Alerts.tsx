@@ -36,7 +36,8 @@ mutation readAlert($input: ReadAlertInput!) {
 type CurrentUser = LoginQuery['currentUser']
 
 type AlertDropdownProps = {
-  alerts: CurrentUser['alerts']
+  alerts: CurrentUser['alerts'],
+  onEmptyClick?: (a: any) => any
 }
 
 const Alerts: React.SFC<AlertDropdownProps> = ({ alerts }) => (
@@ -52,11 +53,11 @@ const Alerts: React.SFC<AlertDropdownProps> = ({ alerts }) => (
   </Connect>
 )
 
-export const AlertDropdown: React.SFC<AlertDropdownProps> = ({ alerts }) => (
+export const AlertDropdown: React.SFC<AlertDropdownProps> = ({ alerts, onEmptyClick }) => (
   <div className={styles.alertDropdown}>
     {alerts.length
       ? <Alerts alerts={alerts} />
-      : 'No Alerts!'
+      : <div className={styles.noAlerts} onClick={onEmptyClick}>No Alerts!</div>
     }
   </div>
 )
