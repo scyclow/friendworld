@@ -1,5 +1,15 @@
 .header {
   margin-bottom: 20px;
+
+  h1 {
+    font-size: 32px
+  }
+}
+
+@media(max-width: 540px) {
+  .header h1 {
+    font-size: 24px
+  }
 }
 
 .header > * {
@@ -28,7 +38,7 @@
   margin-bottom: 10px;
 }
 
-.container {
+.forum {
   display: flex;
   justify-content: space-between;
 }

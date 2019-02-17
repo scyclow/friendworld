@@ -14,6 +14,9 @@ import { RouteProps } from 'react-router-dom'
 
 
 const threadQuery = query(`{
+  currentUser {
+    id
+  }
   threads: threadsList (orderBy: [LATEST_POST_TIME_DESC]) {
     id
     title
@@ -39,6 +42,7 @@ type Thread = {
   }
 }
 type ThreadQuery = {
+  currentUser?: { id: string }
   threads: Array<Thread>
 }
 
@@ -48,14 +52,14 @@ const ThreadPost = ({ thread }: { thread: Thread }) => {
     ? thread.title.substring(0, 297) + '...'
     : thread.title
   return (
-    <div key={thread.id} className={styles.threadPost}>
+    <article key={thread.id} className={styles.threadPost}>
       <Link to={`/threads/${thread.id}`}>{title}</Link>
-      <div className={styles.info}><strong>LAST POST:</strong> [{thread.latestPostTime}]</div>
+      <div className={styles.info}><strong>LAST POST:</strong> <time>[{thread.latestPostTime}]</time></div>
       <div className={styles.info}><strong>by: </strong>
         <Link to={`/users/${userName}`}>{userName}</Link>
       </div>
       <div className={styles.info}><strong>POSTS:</strong> {thread.postStats.totalCount}</div>
-    </div>
+    </article>
   )
 }
 
@@ -65,8 +69,8 @@ const Forum: React.SFC<{}> = () => {
 
 
   return (
-    <div className={styles.container}>
-      <div className={styles.left}>
+    <section className={styles.forum}>
+      <section className={styles.left}>
         <Connect query={threadQuery}>
           {match<ThreadQuery>({
             error: ({ error }) => <div>Something went wrong: {JSON.stringify(error)}</div>,
@@ -76,8 +80,10 @@ const Forum: React.SFC<{}> = () => {
             data: ({ data }) => (
               <>
                 <div className={styles.header}>
-                  <h2>Forum</h2>
-                  <Link to={`/threads/new`}>Start A Thread!</Link>
+                  <h1>Forum</h1>
+                  <Link to={data.currentUser ? `/threads/new` : `/signup`}>
+                    Start A Thread!
+                  </Link>
                 </div>
                 {data.threads.map((thread, i) =>
                   <React.Fragment key={thread.id}>
@@ -89,9 +95,9 @@ const Forum: React.SFC<{}> = () => {
             )
           })}
         </Connect>
-      </div>
+      </section>
       {isDesktop && <AdContainer />}
-    </div>
+    </section>
 
   )
 }

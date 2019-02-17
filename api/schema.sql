@@ -192,7 +192,7 @@ create trigger message_updated_at before update
   execute procedure friendworld_private.set_updated_at();
 
 comment on constraint "messages_from_id_fkey" on friendworld.messages is E'@foreignFieldName messagesSent';
-comment on constraint "messages_to_id_fkey" on friendworld.messages is E'@foreignFieldName messagesRecieved';
+comment on constraint "messages_to_id_fkey" on friendworld.messages is E'@foreignFieldName messagesReceived';
 
 alter table friendworld.messages enable row level security;
 grant select on table friendworld.messages to friendworld_user;
@@ -217,6 +217,7 @@ create table friendworld.alerts (
 , user_id       uuid not null references friendworld.users(id)
 , read          boolean default false
 , content       text not null
+, link          text default null
 );
 
 create trigger alert_updated_at before update
@@ -343,6 +344,7 @@ $$ language sql stable;
 grant execute on function friendworld.current_user() to friendworld_anonymous, friendworld_user;
 grant execute on function friendworld.current_user_id() to friendworld_anonymous, friendworld_user;
 
+
 -- create thread
 create function friendworld.create_thread(
   title     text
@@ -410,39 +412,45 @@ $$ language plpgsql;
 grant execute on function friendworld.create_post(text, tag_store, int) to friendworld_user;
 
 
+
 -- create message
 create function friendworld.create_message(
-  to_id         uuid
-, content       text
+  to_username         username_domain
+, content             text
 ) returns friendworld.messages as $$
   declare
-    message     friendworld.messages;
-    from_user   friendworld.users;
+    message   friendworld.messages;
+    from_user friendworld.users;
+    to_user friendworld.users;
+
 
   begin
-    insert into friendworld.messages (from_id, to_id, content)
-      values (
-        nullif(current_setting('jwt.claims.user_id', true), '')::uuid
-      , to_id::uuid
-      , content
-      )
-      returning * into message;
+
+    select friendworld.users.* into to_user
+    from friendworld.users
+    where friendworld.users.username = to_username;
 
     select friendworld.users.* into from_user
     from friendworld.users
     where friendworld.users.id = nullif(current_setting('jwt.claims.user_id', true), '')::uuid;
 
+    insert into friendworld.messages (from_id, to_id, content) values (
+      from_user.id
+    , to_user.id
+    , content
+    ) returning * into message;
 
-    insert into friendworld.alerts (user_id, content) values (
-      to_id,
-      format('You received a message from @%s!', from_user.username)
+    insert into friendworld.alerts (user_id, content, link) values (
+      to_user.id
+    , format('You received a message from @%s!', from_user.username)
+    , format('/messages/%s', from_user.username)
     );
 
     return message;
   end;
 $$ language plpgsql;
 
-grant execute on function friendworld.create_message(uuid, text) to friendworld_user;
+grant execute on function friendworld.create_message(username_domain, text) to friendworld_user;
 
 commit;
 

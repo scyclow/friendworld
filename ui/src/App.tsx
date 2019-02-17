@@ -1,5 +1,6 @@
 import * as React from 'react'
 import { withRouter, Route, Switch } from 'react-router-dom'
+import { RouteComponentProps } from 'react-router'
 import { ConnectHOC, query, UrqlProps } from 'urql'
 import match, { DataProps } from './utils/match'
 import jwt from './utils/jwt'
@@ -20,42 +21,56 @@ import Forum from './containers/Forum'
 
 
 
-const App: React.SFC<{}> = () => (
-  <main className="App">
-    <Route path="/" component={Nav} />
+class App extends React.Component<RouteComponentProps> {
+  componentDidUpdate(prevProps: RouteComponentProps) {
+    if (this.props.location !== prevProps.location) {
+      window.scrollTo(0, 0)
+    }
+  }
 
-    <Body>
-      <Switch>
-        <Route exact path="/" component={Forum} />
-        <Route exact path="/threads/new" component={NewThread} />
+  render() {
+    return (
+      <main className="App">
+        <Route path="/" component={Nav} />
 
-        <Route exact path="/threads/:id" render={({ match }) =>
-          <Threads id={Number(match.params.id)} />
-        }/>
+        <Body>
+          <Switch>
+            <Route exact path="/" component={Forum} />
+            <Route exact path="/threads/new" component={NewThread} />
 
-        {/* TODOs: */}
-        <Route exact path="/login" component={Login} />
-        <Route exact path="/signup" component={Signup} />
-        <Route exact path="/dashboard" component={Dashboard} />
-        <Route path="/messages" component={Messages} />
+            <Route exact path="/threads/:id" render={({ match }) =>
+              <Threads id={Number(match.params.id)} />
+            }/>
 
-        <Route path="/users/:username" render={({ match }) =>
-          <User username={match.params.username} />
-        }/>
+            <Route path="/messages/:username" render={({ match }) =>
+              <Messages username={match.params.username} />
+            }/>
 
-        <Route path="/posts/:id" render={({ match }) =>
-          <Posts id={Number(match.params.id)} />
-        }/>
+            <Route path="/messages" render={({ match }) =>
+              <Messages />
+            }/>
+
+            {/* TODOs: */}
+            <Route exact path="/login" component={Login} />
+            <Route exact path="/signup" component={Signup} />
+            <Route exact path="/dashboard" component={Dashboard} />
+
+            <Route path="/users/:username" render={({ match }) =>
+              <User username={match.params.username} />
+            }/>
+
+            <Route path="/posts/:id" render={({ match }) =>
+              <Posts id={Number(match.params.id)} />
+            }/>
+          </Switch>
+        </Body>
+      </main>
+    )
+  }
+}
 
 
 
-      </Switch>
 
-    </Body>
-  </main>
-)
-
-
-
-export default App
+export default withRouter(App)
 

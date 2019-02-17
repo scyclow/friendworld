@@ -18,10 +18,13 @@ type ThreadQuery = {
     title: string
     posts: Array<PostType>
   }
+  currentUser?: {
+    id: string
+  }
 }
 
 const threadQuery = `
-query threadById ($id: Int!){
+query threadById ($id: Int!) {
   thread: threadById (id: $id) {
     id
     title
@@ -38,6 +41,9 @@ query threadById ($id: Int!){
         }
       }
     }
+  }
+  currentUser {
+    id
   }
 }`
 
@@ -97,46 +103,53 @@ const Threads: React.SFC<{ id: number }> = ({ id }) => {
   const showAd = (i: number) => isMobile && !((i + 1) % 4)
 
   return (
-    <div>
+    <section>
       <div className={styles.back}>
         <Link to="/">{'< Back to forum'}</Link>
       </div>
 
-    <div className={styles.threadContainer}>
-      <div className={styles.left}>
-        <Connect
-          query={query(threadQuery, { id })}
-          mutation={{ createPost: createPostMutation }}
-        >
-          {match<ThreadQuery, CreatePostMutation>({
-            error: ({ error }) => <div>Something went wrong: {JSON.stringify(error)}</div>,
+      <div className={styles.threadContainer}>
+        <div className={styles.left}>
+          <Connect
+            query={query(threadQuery, { id })}
+            mutation={{ createPost: createPostMutation }}
+          >
+            {match<ThreadQuery, CreatePostMutation>({
+              error: ({ error }) => <div>Something went wrong: {JSON.stringify(error)}</div>,
 
-            loading: () => <div>loading...</div>,
+              loading: () => <div>loading...</div>,
 
-            data: ({ createPost, data: { thread } }) => thread ? (
-              <div className={styles.container}>
-                <h2 className={styles.threadTitle}>{thread.title}</h2>
-                <div>
-                  {thread.posts.map((post, i) =>
-                    <React.Fragment key={post.id}>
-                      {showAd(i) && (
-                        <div className={styles.ad}><AdContainer n={1}/></div>
-                      )}
-                      <Post post={post} />
-                    </React.Fragment>
-                  )}
-                  <AddPost threadId={thread.id} createPost={createPost} />
+              data: ({ createPost, data: { thread, currentUser } }) => thread ? (
+                <div className={styles.container}>
+                  <h2 className={styles.threadTitle}>{thread.title}</h2>
+                  <div>
+                    {thread.posts.map((post, i) =>
+                      <React.Fragment key={post.id}>
+                        {showAd(i) && (
+                          <div className={styles.ad}><AdContainer n={1}/></div>
+                        )}
+                        <Post post={post} />
+                      </React.Fragment>
+                    )}
+                    {!currentUser && (
+                      <Link to="/signup">
+                        <h2 className={styles.signup}>Create An Account To Join The Conversation!</h2>
+                      </Link>
+                    )}
+                    {currentUser
+                      ? <AddPost threadId={thread.id} createPost={createPost} />
+                      : <div className={styles.disabled}><AddPost threadId={thread.id} createPost={createPost} /></div>
+                    }
+                  </div>
                 </div>
-              </div>
-            ) : 'This thread does not exist!'
-          })}
+              ) : 'This thread does not exist!'
+            })}
           </Connect>
         </div>
 
         {isDesktop && <div style={{ marginTop: '10px' }}><AdContainer /></div>}
       </div>
-    </div>
-
+    </section>
   )
 }
 

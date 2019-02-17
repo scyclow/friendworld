@@ -2,6 +2,18 @@
   margin-bottom: 15px;
 }
 
+.signup {
+  text-align: center;
+  padding: 20px;
+  line-height: 1.3;
+}
+
+.disabled {
+  filter: blur(1px);
+  pointer-events: none;
+  user-select: none;
+}
+
 .left {
   width: 100%;
 }

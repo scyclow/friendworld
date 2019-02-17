@@ -13,31 +13,42 @@ const logout = () => {
   location.reload()
 }
 
-export const UserDropdown: React.SFC<{}> = () => (
-  <ul className={styles.userDropdown}>
+export const UserDropdown: React.SFC<{}> = () => {
+  const alternativeUsers = jwt.getInnactiveUserList()
 
-    <a href="#" onClick={logout}>
-      <li>Logout</li>
-    </a>
+  return (
+    <ul className={styles.userDropdown}>
+      <a href="#" onClick={logout}>
+        <li>Logout</li>
+      </a>
 
-    <Link to="/dashboard">
-      <li>
-        <div>User Dashboard</div>
-      </li>
-    </Link>
+      <Link to="/messages">
+        <li>
+          <div>Messages</div>
+        </li>
+      </Link>
 
-    <div className={styles.switchAccounts}>
-      <strong>Switch Account</strong>
-      <ul>
-        {jwt.getInnactiveUserList().map(({ username }) => (
-          <li
-            key={username}
-            onClick={() => switchUser(username)}
-          >
-            {username}
-          </li>
-         ))}
-      </ul>
-    </div>
-  </ul>
-)
+      <Link to="/dashboard">
+        <li>
+          <div>User Dashboard</div>
+        </li>
+      </Link>
+
+      {alternativeUsers.length &&
+        <div className={styles.switchAccounts}>
+          <strong>Switch Account</strong>
+          <ul>
+            {alternativeUsers.map(({ username }) => (
+              <li
+                key={username}
+                onClick={() => switchUser(username)}
+              >
+                {username}
+              </li>
+             ))}
+          </ul>
+        </div>
+      }
+    </ul>
+  )
+}

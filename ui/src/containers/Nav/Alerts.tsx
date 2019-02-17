@@ -6,7 +6,7 @@ import cx from 'classnames'
 import X from '../../components/X'
 import ParsedText from '../../components/ParsedText'
 import styles from './styles.module.scss'
-import { LoginQuery } from './index'
+import { CurrentUserQuery } from './index'
 
 export type ReadAlertMutation = {
   readAlert: (args: {
@@ -33,7 +33,7 @@ mutation readAlert($input: ReadAlertInput!) {
   }
 }`)
 
-type CurrentUser = LoginQuery['currentUser']
+type CurrentUser = CurrentUserQuery['currentUser']
 
 type AlertDropdownProps = {
   alerts: CurrentUser['alerts'],
@@ -46,7 +46,10 @@ const Alerts: React.SFC<AlertDropdownProps> = ({ alerts }) => (
       alerts.map(alert =>
         <div key={alert.id} onClick={() => readAlert({ input: { alertId: alert.id} })}>
           <X ring />
-          <ParsedText content={alert.content} />
+          {alert.link
+            ? <Link to={alert.link}>{alert.content}</Link>
+            : <ParsedText content={alert.content} />
+          }
         </div>
       )
     )}

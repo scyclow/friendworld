@@ -36,7 +36,7 @@ query postById ($id: Int!){
 
 const Posts: React.SFC<{ id: number }> = ({ id }) => {
   return (
-    <div>
+    <section>
       <div className={styles.back}>
         <Link to="/">{'< Back to forum'}</Link>
       </div>
@@ -56,7 +56,7 @@ const Posts: React.SFC<{ id: number }> = ({ id }) => {
           })}
         </Connect>
       </div>
-    </div>
+    </section>
 
   )
 }

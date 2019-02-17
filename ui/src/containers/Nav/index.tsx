@@ -12,7 +12,7 @@ import Dropdown from './Dropdown'
 
 import { RouteChildrenProps } from 'react-router'
 
-export type LoginQuery = {
+export type CurrentUserQuery = {
   currentUser: {
     id: string,
     username: string,
@@ -20,11 +20,12 @@ export type LoginQuery = {
     alerts: Array<{
       id: string
       content: string
+      link?: string
     }>
   }
 }
 
-const loginQuery = query(`{
+const currentUserQuery = query(`{
   currentUser {
     id
     username
@@ -32,11 +33,12 @@ const loginQuery = query(`{
     alerts: alertsList (condition: { read: false }) {
       id
       content
+      link
     }
   }
 }`)
 
-export type Props = RouteChildrenProps & UrqlProps<LoginQuery>
+export type Props = RouteChildrenProps & UrqlProps<CurrentUserQuery>
 
 export type State = {
   dropdownState: null | 'users' | 'alerts'
@@ -102,52 +104,50 @@ class Nav extends React.Component<Props, State> {
 }
 
 type NavBarProps = {
-  currentUser: LoginQuery['currentUser'] | null,
+  currentUser: CurrentUserQuery['currentUser'] | null,
   toggleDropdownVisible: (state: State['dropdownState']) => () => void
 }
 
 const NavBar: React.SFC<NavBarProps> = ({ currentUser, toggleDropdownVisible }) => (
-  <nav className={styles.spaceHolder}>
-    <div className={cx(styles.container, 'solid')}>
-      <Width>
-        <div className={styles.content}>
-          <Link to="/">
-            <div className={styles.title}>FriendWorld</div>
-          </Link>
+  <nav className={cx(styles.container, 'solid')}>
+    <Width>
+      <div className={styles.content}>
+        <Link to="/">
+          <div className={styles.title}>FriendWorld</div>
+        </Link>
 
-          <div className={styles.links}>
-            {/*
-            <Link to="/" className={styles.link}>Home</Link>
-            <Link to="/forum" className={styles.link}>Forum</Link>
-            */}
-            {currentUser
-            ? <>
-                {/*<Link to="/messages" className={styles.link}>Messages</Link>*/}
-                <div className={styles.link} onClick={toggleDropdownVisible('users')}>
-                  {currentUser.username}
-                  <div
-                    className={cx(styles.circle, styles.user)}
-                    style={{ backgroundImage: `url(${currentUser.avatarUrl})` }}
-                  />
-                </div>
-                <div className={styles.link} onClick={toggleDropdownVisible('alerts')}>
-                  Alerts
-                  <AlertCircle unread={currentUser.alerts.length} />
-                </div>
-              </>
+        <div className={styles.links}>
+          {/*
+          <Link to="/" className={styles.link}>Home</Link>
+          <Link to="/forum" className={styles.link}>Forum</Link>
+          */}
+          {currentUser
+          ? <>
+              {/*<Link to="/messages" className={styles.link}>Messages</Link>*/}
+              <div className={styles.link} onClick={toggleDropdownVisible('users')}>
+                {currentUser.username}
+                <div
+                  className={cx(styles.circle, styles.user)}
+                  style={{ backgroundImage: `url(${currentUser.avatarUrl})` }}
+                />
+              </div>
+              <div className={styles.link} onClick={toggleDropdownVisible('alerts')}>
+                Alerts
+                <AlertCircle unread={currentUser.alerts.length} />
+              </div>
+            </>
 
-            : <>
-                <Link to="/login" className={styles.link}>Login</Link>
-                <Link to="/signup" className={styles.link}>Create Account</Link>
-              </>
-            }
-          </div>
+          : <>
+              <Link to="/login" className={styles.link}>Login</Link>
+              <Link to="/signup" className={styles.link}>Create Account</Link>
+            </>
+          }
         </div>
-      </Width>
-    </div>
+      </div>
+    </Width>
   </nav>
 )
 
 export default ConnectHOC({
-  query: loginQuery
+  query: currentUserQuery
 })(Nav)

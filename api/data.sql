@@ -65,12 +65,22 @@ insert into friendworld.posts (author_id, content, thread_id) values
 ;
 
 
-insert into friendworld.alerts (id, user_id, content) values
-  (
-    '0a04ff42-a2c6-4e1f-bda9-80c493aaaaaa'::uuid
-  , '0a04ff42-a2c6-4e1f-bda9-80c493abefea'::uuid
-  , 'This is a test alert for steve_p'
-  )
+insert into friendworld.messages (from_id, to_id, content, created_at) values
+  ('0a04ff42-a2c6-4e1f-bda9-80c493abefeb'::uuid, '0a04ff42-a2c6-4e1f-bda9-80c493abefea'::uuid, 'Hey steve, its vince. just checking in. if you have any more thoughts on what we talked about on tuesday, let me know.', '2019-02-16 19:49:08.154957'::timestamp)
+, ('0a04ff42-a2c6-4e1f-bda9-80c493abefeb'::uuid, '0a04ff42-a2c6-4e1f-bda9-80c493abefea'::uuid, 'Hey steve, its vince. just following up. let me know if you have any thoughts.', '2019-02-16 19:50:08.154957'::timestamp)
+, ('0a04ff42-a2c6-4e1f-bda9-80c493abefeb'::uuid, '0a04ff42-a2c6-4e1f-bda9-80c493abefea'::uuid, 'You know what? fuck you. go make your own money.', '2019-02-16 19:51:08.154957'::timestamp)
+, ('0a04ff42-a2c6-4e1f-bda9-80c493abefea'::uuid, '0a04ff42-a2c6-4e1f-bda9-80c493abefeb'::uuid, 'Who ARE you? leave me alone?', '2019-02-16 19:52:08.154957'::timestamp)
+, ('0a04ff42-a2c6-4e1f-bda9-80c493abefeb'::uuid, '0a04ff42-a2c6-4e1f-bda9-80c493abefea'::uuid, 'make me, scumbag', '2019-02-16 19:53:08.154957'::timestamp)
+, ('0a04ff42-a2c6-4e1f-bda9-80c493abefec'::uuid, '0a04ff42-a2c6-4e1f-bda9-80c493abefea'::uuid, 'hello steven :)', '2019-02-16 19:54:08.154957'::timestamp)
+, ('0a04ff42-a2c6-4e1f-bda9-80c493abefec'::uuid, '0a04ff42-a2c6-4e1f-bda9-80c493abefeb'::uuid, 'hello vince :)', '2019-02-16 19:55:08.154957'::timestamp)
+, ('0a04ff42-a2c6-4e1f-bda9-80c493abefea'::uuid, '0a04ff42-a2c6-4e1f-bda9-80c493abefed'::uuid, 'I dont like you', '2019-02-16 19:5:08.154957'::timestamp)
+;
+
+insert into friendworld.alerts (user_id, content, link) values (
+  '0a04ff42-a2c6-4e1f-bda9-80c493abefea'::uuid
+, 'You received a message from @VinceSlickson!'
+, '/messages/VinceSlickson'
+)
 ;
 
 insert into friendworld.ads (url, img, content) values

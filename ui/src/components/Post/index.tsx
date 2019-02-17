@@ -29,11 +29,11 @@ type Props = {
 }
 
 const Post: React.SFC<Props> = ({ post }) => (
-  <div className={styles.container}>
+  <article className={styles.post}>
     <div className={styles.main}>
       {!!post.author &&
         <Link to={`/users/${post.author.username}`} className={styles.panel}>
-          <div className={styles.panelContainer}>
+          <aside className={styles.panelContainer}>
             <div className={styles.avatar} style={{ backgroundImage: `url(${post.author.avatarUrl})` }} />
             <div className={styles.userInfo}>
               <div className={styles.username}>{post.author.username}</div>
@@ -41,7 +41,7 @@ const Post: React.SFC<Props> = ({ post }) => (
                 <div className={styles.totalPosts}><strong>Posts:</strong> {post.author.postStats.totalCount}</div>
               }
             </div>
-          </div>
+          </aside>
         </Link>
       }
 
@@ -53,7 +53,7 @@ const Post: React.SFC<Props> = ({ post }) => (
     </div>
     <div className={styles.footer}>
       <div className={styles.postedAt}>
-        <span>Posted at: {new Date(post.createdAt).toISOString()}</span>
+        <time>Posted at: {new Date(post.createdAt).toISOString()}</time>
         <span><Link to={`/posts/${post.id}`}>Post #{post.id}</Link></span>
       </div>
       {!!post.thread && (
@@ -62,7 +62,7 @@ const Post: React.SFC<Props> = ({ post }) => (
         </div>
       )}
     </div>
-  </div>
+  </article>
 )
 
 export default Post

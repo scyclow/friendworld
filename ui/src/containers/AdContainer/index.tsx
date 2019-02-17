@@ -50,14 +50,14 @@ const AdContainer = ({ n }: Props) => {
   const adList = sampleSize(adData, n || 5)
 
   return (
-    <div className={styles.adContainer}>
+    <section className={styles.adContainer}>
       <div className={styles.label}>SPONSORED CONTENT</div>
       {adList.map((ad, i) => (
         <React.Fragment key={i}>
           <Ad {...ad} />
         </React.Fragment>
       ))}
-    </div>
+    </section>
   )
 }
 
