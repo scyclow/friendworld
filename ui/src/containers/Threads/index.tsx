@@ -1,11 +1,12 @@
 import * as React from 'react';
-import { Connect, UrqlProps, query, mutation } from 'urql'
+import { useMutation, useQuery } from 'urql'
 import { Link } from 'react-router-dom'
 import styles from './styles.module.scss'
 import AdContainer from '../AdContainer'
-import match from '../../utils/match'
 import Post, { PostType } from '../../components/Post'
 import TextInput from '../../components/TextInput'
+import DisplayError from '../../components/DisplayError'
+import Loading from '../../components/Loading'
 import { getTags } from '../../utils/parsers'
 import useResponsive from '../../utils/useResponsive'
 
@@ -47,8 +48,19 @@ query threadById ($id: Int!) {
   }
 }`
 
+const _threadQuery = `
+query threadById ($id: Int!) {
+  threads: threadById (first: 1) {
+    id
+    title
+  }
+  currentUser {
+    id
+  }
+}`
 
-const createPostMutation = mutation(`
+
+const createPostMutation = `
 mutation createPost($input: CreatePostInput!) {
   createPost(input: $input) {
     post {
@@ -56,11 +68,13 @@ mutation createPost($input: CreatePostInput!) {
       content
       createdAt
       author {
+        id
+        avatarUrl
         username
       }
     }
   }
-}`)
+}`
 
 export type CreatePostMutation = {
   createPost: (args: {
@@ -74,7 +88,10 @@ export type CreatePostMutation = {
       // }
     }
   }) => Promise<{ createPost: { post: PostType } }>
+    // TODO fix this
+    | any
 }
+type CreatePostMutationResponse = { createPost: { post: PostType } }
 
 type AddPostProps = {
   threadId: number,
@@ -98,9 +115,23 @@ const AddPost: React.SFC<AddPostProps> = ({ threadId, createPost }) => {
   )
 }
 
+let i = 0
 const Threads: React.SFC<{ id: number }> = ({ id }) => {
   const { isMobile, isDesktop } = useResponsive(820)
   const showAd = (i: number) => isMobile && !((i + 1) % 4)
+
+  const [q] = useQuery<ThreadQuery>({ query: _threadQuery, })
+  console.log(q[0])
+  // const [query] = useQuery<ThreadQuery>({ query: threadQuery, variables: { id } })
+  const query: any = {}
+  const [response, executeCreatePost] = useMutation<CreatePostMutationResponse>(createPostMutation)
+
+
+  const existingPosts = query.data && query.data.thread && query.data.thread.posts || []
+  const allPosts = existingPosts && response.data
+    ? [...existingPosts, response.data.createPost.post]
+    : existingPosts
+
 
   return (
     <section>
@@ -110,20 +141,16 @@ const Threads: React.SFC<{ id: number }> = ({ id }) => {
 
       <div className={styles.threadContainer}>
         <div className={styles.left}>
-          <Connect
-            query={query(threadQuery, { id })}
-            mutation={{ createPost: createPostMutation }}
-          >
-            {match<ThreadQuery, CreatePostMutation>({
-              error: ({ error }) => <div>Something went wrong: {JSON.stringify(error)}</div>,
-
-              loading: () => <div>loading...</div>,
-
-              data: ({ createPost, data: { thread, currentUser } }) => thread ? (
+          {query.error && <DisplayError error={query.error} />}
+          {query.fetching && <Loading />}
+          {query.data && (
+            !query.data.thread
+              ? 'This thread does not exist!'
+              : (
                 <div className={styles.container}>
-                  <h2 className={styles.threadTitle}>{thread.title}</h2>
+                  <h2 className={styles.threadTitle}>{query.data.thread.title}</h2>
                   <div>
-                    {thread.posts.map((post, i) =>
+                    {allPosts.map((post: any, i: number) =>
                       <React.Fragment key={post.id}>
                         {showAd(i) && (
                           <div className={styles.ad}><AdContainer n={1}/></div>
@@ -131,20 +158,19 @@ const Threads: React.SFC<{ id: number }> = ({ id }) => {
                         <Post post={post} />
                       </React.Fragment>
                     )}
-                    {!currentUser && (
+                    {!query.data.currentUser && (
                       <Link to="/signup">
                         <h2 className={styles.signup}>Create An Account To Join The Conversation!</h2>
                       </Link>
                     )}
-                    {currentUser
-                      ? <AddPost threadId={thread.id} createPost={createPost} />
-                      : <div className={styles.disabled}><AddPost threadId={thread.id} createPost={createPost} /></div>
+                    {query.data.currentUser
+                      ? <AddPost threadId={query.data.thread.id} createPost={executeCreatePost} />
+                      : <div className={styles.disabled}><AddPost threadId={query.data.thread.id} createPost={executeCreatePost} /></div>
                     }
                   </div>
                 </div>
-              ) : 'This thread does not exist!'
-            })}
-          </Connect>
+              )
+          )}
         </div>
 
         {isDesktop && <div style={{ marginTop: '10px' }}><AdContainer /></div>}

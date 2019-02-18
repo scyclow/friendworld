@@ -1,24 +1,22 @@
 import * as React from 'react'
 import { withRouter, Route, Switch } from 'react-router-dom'
 import { RouteComponentProps } from 'react-router'
-import { ConnectHOC, query, UrqlProps } from 'urql'
-import match, { DataProps } from './utils/match'
 import jwt from './utils/jwt'
 
 import Body from './components/Body'
 import Nav from './containers/Nav'
-import Home from './containers/Home'
 import Landing from './containers/Landing'
 import Login from './containers/Login'
 import Signup from './containers/Signup'
 import Posts from './containers/Posts'
 import Threads from './containers/Threads'
 import NewThread from './containers/NewThread'
+// import Home from './containers/Home'
+
 import Dashboard from './containers/Dashboard'
 import User from './containers/User'
 import Messages from './containers/Messages'
 import Forum from './containers/Forum'
-
 
 
 class App extends React.Component<RouteComponentProps> {
@@ -50,18 +48,19 @@ class App extends React.Component<RouteComponentProps> {
               <Messages />
             }/>
 
-            {/* TODOs: */}
-            <Route exact path="/login" component={Login} />
-            <Route exact path="/signup" component={Signup} />
-            <Route exact path="/dashboard" component={Dashboard} />
+            <Route path="/posts/:id" render={({ match }) =>
+              <Posts id={Number(match.params.id)} />
+            }/>
 
             <Route path="/users/:username" render={({ match }) =>
               <User username={match.params.username} />
             }/>
 
-            <Route path="/posts/:id" render={({ match }) =>
-              <Posts id={Number(match.params.id)} />
-            }/>
+            {/* TODOs: */}
+            <Route exact path="/login" component={Login} />
+            <Route exact path="/signup" component={Signup} />
+            {/*<Route exact path="/dashboard" component={Dashboard} />*/}
+
           </Switch>
         </Body>
       </main>

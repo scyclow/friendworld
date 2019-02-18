@@ -1,10 +1,9 @@
-import * as React from 'react';
-import { ConnectHOC, mutation, UrqlProps } from 'urql'
-import match, { DataProps } from '../../utils/match'
+import React, { useState } from 'react';
+import { useMutation } from 'urql'
 import jwt from '../../utils/jwt'
 
 
-const loginMutation = mutation(`
+const loginMutation = `
 mutation($input: LoginInput!) {
   login(input: $input) {
     jwtToken
@@ -15,61 +14,57 @@ mutation($input: LoginInput!) {
       }
     }
   }
-}
-`)
+}`
 
 
-interface LoginMutation {
-  login: (input: {
+type LoginMutation = (input: {
     input: {
       username: string,
       password: string
     }
   }) => Promise<{ login: { jwtToken: string }}>
-}
 
-type Props = UrqlProps<void, LoginMutation>
+
+type MutationResponse = { login: { jwtToken: string }}
+type Props = {}
 
 type State = {
   username: string,
   password: string
 }
 
-class Login extends React.Component<Props, State> {
-  state = {
-    username: '',
-    password: ''
+function Login() {
+  const [username, setUsername] = useState<string>('')
+  const [password, setPassword] = useState<string>('')
+
+  const [result, executeLogin] = useMutation<MutationResponse>(loginMutation)
+
+
+  const login = () => {
+    executeLogin({ input: { username, password } })
   }
 
-  login = async () => {
-    const { username, password } = this.state
-
-    try {
-      const results = await this.props.login({ input: { username, password } })
-      jwt.set(username, results.login.jwtToken)
-      jwt.setCurrentUser(username)
-      window.location.href = '/'
-    } catch (e) {
-      console.log(e)
-    }
+  if (result.error) {
+    console.log(result.error)
+  } else if (result.fetching) {
+    console.log(result.fetching)
   }
 
-  render() {
-    return (
-      <div>
-        <input placeholder="username" value={this.state.username} onChange={(e) => this.setState({ username: e.target.value})} />
-        <input placeholder="password" value={this.state.password} onChange={(e) => this.setState({ password: e.target.value})} />
-        <button onClick={() => this.login()}>login</button>
-      </div>
-    )
+  if (result.data) {
+    jwt.set(username, result.data.login.jwtToken)
+    jwt.setCurrentUser(username)
+    window.location.href = '/'
   }
 
+  return (
+    <div>
+      <input placeholder="username" value={username} onChange={(e) => setUsername(e.target.value)} />
+      <input placeholder="password" value={password} onChange={(e) => setPassword(e.target.value)} />
+      <button onClick={login}>login</button>
+    </div>
+  )
 }
 
 
-export default ConnectHOC({
-  mutation: {
-    login: loginMutation
-  }
-})(Login)
+export default Login
 

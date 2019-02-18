@@ -283,7 +283,7 @@ create function friendworld.signup(
   username username_domain
 , password text
 , email text default null
-) returns friendworld.users as $$
+) returns friendworld_private.jwt_token as $$
   declare
     u friendworld.users;
 
@@ -295,7 +295,11 @@ create function friendworld.signup(
     insert into friendworld_private.accounts (user_id, password_hash)
       values (u.id, crypt(password, gen_salt('bf')));
 
-    return u;
+    return (
+      'friendworld_user',
+      'postgraphile',
+      extract(epoch from now())::int + 7776000, u.id
+    )::friendworld_private.jwt_token;
   end;
 $$ language plpgsql;
 

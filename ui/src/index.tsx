@@ -2,11 +2,11 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import { BrowserRouter as Router } from 'react-router-dom';
-import { Provider, Client } from 'urql';
+import { Provider, createClient } from 'urql';
 import App from './App';
 import jwt from './utils/jwt'
 
-const client = new Client({
+const client = createClient({
   url: 'http://localhost:5000/graphql',
   fetchOptions: () => {
     const jwtToken = jwt.get()
@@ -18,6 +18,7 @@ const client = new Client({
         }
       }
     } else {
+      // TODO Can I take this out with urql v1?
       return {}
     }
   }
@@ -25,7 +26,7 @@ const client = new Client({
 
 ReactDOM.render(
   (
-    <Provider client={client}>
+    <Provider value={client}>
       <Router>
         <App />
       </Router>

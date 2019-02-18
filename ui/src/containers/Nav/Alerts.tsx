@@ -1,10 +1,12 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
-import { Connect, UrqlProps, mutation } from 'urql'
+import { useMutation } from 'urql'
 import cx from 'classnames'
 
 import X from '../../components/X'
 import ParsedText from '../../components/ParsedText'
+import DisplayError from '../../components/DisplayError'
+import Loading from '../../components/Loading'
 import styles from './styles.module.scss'
 import { CurrentUserQuery } from './index'
 
@@ -23,7 +25,16 @@ export type ReadAlertMutation = {
   }>
 }
 
-const readAlertMutation = mutation(`
+type ReadAlertMutationResponse = {
+  readAlert: {
+    alert: {
+      id: string,
+      read: boolean
+    }
+  }
+}
+
+const readAlertMutation = `
 mutation readAlert($input: ReadAlertInput!) {
   readAlert(input: $input) {
     alert {
@@ -31,7 +42,7 @@ mutation readAlert($input: ReadAlertInput!) {
       read
     }
   }
-}`)
+}`
 
 type CurrentUser = CurrentUserQuery['currentUser']
 
@@ -40,21 +51,26 @@ type AlertDropdownProps = {
   onEmptyClick?: (a: any) => any
 }
 
-const Alerts: React.SFC<AlertDropdownProps> = ({ alerts }) => (
-  <Connect mutation={{ readAlert: readAlertMutation }}>
-    {({ readAlert }: UrqlProps<null, ReadAlertMutation>) => (
-      alerts.map(alert =>
-        <div key={alert.id} onClick={() => readAlert({ input: { alertId: alert.id} })}>
-          <X ring />
-          {alert.link
-            ? <Link to={alert.link}>{alert.content}</Link>
-            : <ParsedText content={alert.content} />
-          }
-        </div>
-      )
+const Alerts = ({ alerts }: AlertDropdownProps) => {
+  const [response, executeReadAlert] = useMutation<ReadAlertMutationResponse>(readAlertMutation)
+
+  // if (error) return <DisplayError error={error} />
+  // if (loading) return <Loading />
+
+  return (<>
+    {alerts.map(alert =>
+      <div key={alert.id} onClick={() => executeReadAlert({ input: { alertId: alert.id} })}>
+        <X ring />
+        {alert.link
+          ? <Link to={alert.link}>{alert.content}</Link>
+          : <ParsedText content={alert.content} />
+        }
+      </div>
     )}
-  </Connect>
-)
+  </>)
+
+
+}
 
 export const AlertDropdown: React.SFC<AlertDropdownProps> = ({ alerts, onEmptyClick }) => (
   <div className={styles.alertDropdown}>
