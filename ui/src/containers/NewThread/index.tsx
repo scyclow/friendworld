@@ -122,7 +122,4 @@ const NewThread: React.SFC<{}> = () => {
   )
 }
 
-
-
 export default NewThread
-

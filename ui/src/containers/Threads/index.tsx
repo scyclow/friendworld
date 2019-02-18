@@ -1,6 +1,8 @@
-import * as React from 'react';
+import React, { Fragment } from 'react';
 import { useMutation, useQuery } from 'urql'
+import { RouteChildrenProps } from 'react-router'
 import { Link } from 'react-router-dom'
+import cx from 'classnames'
 import styles from './styles.module.scss'
 import AdContainer from '../AdContainer'
 import Post, { PostType } from '../../components/Post'
@@ -10,8 +12,6 @@ import Loading from '../../components/Loading'
 import { getTags } from '../../utils/parsers'
 import useResponsive from '../../utils/useResponsive'
 
-
-import { RouteChildrenProps } from 'react-router'
 
 type ThreadQuery = {
   thread?: {
@@ -48,17 +48,6 @@ query threadById ($id: Int!) {
   }
 }`
 
-const _threadQuery = `
-query threadById ($id: Int!) {
-  threads: threadById (first: 1) {
-    id
-    title
-  }
-  currentUser {
-    id
-  }
-}`
-
 
 const createPostMutation = `
 mutation createPost($input: CreatePostInput!) {
@@ -87,17 +76,18 @@ export type CreatePostMutation = {
       //   usernames: Array<string>
       // }
     }
-  }) => Promise<{ createPost: { post: PostType } }>
     // TODO fix this
-    | any
+  }) => any | Promise<{ createPost: { post: PostType } }>
 }
+
 type CreatePostMutationResponse = { createPost: { post: PostType } }
 
 type AddPostProps = {
   threadId: number,
+  disabled?: boolean
   createPost: CreatePostMutation['createPost']
 }
-const AddPost: React.SFC<AddPostProps> = ({ threadId, createPost }) => {
+const AddPost: React.SFC<AddPostProps> = ({ threadId, createPost, disabled }) => {
   const submit = (content: string) => {
     createPost({
       input: {
@@ -109,29 +99,54 @@ const AddPost: React.SFC<AddPostProps> = ({ threadId, createPost }) => {
   }
 
   return (
-    <div className={styles.addPost}>
-      <TextInput onSubmit={submit} />
-    </div>
+    <>
+      {disabled && (
+        <Link to="/signup">
+          <h2 className={styles.signup}>Create An Account To Join The Conversation!</h2>
+        </Link>
+      )}
+      <div className={cx(styles.addPost, disabled && styles.disabled)}>
+        <TextInput onSubmit={submit} />
+      </div>
+    </>
   )
 }
 
-let i = 0
+
 const Threads: React.SFC<{ id: number }> = ({ id }) => {
   const { isMobile, isDesktop } = useResponsive(820)
-  const showAd = (i: number) => isMobile && !((i + 1) % 4)
-
-  const [q] = useQuery<ThreadQuery>({ query: _threadQuery, })
-  console.log(q[0])
-  // const [query] = useQuery<ThreadQuery>({ query: threadQuery, variables: { id } })
-  const query: any = {}
+  const [query] = useQuery<ThreadQuery>({ query: threadQuery, variables: { id } })
   const [response, executeCreatePost] = useMutation<CreatePostMutationResponse>(createPostMutation)
 
+  const showAd = (i: number) => isMobile && !((i + 1) % 4)
 
   const existingPosts = query.data && query.data.thread && query.data.thread.posts || []
   const allPosts = existingPosts && response.data
     ? [...existingPosts, response.data.createPost.post]
     : existingPosts
 
+  const isError = query.error && <DisplayError error={query.error} />
+  const isLoading = query.fetching && <Loading />
+  const isData = query.data && (query.data.thread ? (
+    <div className={styles.container}>
+      <h2 className={styles.threadTitle}>{query.data.thread.title}</h2>
+      <div>
+        {allPosts.map((post: any, i: number) =>
+          <Fragment key={post.id}>
+            {showAd(i) && (
+              <div className={styles.ad}><AdContainer n={1}/></div>
+            )}
+            <Post post={post} />
+          </Fragment>
+        )}
+        <AddPost
+          threadId={query.data.thread.id}
+          createPost={executeCreatePost}
+          disabled={!query.data.currentUser}
+        />
+      </div>
+    </div>
+  ) : 'This thread does not exist!')
 
   return (
     <section>
@@ -141,39 +156,12 @@ const Threads: React.SFC<{ id: number }> = ({ id }) => {
 
       <div className={styles.threadContainer}>
         <div className={styles.left}>
-          {query.error && <DisplayError error={query.error} />}
-          {query.fetching && <Loading />}
-          {query.data && (
-            !query.data.thread
-              ? 'This thread does not exist!'
-              : (
-                <div className={styles.container}>
-                  <h2 className={styles.threadTitle}>{query.data.thread.title}</h2>
-                  <div>
-                    {allPosts.map((post: any, i: number) =>
-                      <React.Fragment key={post.id}>
-                        {showAd(i) && (
-                          <div className={styles.ad}><AdContainer n={1}/></div>
-                        )}
-                        <Post post={post} />
-                      </React.Fragment>
-                    )}
-                    {!query.data.currentUser && (
-                      <Link to="/signup">
-                        <h2 className={styles.signup}>Create An Account To Join The Conversation!</h2>
-                      </Link>
-                    )}
-                    {query.data.currentUser
-                      ? <AddPost threadId={query.data.thread.id} createPost={executeCreatePost} />
-                      : <div className={styles.disabled}><AddPost threadId={query.data.thread.id} createPost={executeCreatePost} /></div>
-                    }
-                  </div>
-                </div>
-              )
-          )}
+          {isError}
+          {isLoading}
+          {isData}
         </div>
 
-        {isDesktop && <div style={{ marginTop: '10px' }}><AdContainer /></div>}
+        {isDesktop && <div className={styles.adContainer}><AdContainer /></div>}
       </div>
     </section>
   )

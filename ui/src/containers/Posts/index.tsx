@@ -1,14 +1,12 @@
 import * as React from 'react';
 import { useMutation, useQuery } from 'urql'
+import { RouteChildrenProps } from 'react-router'
 import { Link } from 'react-router-dom'
 import styles from './styles.module.scss'
 import Post, { PostType } from '../../components/Post'
 import DisplayError from '../../components/DisplayError'
 import Loading from '../../components/Loading'
 
-
-
-import { RouteChildrenProps } from 'react-router'
 
 type PostQuery = {
   post?: PostType
@@ -60,4 +58,3 @@ const Posts: React.SFC<{ id: number }> = ({ id }) => {
 }
 
 export default Posts
-
