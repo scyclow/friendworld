@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { Connect } from 'urql'
 import { Link } from 'react-router-dom'
 
 import ParsedText from '../ParsedText'

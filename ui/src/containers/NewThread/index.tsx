@@ -1,5 +1,5 @@
-import * as React from 'react';
-import { Connect, ConnectHOC, UrqlProps, query, mutation } from 'urql'
+import React, { useState } from 'react';
+import { useQuery, useMutation } from 'urql'
 import { Link } from 'react-router-dom'
 
 import styles from './styles.module.scss';
@@ -20,7 +20,7 @@ type UserQuery = {
   }
 }
 
-const userQuery = query(`{
+const userQuery = `{
   currentUser {
     id
     username
@@ -29,23 +29,22 @@ const userQuery = query(`{
       totalCount
     }
   }
-}`)
+}`
 
-export type CreateThreadMutation = {
-  createThread: (args: {
-    input: {
-      title: string,
-      content: string,
-      tags: string
-      // {
-      //   hashtags: Array<string>,
-      //   usernames: Array<string>
-      // }
-    }
-  }) => Promise<{ createThread: { thread: { id: string, title: string } } }>
+type CreateThreadInput = {
+  input: {
+    title: string,
+    content: string,
+    tags: string
+    // {
+    //   hashtags: Array<string>,
+    //   usernames: Array<string>
+    // }
+  }
 }
+type CreateThreadResponse = { createThread: { thread: { id: string, title: string } } }
 
-const createThreadMutation = mutation(`
+const createThreadMutation = `
 mutation createThread($input: CreateThreadInput!) {
   createThread(input: $input) {
     thread {
@@ -53,90 +52,68 @@ mutation createThread($input: CreateThreadInput!) {
       title
     }
   }
-}`)
+}`
 
 
-type Props = UrqlProps<UserQuery, CreateThreadMutation>
-type State = {
-  title: string,
-  content: string,
-}
+const NewThread: React.SFC<{}> = () => {
+  const [title, setTitle] = useState<string>('')
+  const [content, setContent] = useState<string>('')
+  const [query] = useQuery<UserQuery>({ query: userQuery })
+  const [response, executeCreateThread] = useMutation<CreateThreadResponse, CreateThreadInput>(createThreadMutation)
 
-
-class NewThread extends React.Component<Props, State> {
-  state = {
-    title: '',
-    content: '',
-  }
-
-  createThread = async () => {
-    const { title, content } = this.state
+  const createThread = () => {
     const tags = getTags(title + ' ' + content)
-    const { createThread: { thread } } = await this.props.createThread({ input: {
-        title,
-        content,
-        tags,
-      }
-    })
-    window.location.href = `/threads/${thread.id}`
+    executeCreateThread({ input: { title, content, tags, } })
   }
 
-  render() {
-    const { error, data, fetching } = this.props
-    const { title, content } = this.state
+  if (response.data) {
+    window.location.href = `/threads/${response.data.createThread.thread.id}`
+    return <div />
+  }
+  if (query.fetching || response.fetching) return <span>loading...</span>
 
-    if (fetching) return 'loading...'
-
-    const author = data && {
-      ...data.currentUser,
-      postStats: {
-        totalCount: data.currentUser.postStats.totalCount + 1
-      }
+  const author = query.data && {
+    ...query.data.currentUser,
+    postStats: {
+      totalCount: query.data.currentUser.postStats.totalCount + 1
     }
-
-    return (
-      <section className={styles.newThread}>
-        <div className={styles.back}>
-          <Link to="/">{'< Back to forum'}</Link>
-        </div>
-        <h1 className={styles.sectionTitle}>New Thread</h1>
-        <h2 className={styles.label}>Title</h2>
-        <input
-          className={styles.input}
-          onChange={e => this.setState({ title: e.target.value })}
-          value={title}
-        />
-        <h2 className={styles.label}>Content</h2>
-        <TextInput
-          onSubmit={this.createThread}
-          onChange={content => this.setState({ content })}
-          buttonContent="Start Thread"
-          placeholder=""
-          inputStyle={{ height: '200px' }}
-        />
-        {(title || content) && (
-          <>
-            <h2 className={styles.label}>[PREVIEW] {title}</h2>
-            <Post
-              post={{
-                id: 'XX',
-                createdAt: new Date().toString(),
-                content,
-                author,
-              }}
-            />
-          </>
-        )}
-      </section>
-    )
   }
+
+  return (
+    <section className={styles.newThread}>
+      <div className={styles.back}>
+        <Link to="/">{'< Back to forum'}</Link>
+      </div>
+      <h1 className={styles.sectionTitle}>New Thread</h1>
+      <h2 className={styles.label}>Title</h2>
+      <input
+        className={styles.input}
+        onChange={e => setTitle(e.target.value)}
+        value={title}
+      />
+      <h2 className={styles.label}>Content</h2>
+      <TextInput
+        onSubmit={createThread}
+        onChange={setContent}
+        buttonContent="Start Thread"
+        placeholder=""
+        inputStyle={{ height: '200px' }}
+      />
+      {(title || content) && (
+        <>
+          <h2 className={styles.label}>[PREVIEW] {title}</h2>
+          <Post
+            post={{
+              id: 'XX',
+              createdAt: new Date().toString(),
+              content,
+              author,
+            }}
+          />
+        </>
+      )}
+    </section>
+  )
 }
 
-
-export default ConnectHOC({
-  query: userQuery,
-  mutation: {
-    createThread: createThreadMutation
-  }
-})(NewThread)
-
+export default NewThread

@@ -1,7 +1,7 @@
-import React, { Component } from 'react'
+import React, { Component, useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import cx from 'classnames'
-import { ConnectHOC, UrqlProps, query } from 'urql'
+import { useQuery } from 'urql'
 
 import styles from './styles.module.scss'
 import { Width } from '../../components/Body'
@@ -25,7 +25,7 @@ export type CurrentUserQuery = {
   }
 }
 
-const currentUserQuery = query(`{
+const currentUserQuery = `{
   currentUser {
     id
     username
@@ -36,118 +36,103 @@ const currentUserQuery = query(`{
       link
     }
   }
-}`)
+}`
 
-export type Props = RouteChildrenProps & UrqlProps<CurrentUserQuery>
+export type Props = RouteChildrenProps
 
 export type State = {
   dropdownState: null | 'users' | 'alerts'
 }
 
-class Nav extends React.Component<Props, State> {
-  state = {
-    dropdownState: null
-  }
+function Nav(props: Props) {
+  const [dropdownState, setDropdownState] = useState<State['dropdownState']>(null)
+  const [{ data }] = useQuery<CurrentUserQuery>({ query: currentUserQuery })
+  const currentUser = (data && data.currentUser) || null
 
-  unlisten: Function = () => {}
+  const hideDropdown = () => setDropdownState(null)
+  useEffect(() => props.history.listen(hideDropdown))
 
-  componentDidMount() {
-    const { history } = this.props
-    this.unlisten = history.listen(this.changeDropdownState(null))
-  }
-
-  componentWillUnmount() {
-    this.unlisten()
-  }
-
-  changeDropdownState = (dropdownState: State['dropdownState']) => () => {
-    this.setState(state => ({
-      ...state,
-      dropdownState: state.dropdownState ? null : dropdownState
-    }))
-  }
-
-  renderDropdownContent = (contentType: State['dropdownState']) => {
-    const { data } = this.props
-    if (!data) return
-
-    switch (contentType) {
-      case 'users': return <UserDropdown />
-      case 'alerts': return (
-        <AlertDropdown
-          alerts={data.currentUser.alerts}
-          onEmptyClick={this.changeDropdownState(null)}
-        />
-      )
-      default: return <></>
-    }
-  }
-
-  render() {
-    const { dropdownState } = this.state
-    const { data } = this.props
-    return (
-      <>
-        <NavBar
-          {...this.props}
-          currentUser={data && data.currentUser}
-          toggleDropdownVisible={this.changeDropdownState}
-        />
-        {dropdownState &&
-          <Dropdown hide={this.changeDropdownState(null)}>
-            {this.renderDropdownContent(dropdownState)}
-          </Dropdown>
-        }
-      </>
-    )
-  }
+  return (
+    <>
+      <NavBar
+        {...props}
+        currentUser={currentUser}
+        toggleDropdownVisible={setDropdownState}
+      />
+      {dropdownState &&
+        <Dropdown hide={hideDropdown}>
+          {dropdownState === 'users' && <UserDropdown />}
+          {dropdownState === 'alerts' && currentUser && <AlertDropdown
+            alerts={currentUser.alerts}
+            onEmptyClick={hideDropdown}
+          />}
+        </Dropdown>
+      }
+    </>
+  )
 }
+
+
+
 
 type NavBarProps = {
   currentUser: CurrentUserQuery['currentUser'] | null,
-  toggleDropdownVisible: (state: State['dropdownState']) => () => void
+  toggleDropdownVisible: (state: State['dropdownState']) => void
 }
 
-const NavBar: React.SFC<NavBarProps> = ({ currentUser, toggleDropdownVisible }) => (
-  <nav className={cx(styles.container, 'solid')}>
-    <Width>
-      <div className={styles.content}>
-        <Link to="/">
-          <div className={styles.title}>FriendWorld</div>
-        </Link>
+const NavBar: React.SFC<NavBarProps> = ({ toggleDropdownVisible, currentUser }) => {
+  return (
+    <nav className={cx(styles.container, 'solid')}>
+      <Width>
+        <div className={styles.content}>
+          <Link to="/">
+            <div className={styles.title}>FriendWorld</div>
+          </Link>
 
-        <div className={styles.links}>
-          {/*
-          <Link to="/" className={styles.link}>Home</Link>
-          <Link to="/forum" className={styles.link}>Forum</Link>
-          */}
-          {currentUser
-          ? <>
-              {/*<Link to="/messages" className={styles.link}>Messages</Link>*/}
-              <div className={styles.link} onClick={toggleDropdownVisible('users')}>
-                {currentUser.username}
-                <div
-                  className={cx(styles.circle, styles.user)}
-                  style={{ backgroundImage: `url(${currentUser.avatarUrl})` }}
-                />
-              </div>
-              <div className={styles.link} onClick={toggleDropdownVisible('alerts')}>
-                Alerts
-                <AlertCircle unread={currentUser.alerts.length} />
-              </div>
-            </>
-
-          : <>
-              <Link to="/login" className={styles.link}>Login</Link>
-              <Link to="/signup" className={styles.link}>Create Account</Link>
-            </>
-          }
+          <div className={styles.links}>
+            {/*
+            <Link to="/" className={styles.link}>Home</Link>
+            <Link to="/forum" className={styles.link}>Forum</Link>
+            */}
+            {currentUser
+              ? <SignedInMenu currentUser={currentUser} toggleDropdownVisible={toggleDropdownVisible} />
+              : <SignedOutMenu />
+            }
+          </div>
         </div>
-      </div>
-    </Width>
-  </nav>
+      </Width>
+    </nav>
+  )
+}
+
+type SignedInMenuProps = {
+  currentUser: CurrentUserQuery['currentUser']
+  toggleDropdownVisible: NavBarProps['toggleDropdownVisible']
+}
+
+const SignedInMenu = ({ currentUser, toggleDropdownVisible }: SignedInMenuProps) => (
+  <>
+    <div className={styles.link} onClick={() => toggleDropdownVisible('users')}>
+      {currentUser.username}
+      <div
+        className={cx(styles.circle, styles.user)}
+        style={{ backgroundImage: `url(${currentUser.avatarUrl})` }}
+      />
+    </div>
+    <div className={styles.link} onClick={() => toggleDropdownVisible('alerts')}>
+      Alerts
+      <AlertCircle unread={currentUser.alerts.length} />
+    </div>
+  </>
 )
 
-export default ConnectHOC({
-  query: currentUserQuery
-})(Nav)
+const SignedOutMenu = () => (
+  <>
+    <Link to="/login" className={styles.link}>Login</Link>
+    <Link to="/signup" className={styles.link}>Create Account</Link>
+  </>
+)
+
+
+
+export default Nav

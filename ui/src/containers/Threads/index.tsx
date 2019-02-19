@@ -1,16 +1,17 @@
-import * as React from 'react';
-import { Connect, UrqlProps, query, mutation } from 'urql'
+import React, { Fragment } from 'react';
+import { useMutation, useQuery, OperationResult } from 'urql'
+import { RouteChildrenProps } from 'react-router'
 import { Link } from 'react-router-dom'
+import cx from 'classnames'
 import styles from './styles.module.scss'
 import AdContainer from '../AdContainer'
-import match from '../../utils/match'
 import Post, { PostType } from '../../components/Post'
 import TextInput from '../../components/TextInput'
+import DisplayError from '../../components/DisplayError'
+import Loading from '../../components/Loading'
 import { getTags } from '../../utils/parsers'
 import useResponsive from '../../utils/useResponsive'
 
-
-import { RouteChildrenProps } from 'react-router'
 
 type ThreadQuery = {
   thread?: {
@@ -48,7 +49,7 @@ query threadById ($id: Int!) {
 }`
 
 
-const createPostMutation = mutation(`
+const createPostMutation = `
 mutation createPost($input: CreatePostInput!) {
   createPost(input: $input) {
     post {
@@ -56,31 +57,34 @@ mutation createPost($input: CreatePostInput!) {
       content
       createdAt
       author {
+        id
+        avatarUrl
         username
       }
     }
   }
-}`)
+}`
 
-export type CreatePostMutation = {
-  createPost: (args: {
-    input: {
-      content: string,
-      threadId: number,
-      tags: string,
-      // {
-      //   hashtags: Array<string>,
-      //   usernames: Array<string>
-      // }
-    }
-  }) => Promise<{ createPost: { post: PostType } }>
+type CreatePostInput = {
+  input: {
+    content: string,
+    threadId: number,
+    tags: string,
+    // {
+    //   hashtags: Array<string>,
+    //   usernames: Array<string>
+    // }
+  }
 }
+
+type CreatePostResponse = { createPost: { post: PostType } }
 
 type AddPostProps = {
   threadId: number,
-  createPost: CreatePostMutation['createPost']
+  disabled?: boolean
+  createPost: (args: CreatePostInput) => Promise<OperationResult>
 }
-const AddPost: React.SFC<AddPostProps> = ({ threadId, createPost }) => {
+const AddPost: React.SFC<AddPostProps> = ({ threadId, createPost, disabled }) => {
   const submit = (content: string) => {
     createPost({
       input: {
@@ -92,15 +96,54 @@ const AddPost: React.SFC<AddPostProps> = ({ threadId, createPost }) => {
   }
 
   return (
-    <div className={styles.addPost}>
-      <TextInput onSubmit={submit} />
-    </div>
+    <>
+      {disabled && (
+        <Link to="/signup">
+          <h2 className={styles.signup}>Create An Account To Join The Conversation!</h2>
+        </Link>
+      )}
+      <div className={cx(styles.addPost, disabled && styles.disabled)}>
+        <TextInput onSubmit={submit} />
+      </div>
+    </>
   )
 }
 
+
 const Threads: React.SFC<{ id: number }> = ({ id }) => {
   const { isMobile, isDesktop } = useResponsive(820)
+  const [query] = useQuery<ThreadQuery>({ query: threadQuery, variables: { id } })
+  const [response, executeCreatePost] = useMutation<CreatePostResponse, CreatePostInput>(createPostMutation)
+
   const showAd = (i: number) => isMobile && !((i + 1) % 4)
+
+  const existingPosts = query.data && query.data.thread && query.data.thread.posts || []
+  const allPosts = existingPosts && response.data
+    ? [...existingPosts, response.data.createPost.post]
+    : existingPosts
+
+  const isError = query.error && <DisplayError error={query.error} />
+  const isLoading = query.fetching && <Loading />
+  const isData = query.data && (query.data.thread ? (
+    <div className={styles.container}>
+      <h2 className={styles.threadTitle}>{query.data.thread.title}</h2>
+      <div>
+        {allPosts.map((post: any, i: number) =>
+          <Fragment key={post.id}>
+            {showAd(i) && (
+              <div className={styles.ad}><AdContainer n={1}/></div>
+            )}
+            <Post post={post} />
+          </Fragment>
+        )}
+        <AddPost
+          threadId={query.data.thread.id}
+          createPost={executeCreatePost}
+          disabled={!query.data.currentUser}
+        />
+      </div>
+    </div>
+  ) : 'This thread does not exist!')
 
   return (
     <section>
@@ -110,44 +153,12 @@ const Threads: React.SFC<{ id: number }> = ({ id }) => {
 
       <div className={styles.threadContainer}>
         <div className={styles.left}>
-          <Connect
-            query={query(threadQuery, { id })}
-            mutation={{ createPost: createPostMutation }}
-          >
-            {match<ThreadQuery, CreatePostMutation>({
-              error: ({ error }) => <div>Something went wrong: {JSON.stringify(error)}</div>,
-
-              loading: () => <div>loading...</div>,
-
-              data: ({ createPost, data: { thread, currentUser } }) => thread ? (
-                <div className={styles.container}>
-                  <h2 className={styles.threadTitle}>{thread.title}</h2>
-                  <div>
-                    {thread.posts.map((post, i) =>
-                      <React.Fragment key={post.id}>
-                        {showAd(i) && (
-                          <div className={styles.ad}><AdContainer n={1}/></div>
-                        )}
-                        <Post post={post} />
-                      </React.Fragment>
-                    )}
-                    {!currentUser && (
-                      <Link to="/signup">
-                        <h2 className={styles.signup}>Create An Account To Join The Conversation!</h2>
-                      </Link>
-                    )}
-                    {currentUser
-                      ? <AddPost threadId={thread.id} createPost={createPost} />
-                      : <div className={styles.disabled}><AddPost threadId={thread.id} createPost={createPost} /></div>
-                    }
-                  </div>
-                </div>
-              ) : 'This thread does not exist!'
-            })}
-          </Connect>
+          {isError}
+          {isLoading}
+          {isData}
         </div>
 
-        {isDesktop && <div style={{ marginTop: '10px' }}><AdContainer /></div>}
+        {isDesktop && <div className={styles.adContainer}><AdContainer /></div>}
       </div>
     </section>
   )

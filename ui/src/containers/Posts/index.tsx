@@ -1,12 +1,12 @@
 import * as React from 'react';
-import { Connect, UrqlProps, query, mutation } from 'urql'
+import { useMutation, useQuery } from 'urql'
+import { RouteChildrenProps } from 'react-router'
 import { Link } from 'react-router-dom'
 import styles from './styles.module.scss'
-import match from '../../utils/match'
 import Post, { PostType } from '../../components/Post'
+import DisplayError from '../../components/DisplayError'
+import Loading from '../../components/Loading'
 
-
-import { RouteChildrenProps } from 'react-router'
 
 type PostQuery = {
   post?: PostType
@@ -35,6 +35,8 @@ query postById ($id: Int!){
 
 
 const Posts: React.SFC<{ id: number }> = ({ id }) => {
+  const [{ error, fetching, data }] = useQuery<PostQuery>({ query: postQuery, variables: { id } })
+
   return (
     <section>
       <div className={styles.back}>
@@ -42,19 +44,13 @@ const Posts: React.SFC<{ id: number }> = ({ id }) => {
       </div>
 
       <div className={styles.left}>
-        <Connect query={query(postQuery, { id })}>
-          {match<PostQuery>({
-            error: ({ error }) => <div>Something went wrong: {JSON.stringify(error)}</div>,
-
-            loading: () => <div>loading...</div>,
-
-            data: ({ data: { post } }) => post ? (
-
-                <Post post={post}/>
-
-            ) : 'This post does not exist!'
-          })}
-        </Connect>
+        {error && <DisplayError error={error} />}
+        {fetching && <Loading />}
+        {data && (
+          data.post
+            ? <Post post={data.post}/>
+            : 'This post does not exist!'
+        )}
       </div>
     </section>
 
@@ -62,4 +58,3 @@ const Posts: React.SFC<{ id: number }> = ({ id }) => {
 }
 
 export default Posts
-

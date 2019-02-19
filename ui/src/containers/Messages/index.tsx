@@ -1,11 +1,12 @@
 import React, { Component, useState, Fragment } from 'react';
 import { Link } from 'react-router-dom'
 
-import { Connect, UrqlProps, query } from 'urql'
+import { useQuery } from 'urql'
 import orderBy from 'lodash/orderBy'
 import styles from './styles.module.scss'
-import match, { DataProps } from '../../utils/match'
 import useResponsive from '../../utils/useResponsive'
+import DisplayError from '../../components/DisplayError'
+import Loading from '../../components/Loading'
 
 
 const messagesQuery = `
@@ -123,55 +124,39 @@ const collectMessages = (requestedUser: MessagesQuery['requestedUser']) => order
 const Messages: React.SFC<Props> = ({ username }) => {
   const { isMobile, isDesktop } = useResponsive(540)
   const [section, setSection] = useState<State['section']>('users')
+  const [{ error, fetching, data }] = useQuery<MessagesQuery>({ query: messagesQuery, variables: { username } })
 
   return (
     <div>
       <h1>Messages</h1>
       <section>
-        <Connect query={query(messagesQuery, { username: username || '' })} >
-          {match<MessagesQuery>({
-            error: ({ error }) => <div>Something went wrong: {JSON.stringify(error)}</div>,
+        {error && <DisplayError error={error} />}
+        {fetching && <Loading />}
+        {data && (
+          <>
+            <aside>
+              {uniqueUsers(data.usernames).map(_username => (
+                <Fragment key={_username}>
+                  <Link to={`/messages/${_username}`}><div>{_username}</div></Link>
+                </Fragment>
+              ))}
+            </aside>
+            <div>
+              {data.requestedUser
+                ? collectMessages(data.requestedUser).map(message => (
+                  <div key={message.id}>
+                    {message.from.username}: {message.content}
+                  </div>
+                ))
+                : 'no message'
+              }
+            </div>
+          </>
 
-            loading: () => <div>loading...</div>,
-
-            data: ({ data }) => (
-              <>
-                <aside>
-                  {uniqueUsers(data.usernames).map(_username => (
-                    <Fragment key={_username}>
-                      <Link to={`/messages/${_username}`}><div>{_username}</div></Link>
-                    </Fragment>
-                  ))}
-                </aside>
-                <div>
-                  {data.requestedUser
-                    ? collectMessages(data.requestedUser)
-                    .map(message => (
-                      <div key={message.id}>
-                        {message.from.username}: {message.content}
-                      </div>
-                    ))
-                    : 'no message'
-                  }
-                </div>
-              </>
-            )
-          })}
-        </Connect>
+        )}
       </section>
     </div>
   )
-
-
-
-
-  // const users = getUsers(data.messages)
-  // const relevantMessages = filter(data.messages, ['from.username', username])
-
-  // return (
-  // )
 }
-
-
 
 export default Messages

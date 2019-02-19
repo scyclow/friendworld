@@ -1,19 +1,16 @@
 import * as React from 'react';
-import { Connect, UrqlProps, query } from 'urql'
+import { useQuery } from 'urql'
 import { Link } from 'react-router-dom'
 import styles from './styles.module.scss'
-import match, { DataProps } from '../../utils/match'
 import useResponsive from '../../utils/useResponsive'
 
 import ParsedText from '../../components/ParsedText'
+import DisplayError from '../../components/DisplayError'
+import Loading from '../../components/Loading'
 import AdContainer from '../AdContainer'
 
 
-import { RouteProps } from 'react-router-dom'
-
-
-
-const threadQuery = query(`{
+const threadQuery = `{
   currentUser {
     id
   }
@@ -30,7 +27,7 @@ const threadQuery = query(`{
       }
     }
   }
-}`)
+}`
 
 type Thread = {
   id: string,
@@ -63,38 +60,33 @@ const ThreadPost = ({ thread }: { thread: Thread }) => {
   )
 }
 
+
 const Forum: React.SFC<{}> = () => {
   const { isMobile, isDesktop } = useResponsive(540)
+  const [{ fetching, error, data }] = useQuery<ThreadQuery>({ query: threadQuery })
   const showAd = (i: number) => isMobile && !((i + 1) % 6)
-
 
   return (
     <section className={styles.forum}>
       <section className={styles.left}>
-        <Connect query={threadQuery}>
-          {match<ThreadQuery>({
-            error: ({ error }) => <div>Something went wrong: {JSON.stringify(error)}</div>,
-
-            loading: () => <div>loading...</div>,
-
-            data: ({ data }) => (
-              <>
-                <div className={styles.header}>
-                  <h1>Forum</h1>
-                  <Link to={data.currentUser ? `/threads/new` : `/signup`}>
-                    Start A Thread!
-                  </Link>
-                </div>
-                {data.threads.map((thread, i) =>
-                  <React.Fragment key={thread.id}>
-                    {showAd(i) && <div className={styles.adContainer}><AdContainer n={1} /></div>}
-                    <ThreadPost thread={thread} />
-                  </React.Fragment>
-                )}
-              </>
-            )
-          })}
-        </Connect>
+        {fetching && <Loading />}
+        {error && <DisplayError error={error} />}
+        {data && (
+          <>
+            <div className={styles.header}>
+              <h1>Forum</h1>
+              <Link to={data.currentUser ? `/threads/new` : `/signup`}>
+                Start A Thread!
+              </Link>
+            </div>
+            {data.threads.map((thread, i) =>
+              <React.Fragment key={thread.id}>
+                {showAd(i) && <div className={styles.adContainer}><AdContainer n={1} /></div>}
+                <ThreadPost thread={thread} />
+              </React.Fragment>
+            )}
+          </>
+        )}
       </section>
       {isDesktop && <AdContainer />}
     </section>
