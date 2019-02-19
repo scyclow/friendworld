@@ -17,15 +17,15 @@ mutation($input: LoginInput!) {
 }`
 
 
-type LoginMutation = (input: {
-    input: {
-      username: string,
-      password: string
-    }
-  }) => Promise<{ login: { jwtToken: string }}>
 
 
-type MutationResponse = { login: { jwtToken: string }}
+type LoginInput = {
+  input: {
+    username: string,
+    password: string
+  }
+}
+type LoginResponse = { login: { jwtToken: string }}
 type Props = {}
 
 type State = {
@@ -37,8 +37,7 @@ function Login() {
   const [username, setUsername] = useState<string>('')
   const [password, setPassword] = useState<string>('')
 
-  const [result, executeLogin] = useMutation<MutationResponse>(loginMutation)
-
+  const [result, executeLogin] = useMutation<LoginResponse, LoginInput>(loginMutation)
 
   const login = () => {
     executeLogin({ input: { username, password } })

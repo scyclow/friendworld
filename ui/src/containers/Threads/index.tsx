@@ -1,5 +1,5 @@
 import React, { Fragment } from 'react';
-import { useMutation, useQuery } from 'urql'
+import { useMutation, useQuery, OperationResult } from 'urql'
 import { RouteChildrenProps } from 'react-router'
 import { Link } from 'react-router-dom'
 import cx from 'classnames'
@@ -65,27 +65,24 @@ mutation createPost($input: CreatePostInput!) {
   }
 }`
 
-export type CreatePostMutation = {
-  createPost: (args: {
-    input: {
-      content: string,
-      threadId: number,
-      tags: string,
-      // {
-      //   hashtags: Array<string>,
-      //   usernames: Array<string>
-      // }
-    }
-    // TODO fix this
-  }) => any | Promise<{ createPost: { post: PostType } }>
+type CreatePostInput = {
+  input: {
+    content: string,
+    threadId: number,
+    tags: string,
+    // {
+    //   hashtags: Array<string>,
+    //   usernames: Array<string>
+    // }
+  }
 }
 
-type CreatePostMutationResponse = { createPost: { post: PostType } }
+type CreatePostResponse = { createPost: { post: PostType } }
 
 type AddPostProps = {
   threadId: number,
   disabled?: boolean
-  createPost: CreatePostMutation['createPost']
+  createPost: (args: CreatePostInput) => Promise<OperationResult>
 }
 const AddPost: React.SFC<AddPostProps> = ({ threadId, createPost, disabled }) => {
   const submit = (content: string) => {
@@ -116,7 +113,7 @@ const AddPost: React.SFC<AddPostProps> = ({ threadId, createPost, disabled }) =>
 const Threads: React.SFC<{ id: number }> = ({ id }) => {
   const { isMobile, isDesktop } = useResponsive(820)
   const [query] = useQuery<ThreadQuery>({ query: threadQuery, variables: { id } })
-  const [response, executeCreatePost] = useMutation<CreatePostMutationResponse>(createPostMutation)
+  const [response, executeCreatePost] = useMutation<CreatePostResponse, CreatePostInput>(createPostMutation)
 
   const showAd = (i: number) => isMobile && !((i + 1) % 4)
 

@@ -31,21 +31,18 @@ const userQuery = `{
   }
 }`
 
-export type CreateThreadMutation = {
-  createThread: (args: {
-    input: {
-      title: string,
-      content: string,
-      tags: string
-      // {
-      //   hashtags: Array<string>,
-      //   usernames: Array<string>
-      // }
-    }
-  }) => Promise<{ createThread: { thread: { id: string, title: string } } }>
+type CreateThreadInput = {
+  input: {
+    title: string,
+    content: string,
+    tags: string
+    // {
+    //   hashtags: Array<string>,
+    //   usernames: Array<string>
+    // }
+  }
 }
-
-type CreateThreadMutationResponse = { createThread: { thread: { id: string, title: string } } }
+type CreateThreadResponse = { createThread: { thread: { id: string, title: string } } }
 
 const createThreadMutation = `
 mutation createThread($input: CreateThreadInput!) {
@@ -58,14 +55,11 @@ mutation createThread($input: CreateThreadInput!) {
 }`
 
 
-
-
-
 const NewThread: React.SFC<{}> = () => {
   const [title, setTitle] = useState<string>('')
   const [content, setContent] = useState<string>('')
   const [query] = useQuery<UserQuery>({ query: userQuery })
-  const [response, executeCreateThread] = useMutation<CreateThreadMutationResponse>(createThreadMutation)
+  const [response, executeCreateThread] = useMutation<CreateThreadResponse, CreateThreadInput>(createThreadMutation)
 
   const createThread = () => {
     const tags = getTags(title + ' ' + content)

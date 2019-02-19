@@ -14,16 +14,14 @@ mutation($input: SignupInput!) {
 }`
 
 
-interface SignupMutation {
-  signup: (input: {
-    input: {
-      username: string,
-      password: string
-    }
-  }) => Promise<{ signup: { jwtToken: string }}>
+type SignupInput = {
+  input: {
+    username: string,
+    password: string
+  }
 }
 
-type SignupMutationResponse = { signup: { jwtToken: string }}
+type SignupResponse = { signup: { jwtToken: string }}
 
 type Props = {}
 
@@ -35,7 +33,7 @@ type State = {
 function Signup() {
   const [username, setUsername] = useState<string>('')
   const [password, setPassword] = useState<string>('')
-  const [result, executeSignup] = useMutation<SignupMutationResponse>(signupMutation)
+  const [result, executeSignup] = useMutation<SignupResponse, SignupInput>(signupMutation)
 
   const signup = () => executeSignup({ input: { username, password } })
 
