@@ -7,7 +7,7 @@ type Props = {
 
 const DisplayError: React.SFC<Props> = ({ error }) => (
   <div className={styles.error}>
-    An Error Occurred: {JSON.stringify(error)}
+    An Error Occurred: {JSON.stringify(error, null, 3)}
   </div>
 )
 

@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
-import { useMutation } from 'urql'
 import cx from 'classnames'
 
 import X from '../../components/X'
@@ -10,56 +9,23 @@ import Loading from '../../components/Loading'
 import styles from './styles.module.scss'
 import { CurrentUserQuery } from './index'
 
-export type ReadAlertMutation = {
-  readAlert: (args: {
-    input: {
-      alertId: string
-    }
-  }) => Promise<{
-    readAlert: {
-      alert: {
-        id: string,
-        read: boolean
-      }
-    }
-  }>
-}
-
-type ReadAlertMutationResponse = {
-  readAlert: {
-    alert: {
-      id: string,
-      read: boolean
-    }
-  }
-}
-
-const readAlertMutation = `
-mutation readAlert($input: ReadAlertInput!) {
-  readAlert(input: $input) {
-    alert {
-      id
-      read
-    }
-  }
-}`
 
 type CurrentUser = CurrentUserQuery['currentUser']
 
 type AlertDropdownProps = {
   alerts: CurrentUser['alerts'],
+  readAlert: (id: string) => unknown
   onEmptyClick?: (a: any) => any
 }
 
-const Alerts = ({ alerts }: AlertDropdownProps) => {
-  const [response, executeReadAlert] = useMutation<ReadAlertMutationResponse>(readAlertMutation)
+const Alerts = ({ alerts, readAlert }: AlertDropdownProps) => {
 
   // if (error) return <DisplayError error={error} />
   // if (loading) return <Loading />
 
   return (<>
     {alerts.map(alert =>
-      <div key={alert.id} onClick={() => executeReadAlert({ input: { alertId: alert.id} })}>
+      <div key={alert.id} onClick={() => readAlert(alert.id)}>
         <X ring />
         {alert.link
           ? <Link to={alert.link}>{alert.content}</Link>
@@ -72,10 +38,10 @@ const Alerts = ({ alerts }: AlertDropdownProps) => {
 
 }
 
-export const AlertDropdown: React.SFC<AlertDropdownProps> = ({ alerts, onEmptyClick }) => (
+export const AlertDropdown: React.SFC<AlertDropdownProps> = ({ alerts, onEmptyClick, readAlert }) => (
   <div className={styles.alertDropdown}>
     {alerts.length
-      ? <Alerts alerts={alerts} />
+      ? <Alerts alerts={alerts} readAlert={readAlert} />
       : <div className={styles.noAlerts} onClick={onEmptyClick}>No Alerts!</div>
     }
   </div>

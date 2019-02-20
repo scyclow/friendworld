@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, useCallback } from 'react';
 import { useMutation, useQuery, OperationResult } from 'urql'
 import { RouteChildrenProps } from 'react-router'
 import { Link } from 'react-router-dom'
@@ -11,6 +11,8 @@ import DisplayError from '../../components/DisplayError'
 import Loading from '../../components/Loading'
 import { getTags } from '../../utils/parsers'
 import useResponsive from '../../utils/useResponsive'
+import profanityFilter from '../../utils/profanityFilter'
+
 
 
 type ThreadQuery = {
@@ -82,14 +84,16 @@ type CreatePostResponse = { createPost: { post: PostType } }
 type AddPostProps = {
   threadId: number,
   disabled?: boolean
-  createPost: (args: CreatePostInput) => Promise<OperationResult>
 }
-const AddPost: React.SFC<AddPostProps> = ({ threadId, createPost, disabled }) => {
+const AddPost: React.SFC<AddPostProps> = ({ threadId, disabled }) => {
+  const [response, executeCreatePost] = useMutation<CreatePostResponse, CreatePostInput>(createPostMutation)
+
   const submit = (content: string) => {
-    createPost({
+    if (!content) return
+    executeCreatePost({
       input: {
-        content,
         threadId,
+        content: profanityFilter(content),
         tags: getTags(content)
       }
     })
@@ -112,15 +116,13 @@ const AddPost: React.SFC<AddPostProps> = ({ threadId, createPost, disabled }) =>
 
 const Threads: React.SFC<{ id: number }> = ({ id }) => {
   const { isMobile, isDesktop } = useResponsive(820)
-  const [query] = useQuery<ThreadQuery>({ query: threadQuery, variables: { id } })
-  const [response, executeCreatePost] = useMutation<CreatePostResponse, CreatePostInput>(createPostMutation)
+  const [query, executeQuery] = useQuery<ThreadQuery>({ query: threadQuery, variables: { id } })
 
+  const refetch = useCallback(
+    () => executeQuery({ requestPolicy: 'network-only' }),
+    []
+  );
   const showAd = (i: number) => isMobile && !((i + 1) % 4)
-
-  const existingPosts = query.data && query.data.thread && query.data.thread.posts || []
-  const allPosts = existingPosts && response.data
-    ? [...existingPosts, response.data.createPost.post]
-    : existingPosts
 
   const isError = query.error && <DisplayError error={query.error} />
   const isLoading = query.fetching && <Loading />
@@ -128,17 +130,18 @@ const Threads: React.SFC<{ id: number }> = ({ id }) => {
     <div className={styles.container}>
       <h2 className={styles.threadTitle}>{query.data.thread.title}</h2>
       <div>
-        {allPosts.map((post: any, i: number) =>
+        {query.data.thread.posts.map((post, i) =>
           <Fragment key={post.id}>
-            {showAd(i) && (
-              <div className={styles.ad}><AdContainer n={1}/></div>
-            )}
+            {showAd(i) &&
+              <div className={styles.ad}>
+                <AdContainer n={1}/>
+              </div>
+            }
             <Post post={post} />
           </Fragment>
         )}
         <AddPost
           threadId={query.data.thread.id}
-          createPost={executeCreatePost}
           disabled={!query.data.currentUser}
         />
       </div>

@@ -4,13 +4,14 @@ import { Link } from 'react-router-dom'
 
 import styles from './styles.module.scss';
 import { getTags } from '../../utils/parsers'
+import profanityFilter from '../../utils/profanityFilter'
 import TextInput from '../../components/TextInput'
 import Post from '../../components/Post'
 
 
 
 type UserQuery = {
-  currentUser: {
+  currentUser?: {
     id: string
     username: string
     avatarUrl: string
@@ -62,8 +63,14 @@ const NewThread: React.SFC<{}> = () => {
   const [response, executeCreateThread] = useMutation<CreateThreadResponse, CreateThreadInput>(createThreadMutation)
 
   const createThread = () => {
-    const tags = getTags(title + ' ' + content)
-    executeCreateThread({ input: { title, content, tags, } })
+    if (!title || !content) return
+    executeCreateThread({
+      input: {
+        title: profanityFilter(title),
+        content: profanityFilter(content),
+        tags: getTags(title + ' ' + content),
+      }
+    })
   }
 
   if (response.data) {
@@ -72,7 +79,7 @@ const NewThread: React.SFC<{}> = () => {
   }
   if (query.fetching || response.fetching) return <span>loading...</span>
 
-  const author = query.data && {
+  const author = query.data && query.data.currentUser && {
     ...query.data.currentUser,
     postStats: {
       totalCount: query.data.currentUser.postStats.totalCount + 1

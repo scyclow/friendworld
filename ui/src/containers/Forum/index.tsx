@@ -11,9 +11,6 @@ import AdContainer from '../AdContainer'
 
 
 const threadQuery = `{
-  currentUser {
-    id
-  }
   threads: threadsList (orderBy: [LATEST_POST_TIME_DESC]) {
     id
     title
@@ -39,7 +36,6 @@ type Thread = {
   }
 }
 type ThreadQuery = {
-  currentUser?: { id: string }
   threads: Array<Thread>
 }
 
@@ -48,6 +44,7 @@ const ThreadPost = ({ thread }: { thread: Thread }) => {
   const title = thread.title.length > 297
     ? thread.title.substring(0, 297) + '...'
     : thread.title
+
   return (
     <article key={thread.id} className={styles.threadPost}>
       <Link to={`/threads/${thread.id}`}>{title}</Link>
@@ -75,7 +72,7 @@ const Forum: React.SFC<{}> = () => {
           <>
             <div className={styles.header}>
               <h1>Forum</h1>
-              <Link to={data.currentUser ? `/threads/new` : `/signup`}>
+              <Link to="/threads/new">
                 Start A Thread!
               </Link>
             </div>

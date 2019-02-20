@@ -1,0 +1,44 @@
+.mobileContainer {
+
+}
+
+.desktopContainer {
+  display: flex;
+}
+
+.messagePanelContainer {
+
+}
+
+.messagePanel {
+}
+
+.sidePanelContainer {
+
+}
+
+.sidePanel {
+  width: 200px;
+  border: 2px solid;
+  font-size: 18px;
+  line-height: 2;
+
+  a {
+    text-decoration: none
+  }
+
+  a:hover {
+    text-decoration: underline;
+  }
+
+  a .user {
+    padding: 10px;
+    border-bottom: 1px solid
+  }
+
+  a:last-child .user {
+    border-bottom: 0px;
+  }
+}
+
+

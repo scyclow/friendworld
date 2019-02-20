@@ -40,13 +40,14 @@ class App extends React.Component<RouteComponentProps> {
               <Threads id={Number(match.params.id)} />
             }/>
 
+            <Route exact path="/messages" render={({ match }) =>
+              <Messages />
+            }/>
+
             <Route path="/messages/:username" render={({ match }) =>
               <Messages username={match.params.username} />
             }/>
 
-            <Route path="/messages" render={({ match }) =>
-              <Messages />
-            }/>
 
             <Route path="/posts/:id" render={({ match }) =>
               <Posts id={Number(match.params.id)} />

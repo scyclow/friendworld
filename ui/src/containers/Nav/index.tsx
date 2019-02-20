@@ -1,7 +1,7 @@
-import React, { Component, useState, useEffect } from 'react'
+import React, { Component, useState, useEffect, useCallback } from 'react'
 import { Link } from 'react-router-dom'
 import cx from 'classnames'
-import { useQuery } from 'urql'
+import { useQuery, useMutation } from 'urql'
 
 import styles from './styles.module.scss'
 import { Width } from '../../components/Body'
@@ -38,6 +38,31 @@ const currentUserQuery = `{
   }
 }`
 
+type ReadAlertInput = {
+  input: {
+    alertId: string
+  }
+}
+
+type ReadAlertResponse = {
+  readAlert: {
+    alert: {
+      id: string,
+      read: boolean
+    }
+  }
+}
+
+const readAlertMutation = `
+mutation readAlert($input: ReadAlertInput!) {
+  readAlert(input: $input) {
+    alert {
+      id
+      read
+    }
+  }
+}`
+
 export type Props = RouteChildrenProps
 
 export type State = {
@@ -46,8 +71,13 @@ export type State = {
 
 function Nav(props: Props) {
   const [dropdownState, setDropdownState] = useState<State['dropdownState']>(null)
-  const [{ data }] = useQuery<CurrentUserQuery>({ query: currentUserQuery })
+  const [{ data }, executeQuery] = useQuery<CurrentUserQuery>({ query: currentUserQuery })
+  const [response, executeReadAlert] = useMutation<ReadAlertResponse, ReadAlertInput>(readAlertMutation)
   const currentUser = (data && data.currentUser) || null
+
+  const refetch = useCallback(() => executeQuery({ requestPolicy: 'network-only' }), []);
+  const readAlert = (alertId: string) =>
+    executeReadAlert({ input: { alertId } }).then(refetch)
 
   const hideDropdown = () => setDropdownState(null)
   useEffect(() => props.history.listen(hideDropdown))
@@ -65,6 +95,7 @@ function Nav(props: Props) {
           {dropdownState === 'alerts' && currentUser && <AlertDropdown
             alerts={currentUser.alerts}
             onEmptyClick={hideDropdown}
+            readAlert={readAlert}
           />}
         </Dropdown>
       }
