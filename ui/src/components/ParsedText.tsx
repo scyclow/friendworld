@@ -52,10 +52,9 @@ const parseFragment = (fragment: string): Fragment => {
     return fragment.split('\n').reduce((out, str, i) => (
       !!out[0] ? [
         ...out,
-        <br key={i/2}/>,
+        <br style={{ lineHeight: 2 }} key={i/2}/>,
         <React.Fragment key={i+1}>{str}</React.Fragment>
       ] : [
-        ...out,
         <React.Fragment key={i+1.1}>{str}</React.Fragment>
       ]
     ), [])

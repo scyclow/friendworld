@@ -75,9 +75,7 @@ function Nav(props: Props) {
   const [response, executeReadAlert] = useMutation<ReadAlertResponse, ReadAlertInput>(readAlertMutation)
   const currentUser = (data && data.currentUser) || null
 
-  const refetch = useCallback(() => executeQuery({ requestPolicy: 'network-only' }), []);
-  const readAlert = (alertId: string) =>
-    executeReadAlert({ input: { alertId } }).then(refetch)
+  const readAlert = (alertId: string) => executeReadAlert({ input: { alertId } })
 
   const hideDropdown = () => setDropdownState(null)
   useEffect(() => props.history.listen(hideDropdown))
