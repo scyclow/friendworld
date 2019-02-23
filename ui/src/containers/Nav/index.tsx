@@ -2,6 +2,8 @@ import React, { Component, useState, useEffect, useCallback } from 'react'
 import { Link } from 'react-router-dom'
 import cx from 'classnames'
 import { useQuery, useMutation } from 'urql'
+import useResponsive from '../../utils/useResponsive'
+
 
 import styles from './styles.module.scss'
 import { Width } from '../../components/Body'
@@ -136,21 +138,36 @@ type SignedInMenuProps = {
   toggleDropdownVisible: NavBarProps['toggleDropdownVisible']
 }
 
-const SignedInMenu = ({ currentUser, toggleDropdownVisible }: SignedInMenuProps) => (
-  <>
-    <div className={styles.link} onClick={() => toggleDropdownVisible('users')}>
-      {currentUser.username}
-      <div
-        className={cx(styles.circle, styles.user)}
-        style={{ backgroundImage: `url(${currentUser.avatarUrl})` }}
-      />
-    </div>
-    <div className={styles.link} onClick={() => toggleDropdownVisible('alerts')}>
-      Alerts
-      <AlertCircle unread={currentUser.alerts.length} />
-    </div>
-  </>
-)
+const SignedInMenu = ({ currentUser, toggleDropdownVisible }: SignedInMenuProps) => {
+  const { isDesktop, isMobile } = useResponsive(540)
+
+  return (
+    <>
+      <div className={styles.link} onClick={() => toggleDropdownVisible('users')}>
+        {currentUser.username}
+        <div
+          className={cx(styles.circle, styles.user)}
+          style={{ backgroundImage: `url(${currentUser.avatarUrl})` }}
+        />
+      </div>
+
+      {isDesktop && <Link to="/messages" className={styles.link}>Messages</Link>}
+
+      {isDesktop && (
+        <div className={styles.link} onClick={() => toggleDropdownVisible('alerts')}>
+          Alerts
+          <AlertCircle unread={currentUser.alerts.length} />
+        </div>
+      )}
+
+      {isMobile && (
+        <div className={styles.link} onClick={() => toggleDropdownVisible('alerts')}>
+          <AlertCircle unread={currentUser.alerts.length} />
+        </div>
+      )}
+    </>
+  )
+}
 
 const SignedOutMenu = () => (
   <>

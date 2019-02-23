@@ -114,6 +114,16 @@
 
 
 @media(max-width: 450px) {
+  .header {
+    h1 {
+      font-size: 28px;
+    }
+  }
+
+  .messagesSection {
+    height: calc(100vh - 145px)
+  }
+
   .sidePanel {
     width: 100%;
 
@@ -121,5 +131,9 @@
       text-align: center;
 
     }
+  }
+
+  .messagePanel {
+    margin-left: 0;
   }
 }

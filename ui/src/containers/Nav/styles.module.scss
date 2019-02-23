@@ -144,7 +144,7 @@ $link-spacing-mobile: 10px;
 
 .userDropdown li {
   border-bottom: 1px solid;
-  padding: 5px;
+  padding: 8px;
 }
 .userDropdown a {
   text-decoration: none
@@ -164,6 +164,15 @@ $link-spacing-mobile: 10px;
 }
 
 
+@media(max-width: 540px) {
+
+  .link::before {
+    content: '';
+    padding-right: 0;
+  }
+
+}
+
 @media(max-width: 450px) {
   .content {
     height: $height-mobile;
@@ -175,10 +184,6 @@ $link-spacing-mobile: 10px;
   }
   .link {
     font-size: 13px;
-    padding-right: $link-spacing-mobile;
-  }
-
-  .link::before {
     padding-right: $link-spacing-mobile;
   }
 
