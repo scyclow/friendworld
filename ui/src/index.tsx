@@ -13,12 +13,10 @@ const client = createClient({
     if (jwtToken) {
       return {
         headers: {
-          Authorization: `Bearer ${jwtToken}`,
-          'Content-Type': 'application/json'
+          Authorization: `Bearer ${jwtToken}`
         }
       }
     } else {
-      // TODO Can I take this out with urql v1?
       return {}
     }
   }

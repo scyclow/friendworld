@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { useQuery, useMutation } from 'urql'
 import { Link } from 'react-router-dom'
+import cx from 'classnames'
+
 
 import styles from './styles.module.scss';
 import { getTags } from '../../utils/parsers'
@@ -79,6 +81,7 @@ const NewThread: React.SFC<{}> = () => {
   }
   if (query.fetching || response.fetching) return <span>loading...</span>
 
+  const disabled = query.data && !query.data.currentUser
   const author = query.data && query.data.currentUser && {
     ...query.data.currentUser,
     postStats: {
@@ -91,34 +94,42 @@ const NewThread: React.SFC<{}> = () => {
       <div className={styles.back}>
         <Link to="/">{'< Back to forum'}</Link>
       </div>
-      <h1 className={styles.sectionTitle}>New Thread</h1>
-      <h2 className={styles.label}>Title</h2>
-      <input
-        className={styles.input}
-        onChange={e => setTitle(e.target.value)}
-        value={title}
-      />
-      <h2 className={styles.label}>Content</h2>
-      <TextInput
-        onSubmit={createThread}
-        onChange={setContent}
-        buttonContent="Start Thread"
-        placeholder=""
-        inputStyle={{ height: '200px' }}
-      />
-      {(title || content) && (
-        <>
-          <h2 className={styles.label}>[PREVIEW] {title}</h2>
-          <Post
-            post={{
-              id: 'XX',
-              createdAt: new Date().toString(),
-              content,
-              author,
-            }}
-          />
-        </>
+      {!disabled && <h1 className={styles.sectionTitle}>New Thread</h1>}
+      {disabled && (
+        <Link to="/signup">
+          <h2 className={styles.signup}>Create An Account To Join The Conversation!</h2>
+        </Link>
       )}
+
+      <div className={cx({ [styles.disabled]: disabled })}>
+        <h2 className={styles.label}>Title</h2>
+        <input
+          className={styles.input}
+          onChange={e => setTitle(e.target.value)}
+          value={title}
+        />
+        <h2 className={styles.label}>Content</h2>
+        <TextInput
+          onSubmit={createThread}
+          onChange={setContent}
+          buttonContent="Start Thread"
+          placeholder=""
+          inputStyle={{ height: '200px' }}
+        />
+        {(title || content) && (
+          <>
+            <h2 className={styles.label}>[PREVIEW] {title}</h2>
+            <Post
+              post={{
+                id: 'XX',
+                createdAt: new Date().toString(),
+                content,
+                author,
+              }}
+            />
+          </>
+        )}
+      </div>
     </section>
   )
 }
