@@ -2,7 +2,7 @@ import * as React from 'react'
 import styles from './styles.module.scss'
 
 type Props = {
-  error: Error
+  error: Error | string
 }
 
 const DisplayError: React.SFC<Props> = ({ error }) => (

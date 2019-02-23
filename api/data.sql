@@ -88,7 +88,7 @@ insert into friendworld.ads (url, img, content) values
   (
     'http://fastcashmoneyplus.biz'
   , 'https://www.washingtonpost.com/resizer/bmfQHooAGH6PmEv0qHjgf-ZUy-k=/480x0/arc-anglerfish-washpost-prod-washpost.s3.amazonaws.com/public/EBULPVFULQI6PG4TXFYEHZL2EI.jpg'
-  , 'BUY FASTCASH NOW'
+  , 'GET FAST CASH NOW'
   )
 , (
     'http://fakebullshit.news'
