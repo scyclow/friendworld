@@ -45,15 +45,15 @@ const Post: React.SFC<Props> = ({ post }) => (
       }
 
 
-      <p className={styles.content}>
+      <div className={styles.content}>
         <ParsedText content={post.content} />
-      </p>
+      </div>
 
     </div>
     <div className={styles.footer}>
       <div className={styles.postedAt}>
         <time>Posted at: {new Date(post.createdAt).toISOString()}</time>
-        <span><Link to={`/posts/${post.id}`}>Post #{post.id}</Link></span>
+        <span><Link to={`/posts/${post.id}`}>/posts/{post.id}</Link></span>
       </div>
       {!!post.thread && (
         <div className={styles.threadLink}>

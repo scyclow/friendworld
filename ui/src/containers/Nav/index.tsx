@@ -71,7 +71,7 @@ export type State = {
 
 function Nav(props: Props) {
   const [dropdownState, setDropdownState] = useState<State['dropdownState']>(null)
-  const [{ data }, executeQuery] = useQuery<CurrentUserQuery>({ query: currentUserQuery })
+  const [{ data, fetching }, executeQuery] = useQuery<CurrentUserQuery>({ query: currentUserQuery })
   const [response, executeReadAlert] = useMutation<ReadAlertResponse, ReadAlertInput>(readAlertMutation)
   const currentUser = (data && data.currentUser) || null
 
@@ -83,7 +83,7 @@ function Nav(props: Props) {
   return (
     <>
       <NavBar
-        {...props}
+        loading={fetching}
         currentUser={currentUser}
         toggleDropdownVisible={setDropdownState}
       />
@@ -105,11 +105,12 @@ function Nav(props: Props) {
 
 
 type NavBarProps = {
+  loading: boolean,
   currentUser: CurrentUserQuery['currentUser'] | null,
   toggleDropdownVisible: (state: State['dropdownState']) => void
 }
 
-const NavBar: React.SFC<NavBarProps> = ({ toggleDropdownVisible, currentUser }) => {
+const NavBar: React.SFC<NavBarProps> = ({ toggleDropdownVisible, currentUser, loading }) => {
   return (
     <nav className={cx(styles.container, 'solid')}>
       <Width>
@@ -119,13 +120,9 @@ const NavBar: React.SFC<NavBarProps> = ({ toggleDropdownVisible, currentUser }) 
           </Link>
 
           <div className={styles.links}>
-            {/*
-            <Link to="/" className={styles.link}>Home</Link>
-            <Link to="/forum" className={styles.link}>Forum</Link>
-            */}
             {currentUser
               ? <SignedInMenu currentUser={currentUser} toggleDropdownVisible={toggleDropdownVisible} />
-              : <SignedOutMenu />
+              : loading ? false : <SignedOutMenu />
             }
           </div>
         </div>

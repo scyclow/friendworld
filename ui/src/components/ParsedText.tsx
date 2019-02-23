@@ -22,7 +22,7 @@ const imgStyle = {
 }
 const parseFragment = (fragment: string): Fragment => {
   if (isImage(fragment)) {
-    return <Img url={fragment} style={imgStyle} />
+    return <Img url={fragment} style={imgStyle} alt="user posted content"/>
 
   } else if (isExternalLink(fragment)) {
     return <a href={fragment} target="_blank" rel="noopener noreferrer">{fragment}</a>
@@ -47,27 +47,13 @@ const parseFragment = (fragment: string): Fragment => {
     const dirt = fragment.replace(threadId, '').replace(/^\/threads\//, '')
     return <><Link to={`/threads/${threadId}`}>/threads/{threadId}</Link>{dirt}</>
 
-  } else if (hasNewline(fragment)) {
-    // @ts-ignore -- doing some weird shit here
-    return fragment.split('\n').reduce((out, str, i) => (
-      !!out[0] ? [
-        ...out,
-        <br style={{ lineHeight: 2 }} key={i/2}/>,
-        <React.Fragment key={i+1}>{str}</React.Fragment>
-      ] : [
-        <React.Fragment key={i+1.1}>{str}</React.Fragment>
-      ]
-    ), [])
-
   } else {
     return fragment
   }
 }
 
 
-const combineFragments = (fragments: Array<Fragment>, f: string): Array<Fragment> => {
-  const fragment = parseFragment(f);
-
+const combineFragments = (fragments: Array<Fragment>, fragment: Fragment): Array<Fragment> => {
   if (!fragments.length) {
     return [fragment]
   }
@@ -85,12 +71,26 @@ const combineFragments = (fragments: Array<Fragment>, f: string): Array<Fragment
   }
 }
 
-type Props = { content: string };
+const addIndex = (f: React.ReactNode, i: number) => (
+  <React.Fragment key={i}>
+    {f}
+  </React.Fragment>
+)
 
 const parser = (content: string) => content
-  .split(' ')
-  .reduce(combineFragments, [])
-  .map((f, i) => <React.Fragment key={i}>{f}</React.Fragment>)
+  .split('\n')
+  .map((paragraph, i) => (
+    <p key={i}>
+      {paragraph
+        .split(' ')
+        .map(parseFragment)
+        .reduce(combineFragments, [])
+        .map(addIndex)
+      }
+    </p>
+  ))
+
+type Props = { content: string };
 
 export default function ParsedText({ content }: Props) {
   return (

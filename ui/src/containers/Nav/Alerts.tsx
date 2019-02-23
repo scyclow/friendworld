@@ -25,7 +25,7 @@ const Alerts = ({ alerts, readAlert }: AlertDropdownProps) => {
 
   return (<>
     {alerts.map(alert =>
-      <div key={alert.id} onClick={() => readAlert(alert.id)}>
+      <div key={alert.id} className={styles.alert} onClick={() => readAlert(alert.id)}>
         <X ring />
         {alert.link
           ? <Link to={alert.link}>{alert.content}</Link>

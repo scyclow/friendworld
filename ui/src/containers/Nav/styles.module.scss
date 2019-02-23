@@ -101,7 +101,18 @@ $link-spacing-mobile: 10px;
   max-height: calc(100vh - 48px);
   overflow: scroll;
   border: 2px solid;
+  box-sizing: border-box;
   z-index: 1;
+}
+
+.alert {
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
 }
 
 .alertDropdown {
@@ -173,5 +184,10 @@ $link-spacing-mobile: 10px;
 
   .circle {
     margin-left: 5px;
+  }
+
+  .dropdown {
+    top: $height-mobile + 3;
+    margin-right: 0;
   }
 }

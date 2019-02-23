@@ -1,5 +1,5 @@
-import React, { Component, useState, Fragment } from 'react';
-import { Link } from 'react-router-dom'
+import React, { useState } from 'react';
+import { Link, Redirect } from 'react-router-dom'
 
 import { useQuery } from 'urql'
 import orderBy from 'lodash/orderBy'
@@ -7,206 +7,73 @@ import styles from './styles.module.scss'
 import useResponsive from '../../utils/useResponsive'
 import DisplayError from '../../components/DisplayError'
 import Loading from '../../components/Loading'
+import SidePanel from './SidePanel'
+import MessagePanel from './MessagePanel'
+import NewMessagePanel from './NewMessagePanel'
 
 
-const messagesDataQuery = `{
-  messageData: currentUser {
+const currentUserQuery = `{
+  currentUser {
     username
-    sent: messagesSentList {
-      to {
-        username
-      }
-    }
-    received: messagesReceivedList {
-      from {
-        username
-      }
-    }
   }
 }`
 
-type MessagesDataQuery = {
-  messageData: {
-    username: string
-    sent: Array<{
-      to: {
-        username: string
-      }
-    }>
-    received: Array<{
-      from: {
-        username: string
-      }
-    }>
-  }
-}
-
-const requestedUserQuery = `
-query messagesByUsername ($username: UsernameDomain!) {
-  requestedUser: userByUsername(username: $username) {
-    sent: messagesSentList {
-      id
-      content
-      createdAt
-      to {
-        username
-      }
-      from {
-        username
-      }
-    }
-    received: messagesReceivedList {
-      id
-      content
-      createdAt
-      to {
-        id
-        username
-      }
-      from {
-        id
-        username
-      }
-    }
-  }
-}`
-
-type Message = {
-  id: string
-  content: string
-  createdAt: string
-  to: {
-    id: string
-    username: string
-  }
-  from: {
-    id: string
+type CurrentUserQuery = {
+  currentUser?: {
     username: string
   }
 }
-
-type RequestedUserQuery = {
-  requestedUser: {
-    sent: Array<Message>
-    received: Array<Message>
-  }
-}
-
 
 type Props = {
   username?: string | null
 }
-// & UrqlProps<MessagesQuery>
 
 type State = {
-  section: 'users' | 'messages'
+  newMessage: boolean
 }
 
-const collectMessages = (requestedUser: RequestedUserQuery['requestedUser']) => orderBy([
-  ...requestedUser.received,
-  ...requestedUser.sent
-], message => message.createdAt)
-
 const Messages: React.SFC<Props> = ({ username }) => {
-  const { isMobile, isDesktop } = useResponsive(540)
-  const [section, setSection] = useState<State['section']>('users')
+  const { isMobile, isDesktop } = useResponsive(450)
+  const [newMessage, setNewMessage] = useState<State['newMessage']>(false)
+  const [{ data, error, fetching }] = useQuery<CurrentUserQuery>({ query: currentUserQuery })
 
-  const messagePanel = username
-    ? <MessagePanel username={username} />
-    : <EmptyPanel />
+  if (data && !data.currentUser) {
+    return <Redirect to="/signup" />
+  } else if (data && data.currentUser && data.currentUser.username === username) {
+    return <Redirect to="/messages" />
+  }
 
   return (
-    <div>
-      <h1>Messages</h1>
-      <section>
+    <div className={styles.messages}>
+      <header className={styles.header}>
+        <h1>Message Console</h1>
+        {isMobile && (newMessage || username)
+          ? <Link to="/messages" onClick={() => setNewMessage(false)}>{'< All Messages'}</Link>
+          : <Link to="/messages" onClick={() => setNewMessage(true)}>New Message</Link>
+        }
+      </header>
+
+      <section className={styles.messagesSection}>
         {isMobile && (
           <div className={styles.mobileContainer}>
-            {section === 'users' && <SidePanel />}
-            {section === 'messages' && messagePanel}
+            {username && <MessagePanel username={username} />}
+            {!username && newMessage && <NewMessagePanel />}
+            {!username && !newMessage && <SidePanel />}
           </div>
         )}
 
         {isDesktop && (
           <div className={styles.desktopContainer}>
-            <div className={styles.sidePanelContainer}>
-              <SidePanel />
-            </div>
-            <div className={styles.messagePanelContainer}>
-              {messagePanel}
-            </div>
+            <SidePanel />
+
+            {username && <MessagePanel username={username} />}
+            {!username && <NewMessagePanel />}
+
           </div>
         )}
       </section>
     </div>
   )
-}
-
-const uniqueUsers = (messageData: MessagesDataQuery['messageData']) => {
-  const sentNames = messageData.sent.reduce(
-    (set, message) => set.add(message.to.username),
-    new Set()
-  )
-
-  const receivedNames = messageData.received.reduce(
-    (set, message) => set.add(message.from.username),
-    new Set()
-  )
-
-  // @ts-ignore
-  const combinedNames = new Set([...sentNames, ...receivedNames])
-  combinedNames.delete(messageData.username)
-
-  return Array.from(combinedNames)
-}
-
-const SidePanel: React.SFC<{}> = () => {
-  const [{ error, fetching, data }] = useQuery<MessagesDataQuery>({
-    query: messagesDataQuery
-  })
-
-  if (error) return <DisplayError error={error} />
-  if (fetching) return <Loading />
-  if (!data) return null
-
-  return (
-    <aside className={styles.sidePanel}>
-      {uniqueUsers(data.messageData).map(username => (
-        <Fragment key={username}>
-          <Link to={`/messages/${username}`}>
-            <div className={styles.user}>{username}</div>
-          </Link>
-        </Fragment>
-      ))}
-    </aside>
-  )
-}
-
-const MessagePanel: React.SFC<{ username: string }> = ({ username }) => {
-  const [{ error, fetching, data }] = useQuery<RequestedUserQuery>({
-    query: requestedUserQuery,
-    variables: { username }
-  })
-
-  if (error) return <DisplayError error={error} />
-  if (fetching) return <Loading />
-  if (!data) return null
-
-  return (
-    <div className={styles.messagePanel}>
-      {data.requestedUser
-        ? collectMessages(data.requestedUser).map(message => (
-          <div key={message.id}>
-            {message.from.username}: {message.content}
-          </div>
-        ))
-        : 'no message'
-      }
-    </div>
-  )
-}
-
-const EmptyPanel: React.SFC<{}> = () => {
-  return <>'no messages here'</>
 }
 
 export default Messages

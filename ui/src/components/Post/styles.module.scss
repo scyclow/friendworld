@@ -58,6 +58,18 @@
 .content {
   padding: 10px;
   line-height: 1.4;
+
+  p {
+    margin: 8px 0;
+  }
+
+  p:first-child {
+    margin-top: 0;
+  }
+
+  p:last-child {
+    margin-bottom: 0
+  }
 }
 
 .footer {

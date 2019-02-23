@@ -4,7 +4,6 @@ import { Link } from 'react-router-dom'
 import styles from './styles.module.scss'
 import useResponsive from '../../utils/useResponsive'
 
-import ParsedText from '../../components/ParsedText'
 import DisplayError from '../../components/DisplayError'
 import Loading from '../../components/Loading'
 import AdContainer from '../AdContainer'
@@ -70,12 +69,12 @@ const Forum: React.SFC<{}> = () => {
         {error && <DisplayError error={error} />}
         {data && (
           <>
-            <div className={styles.header}>
+            <header className={styles.header}>
               <h1>Forum</h1>
               <Link to="/threads/new">
                 Start A Thread!
               </Link>
-            </div>
+            </header>
             {data.threads.map((thread, i) =>
               <React.Fragment key={thread.id}>
                 {showAd(i) && <div className={styles.adContainer}><AdContainer n={1} /></div>}

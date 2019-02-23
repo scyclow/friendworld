@@ -80,7 +80,7 @@ const User: React.SFC<Props> = ({ username }) => {
         <div className={styles.left}>
           <div className={styles.avatar} style={{ backgroundImage: `url(${user.avatarUrl})` }} />
           <div><strong>Posts:</strong> {user.postStats.totalCount}</div>
-          <Link to={`/messages/new?name=${user.username}`}>Message {user.username}</Link>
+          <Link to={`/messages/${user.username}`}>Message {user.username}</Link>
         </div>
 
         <div className={styles.right}>

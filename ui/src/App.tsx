@@ -3,15 +3,13 @@ import { withRouter, Route, Switch } from 'react-router-dom'
 import { RouteComponentProps } from 'react-router'
 import jwt from './utils/jwt'
 
-import Body from './components/Body'
+import Body, { Width } from './components/Body'
 import Nav from './containers/Nav'
-import Landing from './containers/Landing'
 import Login from './containers/Login'
 import Signup from './containers/Signup'
 import Posts from './containers/Posts'
 import Threads from './containers/Threads'
 import NewThread from './containers/NewThread'
-// import Home from './containers/Home'
 
 import Dashboard from './containers/Dashboard'
 import User from './containers/User'
@@ -60,10 +58,14 @@ class App extends React.Component<RouteComponentProps> {
             {/* TODOs: */}
             <Route exact path="/login" component={Login} />
             <Route exact path="/signup" component={Signup} />
-            {/*<Route exact path="/dashboard" component={Dashboard} />*/}
+            <Route exact path="/dashboard" component={Dashboard} />
 
           </Switch>
         </Body>
+
+        <footer style={{ fontSize: '11px', padding: '10px 0'}}>
+          <Width>(c) 2019 FriendWorld.social</Width>
+        </footer>
       </main>
     )
   }

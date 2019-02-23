@@ -1,25 +1,100 @@
-.mobileContainer {
 
+.header {
+  margin-bottom: 15px;
+}
+
+.header > * {
+  margin-right: 10px;
+}
+
+.header > a {
+  font-size: 12px;
+  padding: 10px 20px 3px 2px;
+}
+
+.messagesSection {
+  height: calc(100vh - 155px)
+}
+
+.mobileContainer {
+  height: inherit;
 }
 
 .desktopContainer {
   display: flex;
-}
-
-.messagePanelContainer {
-
+  height: inherit;
 }
 
 .messagePanel {
+  width: 100%;
+  height: inherit;
+  margin-left: 10px;
+  display: flex;
+  flex-direction: column;
+}
+
+.sentMessages {
+  padding: 5px;
+  overflow-y: auto;
+  border: 2px solid;
+  flex-grow: 1;
+}
+
+.newMessageBox {
+  height: 100px;
+}
+
+.sendBox {
+  font-size: 16px;
+  padding: 5px;
+  width: 100%;
+  border: 2px solid;
+  margin-top: 5px;
+}
+
+.submitButton {
+  padding: 5px;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.message {
+  margin-bottom: 10px;
+}
+
+.message:last-child {
+  margin-bottom: 0;
+}
+
+.sender a {
+  text-decoration: none;
+  font-size: 13px;
+}
+.sender a:hover {
+  text-decoration: underline;
+}
+
+.sender time {
+  font-size: 10px;
+  margin-left: 5px;
 }
 
 .sidePanelContainer {
+  overflow-y: auto;
+  height: inherit;
+  min-width: 200px;
+  border: 2px solid;
+  box-sizing: border-box;
+}
 
+.emptyUsers {
+  padding: 10px;
+  text-align: center;
+  line-height: 1.3;
 }
 
 .sidePanel {
   width: 200px;
-  border: 2px solid;
   font-size: 18px;
   line-height: 2;
 
@@ -35,10 +110,16 @@
     padding: 10px;
     border-bottom: 1px solid
   }
-
-  a:last-child .user {
-    border-bottom: 0px;
-  }
 }
 
 
+@media(max-width: 450px) {
+  .sidePanel {
+    width: 100%;
+
+    a .user {
+      text-align: center;
+
+    }
+  }
+}

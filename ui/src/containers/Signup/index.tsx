@@ -6,10 +6,7 @@ import jwt from '../../utils/jwt'
 const signupMutation = `
 mutation($input: SignupInput!) {
   signup(input: $input) {
-    user {
-      id
-      username
-    }
+    jwtToken
   }
 }`
 

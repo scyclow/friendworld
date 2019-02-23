@@ -128,8 +128,15 @@ const Threads: React.SFC<{ id: number }> = ({ id }) => {
   const isLoading = query.fetching && <Loading />
   const isData = query.data && (query.data.thread ? (
     <div className={styles.container}>
-      <h2 className={styles.threadTitle}>{query.data.thread.title}</h2>
+      <header className={styles.threadTitle}>
+        <h2 >{query.data.thread.title}</h2>
+      </header>
       <div>
+        <Link to={`/threads/${query.data.thread.id}`}>
+          <div className={styles.threadLink}>
+            /threads/{query.data.thread.id}
+          </div>
+        </Link>
         {query.data.thread.posts.map((post, i) =>
           <Fragment key={post.id}>
             {showAd(i) &&

@@ -20,6 +20,14 @@
 
 .back {
   margin-bottom: 20px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.threadLink {
+  text-align: right;
+  font-size: 14px;
+  padding-bottom: 3px;
 }
 
 .addPost {
