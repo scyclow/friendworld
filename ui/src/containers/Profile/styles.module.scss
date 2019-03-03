@@ -1,13 +1,9 @@
-.header {
-  margin-bottom: 25px;
+.profile {
 
-  h4 {
-    margin-bottom: 0;
-  }
 }
 
-.profile {
-  margin-bottom: 20px;
+.header {
+  margin-bottom: 15px;
 }
 
 .intro {
@@ -16,12 +12,7 @@
 
 .memberSince {
   margin-bottom: 15px;
-}
-
-.sendMessage {
-  line-height: 1.2;
-  display: inline-block;
-  margin-top: 5px;
+  font-size: 16px;
 }
 
 .content {
@@ -54,13 +45,12 @@
 }
 
 .recentPosts {
-  h2 {
-    margin-bottom: 10px;
-    margin-top: 20px;
+  h3 {
+    margin-bottom: 10px
   }
 }
 
-.infoSection {
+.inputSection {
   margin-bottom: 15px;
 
   h3 {
@@ -68,13 +58,33 @@
   }
 }
 
-.uuid {
-  margin-top: 10px;
+.contentInput {
+  padding: 5px;
+  font-size: 15px;
+  width: 100%;
+  border: 1px solid;
+}
+
+textarea.contentInput {
+  height: 120px;
+  width: 100%;
+}
+
+.submitButton {
+  margin: 10px 0;
+  padding: 5px;
+  font-size: 13px;
+  cursor: pointer;
 }
 
 @media (max-width: 540px) {
   .content {
     flex-direction: column;
+  }
+
+  .buttonContainer {
+    display: flex;
+    justify-content: center;
   }
 
   .right {

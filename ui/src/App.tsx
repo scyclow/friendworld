@@ -11,10 +11,11 @@ import Posts from './containers/Posts'
 import Threads from './containers/Threads'
 import NewThread from './containers/NewThread'
 
-import Dashboard from './containers/Dashboard'
+import Profile from './containers/Profile'
 import User from './containers/User'
 import Messages from './containers/Messages'
 import Forum from './containers/Forum'
+import Stats from './containers/Stats'
 
 
 class App extends React.Component<RouteComponentProps> {
@@ -55,10 +56,10 @@ class App extends React.Component<RouteComponentProps> {
               <User username={match.params.username} />
             }/>
 
-            {/* TODOs: */}
             <Route exact path="/login" component={Login} />
             <Route exact path="/signup" component={Signup} />
-            <Route exact path="/dashboard" component={Dashboard} />
+            <Route exact path="/profile" component={Profile} />
+            <Route exact path="/stats" component={Stats} />
 
           </Switch>
         </Body>

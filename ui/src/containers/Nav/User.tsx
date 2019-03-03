@@ -28,9 +28,9 @@ export const UserDropdown: React.SFC<{}> = () => {
         </li>
       </Link>
 
-      <Link to="/dashboard">
+      <Link to="/profile">
         <li>
-          <div>User Dashboard</div>
+          <div>Update Profile</div>
         </li>
       </Link>
 

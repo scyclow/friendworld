@@ -81,7 +81,7 @@ export default function SidePanel() {
               </Link>
             </Fragment>
           ))
-          : <div className={styles.emptyUsers}>You have no outstanding message threads.</div>
+          : <div className={styles.emptyUsers}>You have no conversations.</div>
         }
       </div>
     </aside>

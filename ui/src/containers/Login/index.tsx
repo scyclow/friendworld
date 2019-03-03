@@ -6,7 +6,6 @@ import Loading from '../../components/Loading'
 import styles from './styles.module.scss'
 
 
-
 const loginMutation = `
 mutation($input: LoginInput!) {
   login(input: $input) {

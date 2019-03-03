@@ -57,13 +57,22 @@ $$ language plpgsql;
 -- users
 create domain username_domain as citext check (value ~* '^[A-Za-z0-9_\-~+^<>.*!$]{0,18}[A-Za-z0-9_\-<>~^]$');
 create table friendworld.users (
-  id            uuid primary key unique default uuid_generate_v4()
-, created_at    timestamp default now()
-, updated_at    timestamp default now()
-, username      username_domain not null unique
-, email         citext check (email ~* '^.+@.+\..+$')
-, avatar_url    text
-, tracking_info jsonb
+  id             uuid primary key unique default uuid_generate_v4()
+, created_at     timestamp default now()
+, updated_at     timestamp default now()
+, username       username_domain not null unique
+, email          citext check (email ~* '^.+@.+\..+$')
+, avatar_url     text default 'http://simpleicon.com/wp-content/uploads/user-4.png'
+, gender         text default ''
+, birthday       timestamp
+, bio            text default ''
+, job            text default ''
+, interests      text default ''
+, websites       text default ''
+, media          text default ''
+, religion       text default ''
+, politics       text default ''
+, tracking_info  jsonb
 );
 
 create table friendworld_private.accounts (
@@ -243,11 +252,13 @@ to friendworld_user using (
 );
 
 
-/*
-create view friendworld.view_test as
-  select tracking_info
-  from friendworld.users;
-*/
+
+-- create view friendworld.view_test as
+--   select tracking_info
+--   from friendworld.users;
+
+-- grant select on view friendworld.view_test to friendworld_anonymous, friendworld_user;
+
 
 create table friendworld.ads (
   id            uuid primary key unique default uuid_generate_v4()
@@ -476,3 +487,62 @@ create function friendworld.read_alert(
 $$ language plpgsql;
 
 grant execute on function friendworld.read_alert(uuid) to friendworld_user;
+
+create function friendworld.update_user(
+  avatar_url   text default null
+, email        text default null
+, gender       text default null
+, birthday     timestamp default null
+, bio          text default null
+, job          text default null
+, interests    text default null
+, websites     text default null
+, media        text default null
+, religion     text default null
+, politics     text default null
+) returns friendworld.users as $$
+  #variable_conflict use_variable
+  declare
+    user  friendworld.users;
+
+  begin
+    update friendworld.users
+    set
+      avatar_url    = coalesce(avatar_url, friendworld.users.avatar_url)
+    , email         = coalesce(email, friendworld.users.email)
+    , gender        = coalesce(gender, friendworld.users.gender)
+    , birthday      = coalesce(birthday, friendworld.users.birthday)
+    , bio           = coalesce(bio, friendworld.users.bio)
+    , job           = coalesce(job, friendworld.users.job)
+    , interests     = coalesce(interests, friendworld.users.interests)
+    , websites      = coalesce(websites, friendworld.users.websites)
+    , media         = coalesce(media, friendworld.users.media)
+    , religion      = coalesce(religion, friendworld.users.religion)
+    , politics      = coalesce(politics, friendworld.users.politics)
+    where friendworld.users.id = nullif(current_setting('jwt.claims.user_id', true), '')::uuid
+    returning * into user;
+
+    return user;
+  end;
+$$ language plpgsql;
+
+grant execute on function friendworld.update_user(text, text, text, timestamp, text, text, text, text, text, text, text)
+  to friendworld_user;
+
+
+-- Stats
+create function friendworld.user_stats()
+  returns table (
+    username    text
+  , post_count  bigint
+) as $$
+  select username, count(*) as post_count
+  from friendworld.posts
+  join friendworld.users on users.id = friendworld.posts.author_id
+  group by username
+  order by post_count
+  desc;
+$$ language sql stable;
+
+grant execute on function friendworld.user_stats()
+  to friendworld_user, friendworld_anonymous;

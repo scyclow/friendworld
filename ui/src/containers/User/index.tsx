@@ -5,15 +5,42 @@ import { Link } from 'react-router-dom'
 import Post from '../../components/Post'
 import DisplayError from '../../components/DisplayError'
 import Loading from '../../components/Loading'
+import useResponsive from '../../utils/useResponsive'
 
-
+const userProps = `
+  id
+  createdAt
+  username
+  avatarUrl
+  email
+  gender
+  birthday
+  bio
+  job
+  interests
+  websites
+  media
+  religion
+  politics
+`
 const userQuery = `
-query threadById ($username: UsernameDomain!){
+query userByUsername ($username: UsernameDomain!){
   user: userByUsername (username: $username) {
     id
-    username
     createdAt
+    username
     avatarUrl
+    email
+    gender
+    birthday
+    bio
+    job
+    interests
+    websites
+    media
+    religion
+    politics
+    trackingInfo
     postStats: authoredPosts {
       totalCount
     }
@@ -32,9 +59,19 @@ query threadById ($username: UsernameDomain!){
 type UserQuery = {
   user: {
     id: string
-    username: string
     createdAt: string
-    avatarUrl: string
+    username: string
+    avatarUrl: string | null
+    email: string | null
+    gender: string | null
+    birthday: string | null
+    bio: string | null
+    job: string | null
+    interests: string | null
+    websites: string | null
+    media: string | null
+    religion: string | null
+    politics: string | null
     postStats: {
       totalCount: number
     }
@@ -51,6 +88,14 @@ type UserQuery = {
   }
 }
 
+const InfoSection = ({ title, info }: { title: string, info: any }) => (
+  info && (
+    <div className={styles.infoSection}>
+      <h3>{title}</h3>
+      <p>{info}</p>
+    </div>
+  )
+)
 
 type Props = {
   username: string
@@ -68,42 +113,65 @@ const formatDate = (date: string) => new Date(date).toLocaleString('en-US', {
 
 const User: React.SFC<Props> = ({ username }) => {
   const [{ error, fetching, data }] = useQuery<UserQuery>({ query: userQuery, variables: { username } })
+  const { isMobile, isDesktop } = useResponsive(540)
 
   if (error) return <DisplayError error={error} />
   if (fetching) return <Loading />
   if (!data) return <div />
   const { user } = data
 
+  const header = (
+    <header className={styles.header}>
+      <h1 className={styles.intro}>Welcome to {user.username}'s Profile!</h1>
+      <h4 className={styles.memberSince}>{user.username} has been a member since {formatDate(user.createdAt)}</h4>
+    </header>
+  )
+
   return (
     <div className={styles.profile}>
+      {isMobile && header}
       <div className={styles.content}>
         <div className={styles.left}>
-          <div className={styles.avatar} style={{ backgroundImage: `url(${user.avatarUrl})` }} />
-          <div><strong>Posts:</strong> {user.postStats.totalCount}</div>
-          <Link to={`/messages/${user.username}`}>Message {user.username}</Link>
+          <div>
+            <div className={styles.avatar} style={{ backgroundImage: `url(${user.avatarUrl})` }} />
+            <div><strong>Posts:</strong> {user.postStats.totalCount}</div>
+            <div className={styles.sendMessage}>
+              <Link to={`/messages/${user.username}`}>Send Message to {user.username}</Link>
+            </div>
+          </div>
         </div>
 
         <div className={styles.right}>
-          <h1 className={styles.intro}>Welcome to {user.username}'s Profile!</h1>
-          <h4 className={styles.memberSince}>{user.username} has been a member since {formatDate(user.createdAt)}</h4>
+          {isDesktop && header}
+          <div className={styles.userInfo}>
 
+          <InfoSection title="Gender" info={user.gender} />
+          <InfoSection title="Birthday" info={user.birthday} />
+          <InfoSection title="About Me" info={user.bio} />
+          <InfoSection title="Occupation" info={user.job} />
+          <InfoSection title="Favorite Websites" info={user.websites} />
+          <InfoSection title="Favorite Movies, TV shows, and Music" info={user.media} />
+          <InfoSection title="Religious Views" info={user.religion} />
+          <InfoSection title="Political Views" info={user.politics} />
+
+          </div>
           <div className={styles.recentPosts}>
             {user.posts.length ? (<>
-              <h3>Last {user.posts.length} posts:</h3>
+              <h2>Recent posts by {user.username}:</h2>
               {user.posts.map(post => (
                 <div className={styles.postContainer} key={post.id}>
                   <Post post={post} />
                 </div>
               ))}
             </>) : (
-              <h3>This user has not made any posts yet.</h3>
+              <h3>This user has not made any posts yet!</h3>
             )}
           </div>
 
+          <div className={styles.uuid}>user uuid: {user.id}</div>
         </div>
 
       </div>
-      <div>user uuid: {user.id}</div>
     </div>
   )
 }
