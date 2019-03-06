@@ -1,11 +1,10 @@
 'use strict';
 
 require('pretty-error').start()
+
 const http = require('http')
 const app = require('../src')
 const config = require('../src/config.ts').default
-
-
 
 let currentApp = app.default
 
@@ -14,10 +13,9 @@ server.listen(config.PORT, app.onServe)
 
 if (module.hot) {
   module.hot.accept(['../src'], () => {
-    console.log('reloading...')
+    console.log('=================================')
     server.removeListener('request', currentApp)
     currentApp = require('../src').default
     server.on('request', currentApp)
   })
 }
-

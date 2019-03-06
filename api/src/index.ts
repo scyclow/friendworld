@@ -5,13 +5,59 @@ import postgraphile from 'postgraphile'
 import { makeWrapResolversPlugin, gql } from 'graphile-utils'
 import config from './config'
 
+process.env.DEBUG="postgraphile:postgres"
 const app = express()
+
+
+const createPostMutation = `
+  mutation createPost($input: CreatePostInput!) {
+    createPost(input: $input) {
+      post {
+        id
+        content
+        createdAt
+        author {
+          id
+          avatarUrl
+          username
+        }
+      }
+    }
+  }
+`
+
+const makeAutomatedPost = async (args: any, context: any, resolveInfo: any) => {
+  const { input: { threadId, content, tags } } = args;
+
+  const makePost = Math.random() > 0.5
+  const botId = '0a04ff42-a2c6-4e1f-bda9-80c493abefea'
+  const messageContent = 'this is an ENHANCED automated post!'
+
+  if (!makePost) return
+
+  await context.pgClient.query(`set local jwt.claims.user_id to '${botId}';`)
+
+  return resolveInfo
+    .graphile
+    .build
+    .graphql
+    .graphql(resolveInfo.schema, createPostMutation, null, context, {
+      input: {
+        threadId: args.input.threadId,
+        content: messageContent,
+        tags: '{"hashtags":[], "usernames":[]}'
+      }
+    })
+}
 
 
 const doSomething = makeWrapResolversPlugin({
   Mutation: {
-    async createPost(resolve, source, args, context, resolveInfo) {
-      return await resolve(source, newArgs, context, resolveInfo)
+    async createPost(resolve, source, args, context, resolveInfo: any) {
+      const response = await resolve(source, args, context, resolveInfo)
+      await makeAutomatedPost(args, context, resolveInfo)
+      return response
+
     }
   },
 })
@@ -19,8 +65,21 @@ const doSomething = makeWrapResolversPlugin({
 
 
 
+
+
+
+
+
+
+
+
 app.use(cors())
-app.use(logger('[:date[web]] :method :url :status :response-time ms - :res[content-length] -->>'));
+app.use(logger(
+  '[:date[web]] :method :url :status :response-time ms - :res[content-length]',
+  { skip: (req, res) => req.originalUrl === '/favicon.ico' }
+))
+
+
 app.use(postgraphile('postgres:///friendworld', 'friendworld', {
   enhanceGraphiql: true,
   disableDefaultMutations: true,
