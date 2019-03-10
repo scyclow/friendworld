@@ -88,7 +88,7 @@ $link-spacing-mobile: 10px;
   border: 1px solid;
   padding: 10px;
   font-size: 12px;
-  animation: Unread 1.5s linear infinite;
+  animation: Unread 1.5s linear infinite, Rotate 3s linear infinite;
 }
 
 .dropdown {
@@ -139,6 +139,15 @@ $link-spacing-mobile: 10px;
   100% {
     background-color: #ffff00;
     color: #0000ff;
+  }
+}
+
+@keyframes Rotate {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
   }
 }
 

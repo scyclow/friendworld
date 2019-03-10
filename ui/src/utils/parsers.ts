@@ -50,7 +50,7 @@ export function getHashtags(str: string) {
   return str
     .split(' ')
     .filter(isHashtag)
-    .map(f => cleanFragment(f, /^#/))
+    .map(f => cleanFragment(f, /^#/).toLowerCase())
 }
 
 export function getTags(content: string) {

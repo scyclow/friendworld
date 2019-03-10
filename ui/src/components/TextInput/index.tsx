@@ -21,6 +21,16 @@ function TextInput ({
 }: Props) {
   const [content, setContent] = useState('')
 
+  const submit = () => {
+    onSubmit(content)
+    setContent('')
+  }
+  const submitOnCommandEnter = (e: any) => {
+    if (e.keyCode === 13 && e.metaKey) {
+      submit()
+    }
+  }
+
   return (
     <div className={styles.container}>
       <div className={styles.inner}>
@@ -33,13 +43,11 @@ function TextInput ({
         }}
         value={content}
         style={inputStyle}
+        onKeyDown={submitOnCommandEnter}
       />
       <button
         className={styles.submitButton}
-        onClick={() => {
-          onSubmit(content)
-          setContent('')
-        }}
+        onClick={submit}
       >
         {buttonContent || 'Submit'}
       </button>
