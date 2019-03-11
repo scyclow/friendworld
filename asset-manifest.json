@@ -1,13 +1,13 @@
 {
   "main.css": "/friendworld/static/css/main.f604e173.chunk.css",
-  "main.js": "/friendworld/static/js/main.ad930f4c.chunk.js",
-  "main.js.map": "/friendworld/static/js/main.ad930f4c.chunk.js.map",
+  "main.js": "/friendworld/static/js/main.05e261c1.chunk.js",
+  "main.js.map": "/friendworld/static/js/main.05e261c1.chunk.js.map",
   "runtime~main.js": "/friendworld/static/js/runtime~main.59900b99.js",
   "runtime~main.js.map": "/friendworld/static/js/runtime~main.59900b99.js.map",
   "static/js/2.29cee8b6.chunk.js": "/friendworld/static/js/2.29cee8b6.chunk.js",
   "static/js/2.29cee8b6.chunk.js.map": "/friendworld/static/js/2.29cee8b6.chunk.js.map",
   "index.html": "/friendworld/index.html",
-  "precache-manifest.c0e7532c64d028839eaf7ea9dc4768f8.js": "/friendworld/precache-manifest.c0e7532c64d028839eaf7ea9dc4768f8.js",
+  "precache-manifest.4947ae35f0b61ffe1edda2ac2c9fe5bb.js": "/friendworld/precache-manifest.4947ae35f0b61ffe1edda2ac2c9fe5bb.js",
   "service-worker.js": "/friendworld/service-worker.js",
   "static/css/main.f604e173.chunk.css.map": "/friendworld/static/css/main.f604e173.chunk.css.map"
 }
