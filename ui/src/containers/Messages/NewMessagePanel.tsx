@@ -65,6 +65,12 @@ export default function NewMessagePanel() {
     }
   }
 
+  const submitOnCommandEnter = (e: any) => {
+    if (e.keyCode === 13 && e.metaKey) {
+      sendMessage()
+    }
+  }
+
   return (
     <section className={styles.messagePanel}>
       <div>
@@ -81,6 +87,7 @@ export default function NewMessagePanel() {
             value={messageToSend}
             onChange={e => setMessageToSend(e.target.value)}
             placeholder="Enter message here"
+            onKeyDown={submitOnCommandEnter}
           />
         </div>
         <button className={styles.submitButton} onClick={sendMessage}>Send</button>

@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { useQuery, useMutation } from 'urql'
 import { Link } from 'react-router-dom'
+import { RouteComponentProps } from 'react-router'
+
 import styles from './styles.module.scss'
 import Post, { PostType } from '../../components/Post'
 import DisplayError from '../../components/DisplayError'
@@ -99,23 +101,28 @@ const formatDate = (date: string) => new Date(date).toLocaleString('en-US', {
   second: 'numeric'
 })
 
-export default function Profile() {
+type Props = RouteComponentProps
+
+export default function Profile({ history }: Props) {
   const [{ data, error, fetching }] = useQuery<CurrentUserQuery>({ query: currentUserQuery })
+  const goto = (url: string) => history.push(url)
+
   if (error) return <DisplayError error={error} />
   if (fetching) return <Loading />
   if (!data) return null
 
-  return <ProfileContent currentUser={data.currentUser}/>
+  return <ProfileContent currentUser={data.currentUser} goto={goto} />
 }
 
 const validDate = (dateStr: string) => Date.parse(dateStr) ? new Date(dateStr).toISOString() : null
 const validEmail = (emailStr: string) => emailStr.match(/^.+@.+\..+$/) ? emailStr : null
 
-type Props = {
-  currentUser: CurrentUser
+type ContentProps = {
+  currentUser: CurrentUser,
+  goto: (url: string) => unknown
 }
 
-function ProfileContent ({ currentUser }: Props) {
+function ProfileContent ({ currentUser, goto }: ContentProps) {
   const [avatarUrl, setAvatarUrl] = useState<string>(currentUser.avatarUrl)
   const [email, setEmail] = useState<string>(currentUser.email || '')
   const [gender, setGender] = useState<string>(currentUser.gender)
@@ -144,9 +151,9 @@ function ProfileContent ({ currentUser }: Props) {
     </header>
   )
 
-  const updateUser = () => {
+  const updateUser = async () => {
     setSubmitted(true)
-    executeUpdateUser({
+    await executeUpdateUser({
       input: {
         email: validEmail(email),
         birthday: validDate(birthday),
@@ -161,6 +168,7 @@ function ProfileContent ({ currentUser }: Props) {
         politics
       }
     })
+    goto(`/users/${currentUser.username}`)
   }
 
   return (
@@ -177,63 +185,113 @@ function ProfileContent ({ currentUser }: Props) {
         <div className={styles.right}>
           {isDesktop && header}
           <div className={styles.buttonContainer}>
-            <button className={styles.submitButton} onClick={updateUser}>UPDATE PROFILE</button>
+            <button className={styles.submitButton} onClick={updateUser}>Update Profile</button>
           </div>
 
           <div className={styles.inputSection}>
             <h3>Avatar Url</h3>
-            <input className={styles.contentInput} value={avatarUrl} onChange={e => setAvatarUrl(e.target.value)} />
+            <input
+              className={styles.contentInput}
+              value={avatarUrl}
+              placeholder="http://www.website.com/image.jpeg"
+              onChange={e => setAvatarUrl(e.target.value)}
+            />
           </div>
 
           <div className={styles.inputSection}>
             <h3>Email</h3>
-            <input className={styles.contentInput} value={email} onChange={e => setEmail(e.target.value)} />
+            <input
+              className={styles.contentInput}
+              value={email}
+              placeholder="email@website.com"
+              onChange={e => setEmail(e.target.value)}
+            />
             {!!emailError && <div>{emailError}</div>}
           </div>
 
           <div className={styles.inputSection}>
             <h3>Gender</h3>
-            <input className={styles.contentInput} value={gender} onChange={e => setGender(e.target.value)} />
+            <input
+              className={styles.contentInput}
+              value={gender}
+              placeholder="Gender"
+              onChange={e => setGender(e.target.value)}
+            />
           </div>
 
           <div className={styles.inputSection}>
             <h3>Birthday</h3>
-            <input className={styles.contentInput} value={birthday} onChange={e => setBirthday(e.target.value)} />
+            <input
+              className={styles.contentInput}
+              value={birthday}
+              placeholder="03/11/19"
+              onChange={e => setBirthday(e.target.value)}
+            />
             {!!bdayError && <div>{bdayError}</div>}
           </div>
 
           <div className={styles.inputSection}>
             <h3>About Me</h3>
-            <textarea placeholder="Tell us about yourself!" className={styles.contentInput} value={bio} onChange={e => setBio(e.target.value)} />
+            <textarea
+              className={styles.contentInput}
+              value={bio}
+              placeholder="Tell us about yourself!"
+              onChange={e => setBio(e.target.value)}
+            />
           </div>
 
           <div className={styles.inputSection}>
             <h3>Occupation</h3>
-            <input className={styles.contentInput} value={job} onChange={e => setJob(e.target.value)} />
+            <input
+              className={styles.contentInput}
+              value={job}
+              placeholder="Accountant"
+              onChange={e => setJob(e.target.value)}
+            />
           </div>
 
           <div className={styles.inputSection}>
             <h3>Favorite Websites</h3>
-            <input className={styles.contentInput} value={websites} onChange={e => setWebsites(e.target.value)} />
+            <input
+              className={styles.contentInput}
+              value={websites}
+              placeholder="friendworld.social, fastcashmoneyplus.biz"
+              onChange={e => setWebsites(e.target.value)}
+            />
           </div>
 
           <div className={styles.inputSection}>
             <h3>Favorite Movies, TV shows, and Music</h3>
-            <input className={styles.contentInput} value={media} onChange={e => setMedia(e.target.value)} />
+            <input
+              className={styles.contentInput}
+              value={media}
+              placeholder="The Godfather, Citizen Kane, Casablanca"
+              onChange={e => setMedia(e.target.value)}
+            />
           </div>
 
           <div className={styles.inputSection}>
             <h3>Religious Views</h3>
-            <input className={styles.contentInput} value={religion} onChange={e => setReligion(e.target.value)} />
+            <input
+              className={styles.contentInput}
+              value={religion}
+              placeholder="God"
+              onChange={e => setReligion(e.target.value)}
+            />
           </div>
 
           <div className={styles.inputSection}>
             <h3>Political Views</h3>
-            <input className={styles.contentInput} value={politics} onChange={e => setPolitics(e.target.value)} />
+            <input
+              className={styles.contentInput}
+              value={politics}
+              placeholder="Conservative"
+              onChange={e => setPolitics(e.target.value)}
+            />
           </div>
 
           <div className={styles.buttonContainer}>
-            <button className={styles.submitButton} onClick={updateUser}>UPDATE PROFILE</button>
+            <button className={styles.submitButton} onClick={updateUser}>Update Profile</button>
           </div>
         </div>
       </div>

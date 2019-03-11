@@ -6,9 +6,28 @@
   }
 }
 
+.startThread {
+  padding: 2px;
+  box-sizing: border-box;
+}
+
+.startThread:hover {
+  border: 1px dotted;
+  margin-left: -1px;
+}
+
 @media(max-width: 540px) {
   .header h1 {
     font-size: 24px
+  }
+}
+
+.quickLinks {
+  // border: 1px dotted;
+  margin-bottom: 15px;
+  font-size: 12px;
+  strong {
+    text-transform: uppercase;
   }
 }
 
@@ -31,7 +50,6 @@
       text-decoration: underline;
     }
   }
-
 }
 
 .threadPost {

@@ -83,53 +83,52 @@ function Nav(props: Props) {
   useEffect(() => props.history.listen(hideDropdown))
 
   return (
-    <>
-      <NavBar
-        loading={fetching}
-        currentUser={currentUser}
-        toggleDropdownVisible={setDropdownState}
-      />
-      {dropdownState &&
-        <Dropdown hide={hideDropdown}>
-          {dropdownState === 'users' && <UserDropdown />}
-          {dropdownState === 'alerts' && currentUser && <AlertDropdown
-            alerts={currentUser.alerts}
-            onEmptyClick={hideDropdown}
-            readAlert={readAlert}
-          />}
-        </Dropdown>
-      }
-    </>
+    <nav className={cx(styles.container, 'solid')}>
+      <Width>
+        <NavBar
+          loading={fetching}
+          currentUser={currentUser}
+          toggleDropdownVisible={setDropdownState}
+        />
+        <div className={styles.dropdownPosition}>
+          {dropdownState &&
+            <Dropdown hide={hideDropdown}>
+              {dropdownState === 'users' && <UserDropdown />}
+              {dropdownState === 'alerts' && currentUser && <AlertDropdown
+                alerts={currentUser.alerts}
+                onEmptyClick={hideDropdown}
+                readAlert={readAlert}
+              />}
+            </Dropdown>
+          }
+        </div>
+      </Width>
+    </nav>
   )
 }
-
 
 
 
 type NavBarProps = {
   loading: boolean,
   currentUser: CurrentUserQuery['currentUser'] | null,
-  toggleDropdownVisible: (state: State['dropdownState']) => void
+  toggleDropdownVisible: (state: State['dropdownState']) => void,
 }
 
 const NavBar: React.SFC<NavBarProps> = ({ toggleDropdownVisible, currentUser, loading }) => {
   return (
-    <nav className={cx(styles.container, 'solid')}>
-      <Width>
-        <div className={styles.content}>
-          <Link to="/">
-            <div className={styles.title}>FriendWorld</div>
-          </Link>
+    <div className={styles.content}>
+      <Link to="/">
+        <div className={styles.title}>FriendWorld</div>
+      </Link>
 
-          <div className={styles.links}>
-            {currentUser
-              ? <SignedInMenu currentUser={currentUser} toggleDropdownVisible={toggleDropdownVisible} />
-              : loading ? false : <SignedOutMenu />
-            }
-          </div>
-        </div>
-      </Width>
-    </nav>
+      <div className={styles.links}>
+        {currentUser
+          ? <SignedInMenu currentUser={currentUser} toggleDropdownVisible={toggleDropdownVisible} />
+          : loading ? false : <SignedOutMenu />
+        }
+      </div>
+    </div>
   )
 }
 
@@ -143,15 +142,17 @@ const SignedInMenu = ({ currentUser, toggleDropdownVisible }: SignedInMenuProps)
 
   return (
     <>
-      <div className={styles.link} onClick={() => toggleDropdownVisible('users')}>
+      <div
+        className={styles.link}
+        onClick={() => toggleDropdownVisible('users')}
+        style={{ maxWidth: '180px', overflow: 'auto' }}
+      >
         {currentUser.username}
         <div
           className={cx(styles.circle, styles.user)}
           style={{ backgroundImage: `url(${currentUser.avatarUrl})` }}
         />
       </div>
-
-      {isDesktop && <Link to="/messages" className={styles.link}>Messages</Link>}
 
       {isDesktop && (
         <div className={styles.link} onClick={() => toggleDropdownVisible('alerts')}>
@@ -175,7 +176,5 @@ const SignedOutMenu = () => (
     <Link to="/signup" className={styles.link}>Create Account</Link>
   </>
 )
-
-
 
 export default Nav

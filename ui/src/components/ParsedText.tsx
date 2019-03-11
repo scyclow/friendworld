@@ -25,7 +25,7 @@ const parseFragment = (fragment: string): Fragment => {
     return <Img url={fragment} style={imgStyle} alt="user posted content"/>
 
   } else if (isExternalLink(fragment)) {
-    return <a href={fragment} target="_blank" rel="noopener noreferrer">{fragment}</a>
+    return <a href={cleanFragment(fragment)} target="_blank" rel="noopener noreferrer">{fragment}</a>
 
   } else if (isUsername(fragment)) {
     const userId = cleanFragment(fragment, /^@/)

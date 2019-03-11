@@ -4,6 +4,7 @@ import styles from './styles.module.scss'
 import { Link } from 'react-router-dom'
 import Post from '../../components/Post'
 import DisplayError from '../../components/DisplayError'
+import ParsedText from '../../components/ParsedText'
 import Loading from '../../components/Loading'
 import useResponsive from '../../utils/useResponsive'
 
@@ -85,14 +86,14 @@ type UserQuery = {
       }
 
     }>
-  }
+  } | null
 }
 
 const InfoSection = ({ title, info }: { title: string, info: any }) => (
   info && (
     <div className={styles.infoSection}>
       <h3>{title}</h3>
-      <p>{info}</p>
+      <ParsedText content={info} />
     </div>
   )
 )
@@ -117,7 +118,12 @@ const User: React.SFC<Props> = ({ username }) => {
 
   if (error) return <DisplayError error={error} />
   if (fetching) return <Loading />
-  if (!data) return <div />
+  if (!data || !data.user) return (
+    <div style={{ margin: '20px 0', textAlign: 'center' }}>
+      {username} is not an active Friendworld user!
+    </div>
+  )
+
   const { user } = data
 
   const header = (
@@ -136,7 +142,7 @@ const User: React.SFC<Props> = ({ username }) => {
             <div className={styles.avatar} style={{ backgroundImage: `url(${user.avatarUrl})` }} />
             <div><strong>Posts:</strong> {user.postStats.totalCount}</div>
             <div className={styles.sendMessage}>
-              <Link to={`/messages/${user.username}`}>Send Message to {user.username}</Link>
+              <Link to={`/messages/${user.username}`}>Message {user.username}</Link>
             </div>
           </div>
         </div>

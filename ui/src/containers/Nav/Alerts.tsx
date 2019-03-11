@@ -19,10 +19,6 @@ type AlertDropdownProps = {
 }
 
 const Alerts = ({ alerts, readAlert }: AlertDropdownProps) => {
-
-  // if (error) return <DisplayError error={error} />
-  // if (loading) return <Loading />
-
   return (<>
     {alerts.map(alert =>
       <div key={alert.id} className={styles.alert} onClick={() => readAlert(alert.id)}>
@@ -48,7 +44,6 @@ export const AlertDropdown: React.SFC<AlertDropdownProps> = ({ alerts, onEmptyCl
 )
 
 export const AlertCircle: React.SFC<{ unread: number }> = ({ unread }) => (
-  // TODO make padding a a function of unread
   <div className={cx(styles.circle, { [styles.unread]: unread })}>
     {unread || 0}
   </div>

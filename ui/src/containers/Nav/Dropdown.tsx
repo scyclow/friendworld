@@ -24,10 +24,7 @@ export default function Dropdown({ children, hide }: Props) {
   })
 
   return (
-    <div
-      id={ELEMENT_ID}
-      className={cx(styles.dropdown, 'solid')}
-    >
+    <div id={ELEMENT_ID} className={cx(styles.dropdown, 'solid')}>
       {children}
     </div>
   )

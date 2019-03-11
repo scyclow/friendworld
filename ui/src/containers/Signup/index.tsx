@@ -59,7 +59,7 @@ function Signup() {
   if (data && !error) {
     jwt.set(username, data.signup.jwtToken)
     jwt.setCurrentUser(username)
-    window.location.href = '/'
+    window.location.href = '/profile'
   }
 
   return (
@@ -72,7 +72,10 @@ function Signup() {
               name="fw_username"
               placeholder="Username"
               value={username}
-              onChange={(e) => setUsername(e.target.value)}
+              onChange={(e) => {
+                setUsername(e.target.value)
+                if (e.target.value.length > 18) setErrorText('Username must be 18 characters or less')
+              }}
             />
             <input
               type="password"

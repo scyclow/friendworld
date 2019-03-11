@@ -65,13 +65,19 @@ const Forum: React.SFC<{}> = () => {
   return (
     <section className={styles.forum}>
       <section className={styles.left}>
+        <div className={styles.quickLinks}>
+          <strong>quick links:</strong>{' '}
+          <Link to="/messages">Messages</Link>{', '}
+          <Link to="/profile">Profile</Link>{', '}
+          <Link to="/stats">Stats</Link>
+        </div>
         {fetching && <Loading />}
         {error && <DisplayError error={error} />}
         {data && (
           <>
             <header className={styles.header}>
               <h1>Forum</h1>
-              <Link to="/threads/new">
+              <Link to="/threads/new" className={styles.startThread}>
                 Start A Thread!
               </Link>
             </header>

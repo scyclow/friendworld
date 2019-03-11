@@ -32,7 +32,6 @@ $link-spacing-mobile: 10px;
 .links {
   display: inline-flex;
   align-items: center;
-  overflow: auto;
 }
 
 .link {
@@ -91,11 +90,15 @@ $link-spacing-mobile: 10px;
   animation: Unread 1.5s linear infinite, Rotate 3s linear infinite;
 }
 
+.dropdownPosition {
+  display: flex;
+  justify-content: flex-end;
+}
+
 .dropdown {
-  position: fixed;
-  right: 0;
-  margin-right: -2px;
-  top: $height + 3;
+  position: absolute;
+  margin-right: -5px;
+  margin-top: 1px;
   width: 320px;
   min-height: 50px;
   max-height: calc(100vh - 48px);
@@ -178,6 +181,10 @@ $link-spacing-mobile: 10px;
   .link::before {
     content: '';
     padding-right: 0;
+  }
+
+  .dropdownPosition {
+    margin-right: -9px;
   }
 
 }
