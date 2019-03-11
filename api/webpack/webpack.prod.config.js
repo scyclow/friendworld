@@ -13,7 +13,7 @@ module.exports = merge(config, {
   watch: false,
   mode: 'production',
   externals: [nodeExternals()],
-  plugins: [new webpack.NamedModulesPlugin(), ],
+  plugins: [new webpack.NamedModulesPlugin()],
   optimization: {
     minimize: false
   },

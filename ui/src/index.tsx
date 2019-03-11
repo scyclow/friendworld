@@ -6,7 +6,7 @@ import { Provider, createClient } from 'urql';
 import App from './App';
 import jwt from './utils/jwt'
 
-const isProd = true//process.env.NODE_ENV === 'production'
+const isProd = process.env.NODE_ENV === 'production'
 const client = createClient({
   url: isProd
     ? 'https://friendworld.appspot.com/graphql'
@@ -26,7 +26,7 @@ const client = createClient({
 })
 
 const hours = new Date().getHours();
-if (hours < 5 || hours >= 21) document.body.className = 'nightmode';
+if (hours < 5 || hours >= 22) document.body.className = 'nightmode';
 
 const basename = isProd ? '/friendworld' : '/'
 
