@@ -11,14 +11,25 @@
   background-color: #fff;
 }
 
-.nightmode * {
-  color: #fff;
-  background-color: #000;
+.nightmode,
+.nightmode .solid,
+.nightmode input,
+.nightmode textarea,
+.nightmode button {
+  background-color: #000000;
+}
+.nightmode, .nightmode * {
+  color: #ffffff;
 }
 
-.nightmode .solid {
-  background-color: #000
+input, textarea {
+  border: 1px solid #737373;
 }
+.nightmode input,
+.nightmode textarea {
+  border: 1px solid #ffffff;
+}
+
 
 a {
   border: 0;

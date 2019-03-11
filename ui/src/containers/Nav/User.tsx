@@ -34,7 +34,13 @@ export const UserDropdown: React.SFC<{}> = () => {
         </li>
       </Link>
 
-      {alternativeUsers.length &&
+      <Link to="/signup">
+        <li>
+          <div>Create Account</div>
+        </li>
+      </Link>
+
+      {!!alternativeUsers.length &&
         <div className={styles.switchAccounts}>
           <strong>Switch Account</strong>
           <ul>

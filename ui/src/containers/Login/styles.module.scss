@@ -31,3 +31,9 @@
   font-size: 13px;
   cursor: pointer;
 }
+
+@media(max-height: 540px) {
+  .card {
+    margin: 10px 0;
+  }
+}

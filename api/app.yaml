@@ -1,0 +1,4 @@
+runtime: nodejs10
+
+beta_settings:
+  cloud_sql_instances: friendworld:us-central1:paget

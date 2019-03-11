@@ -46,7 +46,7 @@ const ThreadPost = ({ thread }: { thread: Thread }) => {
 
   return (
     <article key={thread.id} className={styles.threadPost}>
-      <Link to={`/threads/${thread.id}`}>{title}</Link>
+      <Link className={styles.postLink} to={`/threads/${thread.id}`}>{title}</Link>
       <div className={styles.info}><strong>LAST POST:</strong> <time>[{thread.latestPostTime}]</time></div>
       <div className={styles.info}><strong>by: </strong>
         <Link to={`/users/${userName}`}>{userName}</Link>

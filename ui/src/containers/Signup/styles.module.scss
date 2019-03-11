@@ -26,8 +26,18 @@
   }
 }
 
+.inputs {
+  margin-bottom: 5px;
+}
+
 .submitButton {
   padding: 5px;
   font-size: 13px;
   cursor: pointer;
+}
+
+@media(max-height: 540px) {
+  .card {
+    margin: 10px 0;
+  }
 }

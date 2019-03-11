@@ -35,7 +35,7 @@ const parseFragment = (fragment: string): Fragment => {
   } else if (isHashtag(fragment)) {
     const hashtag = cleanFragment(fragment, /^#/)
     const dirt = fragment.replace(hashtag, '').replace(/^#/, '')
-    return <><Link to={`/hashtag/${hashtag}`}>#{hashtag}</Link>{dirt}</>
+    return <><Link to={`/hashtag/${hashtag.toLowerCase()}`}>#{hashtag}</Link>{dirt}</>
 
   } else if (isPostRef(fragment)) {
     const postId = cleanFragment(fragment, /^\/posts\//)

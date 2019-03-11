@@ -67,42 +67,42 @@ function Signup() {
       <div className={styles.card}>
         <h1>Create Account</h1>
         <form>
-          <input
-            name="fw_username"
-            placeholder="Username"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-          />
-          <input
-            type="password"
-            name="password"
-            placeholder="Password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
-          <input
-            type="password"
-            name="password_confirm"
-            placeholder="Password Confirmation"
-            value={passwordConfirm}
-            onChange={(e) => setPasswordConfirm(e.target.value)}
-          />
-
-          <div style={{ marginTop: '10px' }}>
-            {displayErrorText && <DisplayError error={displayErrorText} />}
-            {fetching && <Loading />}
-            {!fetching && (
-              <button
-                className={styles.submitButton}
-                onClick={(e) => {
-                  e.preventDefault()
-                  signup()
-                }}
-              >
-                Submit
-              </button>
-            )}
+          <div className={styles.inputs}>
+            <input
+              name="fw_username"
+              placeholder="Username"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+            />
+            <input
+              type="password"
+              name="password"
+              placeholder="Password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+            <input
+              type="password"
+              name="password_confirm"
+              placeholder="Password Confirmation"
+              value={passwordConfirm}
+              onChange={(e) => setPasswordConfirm(e.target.value)}
+            />
           </div>
+
+          {displayErrorText && <DisplayError error={displayErrorText} />}
+          {fetching && <Loading />}
+          {!fetching && (
+            <button
+              className={styles.submitButton}
+              onClick={(e) => {
+                e.preventDefault()
+                signup()
+              }}
+            >
+              Submit
+            </button>
+          )}
         </form>
       </div>
     </section>
