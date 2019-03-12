@@ -4,19 +4,19 @@ self.__precacheManifest = [
     "url": "/friendworld/static/js/runtime~main.59900b99.js"
   },
   {
-    "revision": "2dbe1a202e04e4bdf776",
-    "url": "/friendworld/static/js/main.2dbe1a20.chunk.js"
+    "revision": "53a7bbee2e28592ffc8e",
+    "url": "/friendworld/static/js/main.53a7bbee.chunk.js"
   },
   {
     "revision": "193da264d89b89e15886",
     "url": "/friendworld/static/js/2.193da264.chunk.js"
   },
   {
-    "revision": "2dbe1a202e04e4bdf776",
-    "url": "/friendworld/static/css/main.ab1c801a.chunk.css"
+    "revision": "53a7bbee2e28592ffc8e",
+    "url": "/friendworld/static/css/main.7b7ae3f1.chunk.css"
   },
   {
-    "revision": "a188dc1b81f0e58edcd71bc019721865",
+    "revision": "897f51744544486723ab0aefa3bf672a",
     "url": "/friendworld/index.html"
   }
 ];

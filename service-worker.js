@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/3.6.3/workbox-sw.js");
 
 importScripts(
-  "/friendworld/precache-manifest.19e7dec7e909b3318abfa91110b163ef.js"
+  "/friendworld/precache-manifest.9e7ba06caa53e8ab885aee123db6936c.js"
 );
 
 workbox.clientsClaim();
