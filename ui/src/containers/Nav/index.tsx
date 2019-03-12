@@ -14,8 +14,7 @@ import Dropdown from './Dropdown'
 
 import { RouteChildrenProps } from 'react-router'
 
-export type CurrentUserQuery = {
-  currentUser: {
+export type CurrentUser = {
     id: string,
     username: string,
     avatarUrl?: string
@@ -25,6 +24,8 @@ export type CurrentUserQuery = {
       link?: string
     }>
   }
+export type CurrentUserQuery = {
+  currentUser?: CurrentUser
 }
 
 const currentUserQuery = `{
@@ -133,7 +134,7 @@ const NavBar: React.SFC<NavBarProps> = ({ toggleDropdownVisible, currentUser, lo
 }
 
 type SignedInMenuProps = {
-  currentUser: CurrentUserQuery['currentUser']
+  currentUser: CurrentUser
   toggleDropdownVisible: NavBarProps['toggleDropdownVisible']
 }
 

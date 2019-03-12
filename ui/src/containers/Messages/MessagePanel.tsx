@@ -68,7 +68,7 @@ type Message = {
 }
 
 type RequestedUserQuery = {
-  currentUser: {
+  currentUser?: {
     username: string
   }
   requestedUser: {
@@ -126,7 +126,7 @@ export default function MessagePanel ({ username }: Props) {
 
   if (error) return <DisplayError error={error} />
   if (fetching) return <Loading />
-  if (!data) return null
+  if (!data || !data.currentUser) return null
 
   if (data.currentUser.username === username) return <Redirect to="/messages" />
 

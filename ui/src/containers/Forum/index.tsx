@@ -10,6 +10,9 @@ import AdContainer from '../AdContainer'
 
 
 const threadQuery = `{
+  currentUser {
+    id
+  }
   threads: threadsList (orderBy: [LATEST_POST_TIME_DESC]) {
     id
     title
@@ -36,6 +39,9 @@ type Thread = {
 }
 type ThreadQuery = {
   threads: Array<Thread>
+  currentUser: null | {
+    id: string
+  }
 }
 
 const ThreadPost = ({ thread }: { thread: Thread }) => {
@@ -65,16 +71,18 @@ const Forum: React.SFC<{}> = () => {
   return (
     <section className={styles.forum}>
       <section className={styles.left}>
-        <div className={styles.quickLinks}>
-          <strong>quick links:</strong>{' '}
-          <Link to="/messages">Messages</Link>{', '}
-          <Link to="/profile">Profile</Link>{', '}
-          <Link to="/stats">Stats</Link>
-        </div>
         {fetching && <Loading />}
         {error && <DisplayError error={error} />}
         {data && (
           <>
+            {data.currentUser &&
+              <div className={styles.quickLinks}>
+                <strong>quick links:</strong>{' '}
+                <Link to="/messages">Messages</Link>{', '}
+                <Link to="/profile">Profile</Link>{', '}
+                <Link to="/stats">Stats</Link>
+              </div>
+            }
             <header className={styles.header}>
               <h1>Forum</h1>
               <Link to="/threads/new" className={styles.startThread}>

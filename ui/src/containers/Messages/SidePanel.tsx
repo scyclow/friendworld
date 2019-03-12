@@ -31,7 +31,7 @@ type MessageData = {
   }
 }
 type MessagesDataQuery = {
-  messageData: {
+  messageData: null | {
     username: string
     sent: Array<MessageData>
     received: Array<MessageData>
@@ -51,6 +51,8 @@ const collectMessages = (
 }
 
 const uniqueSortedUsers = (messageData: MessagesDataQuery['messageData']) => {
+  if (!messageData) return []
+
   const allMessages = [...messageData.sent, ...messageData.received]
   const messages = allMessages.reduce(collectMessages, new Map())
 
@@ -65,7 +67,7 @@ export default function SidePanel() {
 
   if (error) return <DisplayError error={error} />
   if (fetching) return <Loading />
-  if (!data) return null
+  if (!data || !data.messageData) return null
 
   const messageNames = uniqueSortedUsers(data.messageData)
 

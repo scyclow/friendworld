@@ -7,10 +7,7 @@ import ParsedText from '../../components/ParsedText'
 import DisplayError from '../../components/DisplayError'
 import Loading from '../../components/Loading'
 import styles from './styles.module.scss'
-import { CurrentUserQuery } from './index'
-
-
-type CurrentUser = CurrentUserQuery['currentUser']
+import { CurrentUser } from './index'
 
 type AlertDropdownProps = {
   alerts: CurrentUser['alerts'],

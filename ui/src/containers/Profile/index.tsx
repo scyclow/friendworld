@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useQuery, useMutation } from 'urql'
-import { Link } from 'react-router-dom'
+import { Link, Redirect } from 'react-router-dom'
 import { RouteComponentProps } from 'react-router'
 
 import styles from './styles.module.scss'
@@ -32,7 +32,7 @@ type CurrentUser = {
   }
 }
 type CurrentUserQuery = {
-  currentUser: CurrentUser
+  currentUser?: CurrentUser
 }
 
 const userProps = `
@@ -109,7 +109,7 @@ export default function Profile({ history }: Props) {
 
   if (error) return <DisplayError error={error} />
   if (fetching) return <Loading />
-  if (!data) return null
+  if (!data || !data.currentUser) return <Redirect to="/signup" />
 
   return <ProfileContent currentUser={data.currentUser} goto={goto} />
 }

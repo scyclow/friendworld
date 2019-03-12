@@ -93,10 +93,13 @@ $link-spacing-mobile: 10px;
 .dropdownPosition {
   display: flex;
   justify-content: flex-end;
+  position: absolute;
+  width: inherit;
+  z-index: 1;
+  height: 0;
 }
 
 .dropdown {
-  position: absolute;
   margin-right: -5px;
   margin-top: 1px;
   width: 320px;
@@ -105,7 +108,8 @@ $link-spacing-mobile: 10px;
   overflow: scroll;
   border: 2px solid;
   box-sizing: border-box;
-  z-index: 1;
+  // this is needed because of height:0 on .dropdownPosition
+  display: table;
 }
 
 .alert {
