@@ -1,6 +1,5 @@
 import React, { useState } from 'react'
 import styles from './styles.module.scss'
-import profanityFilter from '../../utils/profanityFilter'
 
 const defaultPlaceholder = "Join the conversation..."
 

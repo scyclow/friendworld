@@ -6,9 +6,9 @@ export default function profanityFilter (input: string): string {
     motherfucker: 'm0therf_cker',
     fuck: 'f_ck',
 
-    shit: 'sh!t',
+    shit: 'poo',
     ' dick ': 'penis',
-    bitch: 'b&tch',
+    bitch: 'b!tch',
 
     cunt: 'c%nt',
     cocksuck: 'c*cks^ck',
@@ -22,7 +22,9 @@ export default function profanityFilter (input: string): string {
 
     tranny: 'transexual',
     ' god ': 'g-d',
-    goddamn: 'goshdarn'
+    goddamn: 'goshdarn',
+
+    pussy: 'p#ssy'
   }
 
   each(swap, (replaceTo, replaceFrom) => {

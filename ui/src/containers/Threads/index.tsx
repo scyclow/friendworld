@@ -93,7 +93,7 @@ const AddPost: React.SFC<AddPostProps> = ({ threadId, disabled }) => {
     executeCreatePost({
       input: {
         threadId,
-        content: profanityFilter(content),
+        content,
         tags: getTags(content)
       }
     })
@@ -129,7 +129,7 @@ const Threads: React.SFC<{ id: number }> = ({ id }) => {
   const isData = query.data && (query.data.thread ? (
     <div className={styles.container}>
       <header className={styles.threadTitle}>
-        <h2 >{query.data.thread.title}</h2>
+        <h2 >{profanityFilter(query.data.thread.title)}</h2>
       </header>
       <div>
         <Link to={`/threads/${query.data.thread.id}`}>

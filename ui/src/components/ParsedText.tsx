@@ -12,6 +12,8 @@ import {
   cleanFragment,
 } from '../utils/parsers'
 import Img from './Img'
+import profanityFilter from '../utils/profanityFilter'
+
 
 type Fragment = string | React.ReactNode;
 
@@ -30,12 +32,12 @@ const parseFragment = (fragment: string): Fragment => {
   } else if (isUsername(fragment)) {
     const userId = cleanFragment(fragment, /^@/)
     const dirt = fragment.replace(userId, '').replace(/^@/, '')
-    return <><Link to={`/users/${userId}`}>@{userId}</Link>{dirt}</>
+    return <><Link to={`/users/${userId}`}>@{profanityFilter(userId)}</Link>{dirt}</>
 
   } else if (isHashtag(fragment)) {
     const hashtag = cleanFragment(fragment, /^#/)
     const dirt = fragment.replace(hashtag, '').replace(/^#/, '')
-    return <><Link to={`/hashtag/${hashtag.toLowerCase()}`}>#{hashtag}</Link>{dirt}</>
+    return <><Link to={`/hashtag/${hashtag.toLowerCase()}`}>#{profanityFilter(hashtag)}</Link>{dirt}</>
 
   } else if (isPostRef(fragment)) {
     const postId = cleanFragment(fragment, /^\/posts\//)
@@ -48,7 +50,7 @@ const parseFragment = (fragment: string): Fragment => {
     return <><Link to={`/threads/${threadId}`}>/threads/{threadId}</Link>{dirt}</>
 
   } else {
-    return fragment
+    return profanityFilter(fragment)
   }
 }
 

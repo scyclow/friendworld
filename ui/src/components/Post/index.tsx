@@ -2,6 +2,7 @@ import * as React from 'react';
 import { Link } from 'react-router-dom'
 
 import ParsedText from '../ParsedText'
+import profanityFilter from '../../utils/profanityFilter'
 import styles from './styles.module.scss';
 
 
@@ -57,7 +58,7 @@ const Post: React.SFC<Props> = ({ post }) => (
       </div>
       {!!post.thread && (
         <div className={styles.threadLink}>
-          In thread: <Link to={`/threads/${post.thread.id}`}>{post.thread.title}</Link>
+          In thread: <Link to={`/threads/${post.thread.id}`}>{profanityFilter(post.thread.title)}</Link>
         </div>
       )}
     </div>

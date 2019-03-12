@@ -3,6 +3,7 @@ import { useQuery } from 'urql'
 import { Link } from 'react-router-dom'
 import styles from './styles.module.scss'
 import useResponsive from '../../utils/useResponsive'
+import profanityFilter from '../../utils/profanityFilter'
 
 import DisplayError from '../../components/DisplayError'
 import Loading from '../../components/Loading'
@@ -46,9 +47,11 @@ type ThreadQuery = {
 
 const ThreadPost = ({ thread }: { thread: Thread }) => {
   const userName = thread.posts[0] && thread.posts[0].author.username
-  const title = thread.title.length > 297
-    ? thread.title.substring(0, 297) + '...'
-    : thread.title
+  const title = profanityFilter(
+    thread.title.length > 297
+      ? thread.title.substring(0, 297) + '...'
+      : thread.title
+  )
 
   return (
     <article key={thread.id} className={styles.threadPost}>

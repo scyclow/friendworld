@@ -68,8 +68,8 @@ const NewThread: React.SFC<{}> = () => {
     if (!title || !content) return
     executeCreateThread({
       input: {
-        title: profanityFilter(title),
-        content: profanityFilter(content),
+        title,
+        content,
         tags: getTags(title + ' ' + content),
       }
     })
@@ -118,7 +118,7 @@ const NewThread: React.SFC<{}> = () => {
         />
         {(title || content) && (
           <>
-            <h2 className={styles.label}>[PREVIEW] {title}</h2>
+            <h2 className={styles.label}>[PREVIEW] {profanityFilter(title)}</h2>
             <Post
               post={{
                 id: 'XX',
