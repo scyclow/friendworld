@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Link } from 'react-router-dom'
-
+import cx from 'classnames'
 import ParsedText from '../ParsedText'
 import profanityFilter from '../../utils/profanityFilter'
 import styles from './styles.module.scss';
@@ -51,7 +51,7 @@ const Post: React.SFC<Props> = ({ post }) => (
       </div>
 
     </div>
-    <div className={styles.footer}>
+    <div className={cx(styles.footer, 'offWhite')}>
       <div className={styles.postedAt}>
         <time>Posted at: {new Date(post.createdAt).toISOString()}</time>
         <span><Link to={`/posts/${post.id}`}>/posts/{post.id}</Link></span>

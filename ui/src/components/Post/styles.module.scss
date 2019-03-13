@@ -89,15 +89,20 @@
     display: block;
   }
 
+  .content {
+    padding: 7px;
+  }
+
   .panel {
     border-right: 0;
     border-bottom: 1px solid;
     width: 100%;
     display: flex;
+    padding: 7px;
 
     .avatar {
-      height: 30px;
-      width: 30px;
+      height: 40px;
+      width: 40px;
       display: inline-block;
       margin-bottom: 0;
       margin-right: 10px;
@@ -107,7 +112,7 @@
   .panelContainer {
     width: 100%;
     display: flex;
-    align-items: center;
+    align-items: flex-start;
   }
 
   .totalPosts {

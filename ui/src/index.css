@@ -7,6 +7,14 @@
   color: #000;
 }
 
+.offWhite {
+  background-color: #f6f6f6;
+}
+
+.nightmode .offWhite {
+  background-color: #000000;
+}
+
 .solid {
   background-color: #fff;
 }

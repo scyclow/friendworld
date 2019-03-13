@@ -82,7 +82,7 @@ const Forum: React.SFC<{}> = () => {
               <div className={styles.quickLinks}>
                 <strong>quick links:</strong>{' '}
                 <Link to="/messages">Messages</Link>{', '}
-                <Link to="/profile">Profile</Link>{', '}
+                <Link to="/profile">Update Profile</Link>{', '}
                 <Link to="/stats">Stats</Link>
               </div>
             }

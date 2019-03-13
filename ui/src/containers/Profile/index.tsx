@@ -109,7 +109,9 @@ export default function Profile({ history }: Props) {
 
   if (error) return <DisplayError error={error} />
   if (fetching) return <Loading />
-  if (!data || !data.currentUser) return <Redirect to="/signup" />
+  if (!data) return null
+  if (!data.currentUser) return <Redirect to="/signup" />
+
 
   return <ProfileContent currentUser={data.currentUser} goto={goto} />
 }
@@ -146,8 +148,9 @@ function ProfileContent ({ currentUser, goto }: ContentProps) {
 
   const header = (
     <header className={styles.header}>
-      <h1 className={styles.intro}>Update Profile: {currentUser.username}</h1>
-      <div>uuid: {currentUser.id}</div>
+      <h1>Update Profile: {currentUser.username}</h1>
+      <div className={styles.subheader}>uuid: {currentUser.id}</div>
+      <div className={styles.subheader}><Link to={`/users/${currentUser.username}`}>View Profile</Link></div>
     </header>
   )
 
@@ -285,7 +288,7 @@ function ProfileContent ({ currentUser, goto }: ContentProps) {
             <input
               className={styles.contentInput}
               value={politics}
-              placeholder="Conservative"
+              placeholder="Liberal/Conservative"
               onChange={e => setPolitics(e.target.value)}
             />
           </div>

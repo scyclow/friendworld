@@ -6,10 +6,6 @@
   margin-bottom: 15px;
 }
 
-.intro {
-  margin-bottom: 5px;
-}
-
 .memberSince {
   margin-bottom: 15px;
   font-size: 16px;
@@ -39,6 +35,11 @@
   background-size: cover;
   filter: grayscale(45%) contrast(125%);
   display: block;
+}
+
+.subheader {
+  font-size: 14px;
+  margin-top: 2px;
 }
 
 .postContainer {

@@ -4,7 +4,7 @@ insert into friendworld.users (id, username, avatar_url, gender) values
 , ('0a04ff42-a2c6-4e1f-bda9-80c493abefec'::uuid, 'SweetSalvation66', 'https://health.clevelandclinic.org/wp-content/uploads/sites/3/2014/07/cereal-179691809.jpg', '')
 , ('0a04ff42-a2c6-4e1f-bda9-80c493abefed'::uuid, 'sadsack4', 'https://image.shutterstock.com/image-photo/portrait-beautiful-child-having-breakfast-260nw-226912240.jpg', '')
 , ('0a04ff42-a2c6-4e1f-bda9-80c493abefee'::uuid, 'DumboTheClown', 'https://www.healthybabycereals.org/sites/healthybabycereals.org/files/images/2017-12/BabyEatingCereal.jpg', '')
-, ('0a04ff42-a2c6-4e1f-bda9-80c493abefef'::uuid, 'SuperCatMeow', 'https://scontent-ams3-1.cdninstagram.com/vp/df98d0520124614af70cdfa5ec0ef7dd/5C87DAA4/t51.2885-15/sh0.08/e35/c0.135.1080.1080/s640x640/42443173_278983142740614_1666608103659609066_n.jpg', '')
+, ('0a04ff42-a2c6-4e1f-bda9-80c493abefef'::uuid, 'SuperCatMeow', 'https://www.edmontonhumanesociety.com/wp-content/uploads/2018/05/Black-cat-looking-at-camera-e1533738476357.jpg', '')
 , ('0a04ff42-a2c6-4e1f-bda9-80c493abefaa'::uuid, 'TargetedTom', 'https://cdn.business2community.com/wp-content/uploads/2012/12/Targeted-User-Education.jpg', '')
 , ('0a04ff42-a2c6-4e1f-bda9-80c493abefab'::uuid, 'fuckface99', 'https://i.ytimg.com/vi/sM-O4ZOwB2U/hqdefault.jpg', '')
 , ('0a04ff42-a2c6-4e1f-bda9-80c493abefac'::uuid, 'BullseyeBob', 'https://images-na.ssl-images-amazon.com/images/I/71UgYrtHFnL._SX425_.jpg', '')
