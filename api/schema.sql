@@ -72,7 +72,7 @@ create table friendworld.users (
 , media          text default ''
 , religion       text default ''
 , politics       text default ''
-, tracking_info  jsonb
+, tracking_info  jsonb default '{}'
 );
 
 create table friendworld_private.accounts (
@@ -267,6 +267,8 @@ create table friendworld.ads (
 , url           text
 , img           text default null
 , content       text default null
+, tags          jsonb default '[]'
+, is_generic    boolean default true
 );
 
 create trigger ad_updated_at before update
@@ -275,6 +277,19 @@ create trigger ad_updated_at before update
   execute procedure friendworld_private.set_updated_at();
 
 grant select on table friendworld.ads to friendworld_anonymous, friendworld_user;
+
+-- (add as computed column on thread)
+-- function ad_for_thread
+--   take thread_id
+--   get all posts for thread
+--   concatinate all key words
+--   find all ads with intersection
+--     https://www.postgresql.org/docs/current/functions-json.html#FUNCTIONS-JSONB-OP-TABLE
+--     select '{ "blah": ["a", "b", "c"] }'::jsonb -> 'blah' ?| array['c', 'd', 'e'];
+
+
+
+
 
 
 
@@ -437,7 +452,6 @@ create function friendworld.create_message(
     message   friendworld.messages;
     from_user friendworld.users;
     to_user friendworld.users;
-
 
   begin
 

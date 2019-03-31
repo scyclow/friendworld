@@ -16,6 +16,7 @@ import User from './containers/User'
 import Messages from './containers/Messages'
 import Forum from './containers/Forum'
 import Stats from './containers/Stats'
+import Onboarding from './containers/Onboarding'
 
 
 class App extends React.Component<RouteComponentProps> {
@@ -60,6 +61,7 @@ class App extends React.Component<RouteComponentProps> {
             <Route exact path="/signup" component={Signup} />
             <Route exact path="/profile" component={Profile} />
             <Route exact path="/stats" component={Stats} />
+            <Route exact path="/onboarding" component={Onboarding} />
 
           </Switch>
         </Body>

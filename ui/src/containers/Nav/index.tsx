@@ -167,6 +167,10 @@ const SignedInMenu = ({ currentUser, toggleDropdownVisible }: SignedInMenuProps)
           <AlertCircle unread={currentUser.alerts.length} />
         </div>
       )}
+      {/*
+      <Link to="/signup" className={styles.link}>Signup</Link>
+      <Link to="/login" className={styles.link}>Login</Link>
+    */}
     </>
   )
 }
@@ -174,7 +178,7 @@ const SignedInMenu = ({ currentUser, toggleDropdownVisible }: SignedInMenuProps)
 const SignedOutMenu = () => (
   <>
     <Link to="/login" className={styles.link}>Login</Link>
-    <Link to="/signup" className={styles.link}>Create Account</Link>
+    <Link to="/signup" className={styles.link}>Signup</Link>
   </>
 )
 

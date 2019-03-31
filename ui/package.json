@@ -35,7 +35,7 @@
   "eslintConfig": {
     "extends": "react-app"
   },
-  "homepage": "http://steviep.xyz/friendworld",
+  "homepage": "https://friendworld.social",
   "browserslist": [
     ">0.2%",
     "not dead",

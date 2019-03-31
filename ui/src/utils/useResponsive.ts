@@ -20,13 +20,18 @@ const setEventListener = (event: string, handler: AnyFn) => () => {
 
 
 export default function useResponsive(mobileWidth: number) {
-  const [windowSize, setWindowSize] = useState<WindowSize>(getSize())
-  const handleResize = () => setWindowSize(getSize())
+  const [isMobile, setIsMobile] = useState<boolean>(getSize().innerWidth <= mobileWidth)
 
-  useEffect(setEventListener('resize', handleResize))
+  useEffect(setEventListener('resize', () => {
+    const wasMobile = isMobile
+    const isNowMobile = getSize().innerWidth <= mobileWidth
+    if (wasMobile !== isNowMobile) {
+      setIsMobile(isNowMobile)
+    }
+  }))
 
   return {
-    isMobile: windowSize.innerWidth <= mobileWidth,
-    isDesktop: windowSize.innerWidth > mobileWidth
+    isMobile,
+    isDesktop: !isMobile
   }
 }

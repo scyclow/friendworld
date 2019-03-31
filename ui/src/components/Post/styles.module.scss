@@ -58,9 +58,10 @@
 .content {
   padding: 10px;
   line-height: 1.4;
+  word-break: break-word;
 
   p {
-    margin: 8px 0;
+    margin: 13px 0;
   }
 
   p:first-child {

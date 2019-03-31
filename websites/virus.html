@@ -1,0 +1,58 @@
+<html>
+  <head>
+    <title>My first js app</title>
+    <style>
+      body { margin: 0; }
+      canvas { width: 100%; height: 100% }
+    </style>
+  </head>
+  <body>
+    <script src="https://threejs.org/build/three.js"></script>
+    <script>
+      const {
+        Scene,
+        PerspectiveCamera,
+        WebGLRenderer,
+        BoxGeometry,
+        MeshBasicMaterial,
+        Mesh
+      } = THREE
+      const scene = new Scene()
+      const camera = new PerspectiveCamera(
+        75,
+        window.innerWidth / window.innerHeight,
+        0.1,
+        1000
+      )
+
+      const renderer = new WebGLRenderer()
+      renderer.setSize(
+        window.innerWidth,
+        window.innerHeight
+      )
+      document.body.appendChild(renderer.domElement)
+
+      const geometry = new BoxGeometry(1, 1, 1)
+      const material = new MeshBasicMaterial({
+        color: 0xbb0000,
+        opacity: 0.5,
+      })
+      const cube = new Mesh( geometry, material )
+      scene.add(cube)
+
+      camera.position.z = 6
+
+      function animate () {
+        requestAnimationFrame( animate )
+
+        // cube.rotation.x += 0.01
+        cube.rotation.y += 0.1
+        cube.rotation.z += 0.001
+
+        renderer.render( scene, camera )
+      }
+
+      animate()
+    </script>
+  </body>
+</html>

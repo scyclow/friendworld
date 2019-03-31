@@ -137,16 +137,18 @@ const Threads: React.SFC<{ id: number }> = ({ id }) => {
             /threads/{query.data.thread.id}
           </div>
         </Link>
-        {query.data.thread.posts.map((post, i) =>
-          <Fragment key={post.id}>
-            {showAd(i) &&
-              <div className={styles.ad}>
-                <AdContainer n={1}/>
-              </div>
-            }
-            <Post post={post} />
-          </Fragment>
-        )}
+        <>
+          {query.data.thread.posts.map((post, i) =>
+            <Fragment key={post.id}>
+              {showAd(i) &&
+                <div className={styles.ad}>
+                  <AdContainer n={1}/>
+                </div>
+              }
+              <Post post={post} />
+            </Fragment>
+          )}
+        </>
         <AddPost
           threadId={query.data.thread.id}
           disabled={!query.data.currentUser}
@@ -168,7 +170,7 @@ const Threads: React.SFC<{ id: number }> = ({ id }) => {
           {isData}
         </div>
 
-        {isDesktop && <div className={styles.adContainer}><AdContainer /></div>}
+        {isDesktop && <div className={styles.adContainer}><AdContainer n={3}/></div>}
       </div>
     </section>
   )

@@ -1,5 +1,5 @@
 .header {
-  margin-bottom: 20px;
+  margin-bottom: 30px;
 
   h1 {
     font-size: 30px
@@ -17,6 +17,10 @@
 }
 
 @media(max-width: 540px) {
+  .header {
+    margin-bottom: 20px;
+  }
+
   .header h1 {
     font-size: 24px
   }

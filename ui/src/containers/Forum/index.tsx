@@ -101,7 +101,7 @@ const Forum: React.SFC<{}> = () => {
           </>
         )}
       </section>
-      {isDesktop && <AdContainer />}
+      {isDesktop && <AdContainer n={3}/>}
     </section>
 
   )

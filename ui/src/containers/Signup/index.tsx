@@ -59,7 +59,7 @@ function Signup() {
   if (data && !error) {
     jwt.set(username, data.signup.jwtToken)
     jwt.setCurrentUser(username)
-    window.location.href = '/profile'
+    window.location.href = '/onboarding'
   }
 
   return (

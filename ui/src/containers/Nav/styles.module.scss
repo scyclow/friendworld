@@ -87,7 +87,58 @@ $link-spacing-mobile: 10px;
   border: 1px solid;
   padding: 10px;
   font-size: 12px;
+}
+
+.unread1 {
+  animation: Unread 3s linear infinite;
+}
+
+.unread2 {
+  animation: Unread 1.5s linear infinite;
+}
+
+.unread3 {
   animation: Unread 1.5s linear infinite, Rotate 3s linear infinite;
+}
+
+.unread4 {
+  animation: Unread 1.5s linear infinite, Rotate 3s linear infinite, Breathe 3s linear infinite;
+}
+
+@keyframes Unread {
+  0% {
+    background-color: #ffff00;
+    color: #0000ff;
+  }
+  50% {
+    background-color: #ff0000;
+    color: #00ffff;
+  }
+  100% {
+    background-color: #ffff00;
+    color: #0000ff;
+  }
+}
+
+@keyframes Rotate {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes Breathe {
+  0% {
+    padding: 10px;
+  }
+  50% {
+    padding: 13px;
+  }
+  100% {
+    padding: 10px;
+  }
 }
 
 .dropdownPosition {
@@ -134,30 +185,6 @@ $link-spacing-mobile: 10px;
   height: 50px;
 }
 
-@keyframes Unread {
-  0% {
-    background-color: #ffff00;
-    color: #0000ff;
-  }
-  50% {
-    background-color: #ff0000;
-    color: #00ffff;
-  }
-  100% {
-    background-color: #ffff00;
-    color: #0000ff;
-  }
-}
-
-@keyframes Rotate {
-  0% {
-    transform: rotate(0deg);
-  }
-  100% {
-    transform: rotate(360deg);
-  }
-}
-
 .userDropdown li {
   border-bottom: 1px solid;
   padding: 8px;
@@ -191,6 +218,16 @@ $link-spacing-mobile: 10px;
     margin-right: -9px;
   }
 
+  .link {
+    padding-right: $link-spacing-mobile / 2;
+    padding-left: $link-spacing-mobile / 2;
+  }
+
+  .link:last-child {
+    padding-right: 0;
+  }
+
+
 }
 
 @media(max-width: 450px) {
@@ -204,7 +241,6 @@ $link-spacing-mobile: 10px;
   }
   .link {
     font-size: 13px;
-    padding-right: $link-spacing-mobile;
   }
 
   .circle {
@@ -213,6 +249,14 @@ $link-spacing-mobile: 10px;
 
   .dropdown {
     top: $height-mobile + 3;
+  }
+}
+
+@media(max-width: 1041px) {
+  .dropdownPosition {
+    margin-left: -8px;
+  }
+  .dropdown {
     margin-right: 0;
   }
 }

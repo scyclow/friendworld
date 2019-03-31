@@ -118,7 +118,7 @@ export default function Profile({ history }: Props) {
 
 const validDate = (dateStr: string) => Date.parse(dateStr) ? new Date(dateStr).toISOString() : null
 const validEmail = (emailStr: string) => emailStr.match(/^.+@.+\..+$/) ? emailStr : null
-
+const wait = (ms: number) => new Promise(res => setTimeout(res, ms))
 type ContentProps = {
   currentUser: CurrentUser,
   goto: (url: string) => unknown
@@ -141,6 +141,7 @@ function ProfileContent ({ currentUser, goto }: ContentProps) {
   const { isMobile, isDesktop } = useResponsive(540)
 
 
+  const [isFakeLoading, setIsFakeLoading] = useState<boolean>(false)
   const [response, executeUpdateUser] = useMutation<UpdateUserPayload, UpdateUserInput>(updateUserMutation)
 
   const bdayError = submitted && birthday && !validDate(birthday) ? 'Birthday must be a valid date' : ''
@@ -156,22 +157,27 @@ function ProfileContent ({ currentUser, goto }: ContentProps) {
 
   const updateUser = async () => {
     setSubmitted(true)
-    await executeUpdateUser({
-      input: {
-        email: validEmail(email),
-        birthday: validDate(birthday),
-        avatarUrl,
-        gender,
-        bio,
-        job,
-        interests,
-        websites,
-        media,
-        religion,
-        politics
-      }
-    })
-    goto(`/users/${currentUser.username}`)
+    setIsFakeLoading(true)
+    await Promise.all([
+      executeUpdateUser({
+        input: {
+          email: validEmail(email),
+          birthday: validDate(birthday),
+          avatarUrl,
+          gender,
+          bio,
+          job,
+          interests,
+          websites,
+          media,
+          religion,
+          politics
+        }
+      }),
+      wait(1000)
+    ])
+    setIsFakeLoading(false)
+    // goto(`/users/${currentUser.username}`)
   }
 
   return (
@@ -186,116 +192,122 @@ function ProfileContent ({ currentUser, goto }: ContentProps) {
         </div>
 
         <div className={styles.right}>
-          {isDesktop && header}
-          <div className={styles.buttonContainer}>
-            <button className={styles.submitButton} onClick={updateUser}>Update Profile</button>
-          </div>
+          {response.fetching || isFakeLoading
+            ? <Loading />
+            :
+            <>
+              {isDesktop && header}
+              <div className={styles.buttonContainer}>
+                <button className={styles.submitButton} onClick={updateUser}>Update Profile</button>
+              </div>
 
-          <div className={styles.inputSection}>
-            <h3>Avatar Url</h3>
-            <input
-              className={styles.contentInput}
-              value={avatarUrl}
-              placeholder="http://www.website.com/image.jpeg"
-              onChange={e => setAvatarUrl(e.target.value)}
-            />
-          </div>
+              <div className={styles.inputSection}>
+                <h3>Avatar Url</h3>
+                <input
+                  className={styles.contentInput}
+                  value={avatarUrl}
+                  placeholder="http://www.website.com/image.jpeg"
+                  onChange={e => setAvatarUrl(e.target.value)}
+                />
+              </div>
 
-          <div className={styles.inputSection}>
-            <h3>Email</h3>
-            <input
-              className={styles.contentInput}
-              value={email}
-              placeholder="email@website.com"
-              onChange={e => setEmail(e.target.value)}
-            />
-            {!!emailError && <div>{emailError}</div>}
-          </div>
+              <div className={styles.inputSection}>
+                <h3>Email</h3>
+                <input
+                  className={styles.contentInput}
+                  value={email}
+                  placeholder="email@website.com"
+                  onChange={e => setEmail(e.target.value)}
+                />
+                {!!emailError && <div>{emailError}</div>}
+              </div>
 
-          <div className={styles.inputSection}>
-            <h3>Gender</h3>
-            <input
-              className={styles.contentInput}
-              value={gender}
-              placeholder="Gender"
-              onChange={e => setGender(e.target.value)}
-            />
-          </div>
+              <div className={styles.inputSection}>
+                <h3>Gender</h3>
+                <input
+                  className={styles.contentInput}
+                  value={gender}
+                  placeholder="Gender"
+                  onChange={e => setGender(e.target.value)}
+                />
+              </div>
 
-          <div className={styles.inputSection}>
-            <h3>Birthday</h3>
-            <input
-              className={styles.contentInput}
-              value={birthday}
-              placeholder="03/11/19"
-              onChange={e => setBirthday(e.target.value)}
-            />
-            {!!bdayError && <div>{bdayError}</div>}
-          </div>
+              <div className={styles.inputSection}>
+                <h3>Birthday</h3>
+                <input
+                  className={styles.contentInput}
+                  value={birthday}
+                  placeholder="03/11/19"
+                  onChange={e => setBirthday(e.target.value)}
+                />
+                {!!bdayError && <div>{bdayError}</div>}
+              </div>
 
-          <div className={styles.inputSection}>
-            <h3>About Me</h3>
-            <textarea
-              className={styles.contentInput}
-              value={bio}
-              placeholder="Tell us about yourself!"
-              onChange={e => setBio(e.target.value)}
-            />
-          </div>
+              <div className={styles.inputSection}>
+                <h3>About Me</h3>
+                <textarea
+                  className={styles.contentInput}
+                  value={bio}
+                  placeholder="Tell us about yourself!"
+                  onChange={e => setBio(e.target.value)}
+                />
+              </div>
 
-          <div className={styles.inputSection}>
-            <h3>Occupation</h3>
-            <input
-              className={styles.contentInput}
-              value={job}
-              placeholder="Accountant"
-              onChange={e => setJob(e.target.value)}
-            />
-          </div>
+              <div className={styles.inputSection}>
+                <h3>Occupation</h3>
+                <input
+                  className={styles.contentInput}
+                  value={job}
+                  placeholder="Accountant"
+                  onChange={e => setJob(e.target.value)}
+                />
+              </div>
 
-          <div className={styles.inputSection}>
-            <h3>Favorite Websites</h3>
-            <input
-              className={styles.contentInput}
-              value={websites}
-              placeholder="friendworld.social, fastcashmoneyplus.biz"
-              onChange={e => setWebsites(e.target.value)}
-            />
-          </div>
+              <div className={styles.inputSection}>
+                <h3>Favorite Websites</h3>
+                <input
+                  className={styles.contentInput}
+                  value={websites}
+                  placeholder="friendworld.social, fastcashmoneyplus.biz"
+                  onChange={e => setWebsites(e.target.value)}
+                />
+              </div>
 
-          <div className={styles.inputSection}>
-            <h3>Favorite Movies, TV shows, and Music</h3>
-            <input
-              className={styles.contentInput}
-              value={media}
-              placeholder="The Godfather, Citizen Kane, Casablanca"
-              onChange={e => setMedia(e.target.value)}
-            />
-          </div>
+              <div className={styles.inputSection}>
+                <h3>Favorite Movies, TV shows, and Music</h3>
+                <input
+                  className={styles.contentInput}
+                  value={media}
+                  placeholder="The Godfather, Citizen Kane, Casablanca"
+                  onChange={e => setMedia(e.target.value)}
+                />
+              </div>
 
-          <div className={styles.inputSection}>
-            <h3>Religious Views</h3>
-            <input
-              className={styles.contentInput}
-              value={religion}
-              placeholder="God"
-              onChange={e => setReligion(e.target.value)}
-            />
-          </div>
+              <div className={styles.inputSection}>
+                <h3>Religious Views</h3>
+                <input
+                  className={styles.contentInput}
+                  value={religion}
+                  placeholder="God"
+                  onChange={e => setReligion(e.target.value)}
+                />
+              </div>
 
-          <div className={styles.inputSection}>
-            <h3>Political Views</h3>
-            <input
-              className={styles.contentInput}
-              value={politics}
-              placeholder="Liberal/Conservative"
-              onChange={e => setPolitics(e.target.value)}
-            />
-          </div>
+              <div className={styles.inputSection}>
+                <h3>Political Views</h3>
+                <input
+                  className={styles.contentInput}
+                  value={politics}
+                  placeholder="Liberal/Conservative"
+                  onChange={e => setPolitics(e.target.value)}
+                />
+              </div>
 
-          <div className={styles.buttonContainer}>
-            <button className={styles.submitButton} onClick={updateUser}>Update Profile</button>
-          </div>
+              <div className={styles.buttonContainer}>
+                <button className={styles.submitButton} onClick={updateUser}>Update Profile</button>
+              </div>
+            </>
+          }
         </div>
       </div>
     </div>

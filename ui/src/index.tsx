@@ -28,12 +28,10 @@ const client = createClient({
 const hours = new Date().getHours();
 if (hours < 5 || hours >= 22) document.body.className = 'nightmode';
 
-const basename = isProd ? '/friendworld' : '/'
-
 ReactDOM.render(
   (
     <Provider value={client}>
-      <Router basename={basename}>
+      <Router>
         <App />
       </Router>
     </Provider>

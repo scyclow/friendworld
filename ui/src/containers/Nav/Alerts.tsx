@@ -41,7 +41,13 @@ export const AlertDropdown: React.SFC<AlertDropdownProps> = ({ alerts, onEmptyCl
 )
 
 export const AlertCircle: React.SFC<{ unread: number }> = ({ unread }) => (
-  <div className={cx(styles.circle, { [styles.unread]: unread })}>
+  <div className={cx(styles.circle, {
+    [styles.unread]: unread,
+    [styles.unread1]: unread > 0 && unread < 5,
+    [styles.unread2]: unread >= 5 && unread < 10,
+    [styles.unread3]: unread >= 10 && unread < 15,
+    [styles.unread4]: unread >= 15,
+  })}>
     {unread || 0}
   </div>
 )

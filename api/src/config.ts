@@ -1,4 +1,4 @@
-import { createAutomatedPostPlugin } from './plugins'
+import { createAutomatedPostPlugin, sendWelcomMessagePlugin } from './plugins'
 
 require('dotenv').config()
 const isDev = process.env.NODE_ENV === 'development'
@@ -40,7 +40,8 @@ export const pgConfig = {
 
   appendPlugins: [
     require('@graphile-contrib/pg-simplify-inflector'),
-    createAutomatedPostPlugin
+    createAutomatedPostPlugin,
+    sendWelcomMessagePlugin,
   ],
 }
 
