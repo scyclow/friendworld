@@ -3,6 +3,8 @@ import {
   makeExtendSchemaPlugin,
   gql,
 } from 'graphile-utils'
+import _ from 'lodash'
+
 
 const createPostMutation = `
   mutation createPost($input: CreatePostInput!) {
@@ -21,31 +23,81 @@ const createPostMutation = `
   }
 `
 
-type Tags = {
-  hashtags: Array<string>
-  usernames: Array<string>
-}
+type Tags = Array<string>
+type Usernames = Array<string>
 
 type AutomatedPostInfo = {
+  chance?: number
   userUuid: string
   content: string
+  usernames?: Array<string>
+  tags?: Array<string>
 }
-const getAutomatedPost = (content: string, tags: Tags): AutomatedPostInfo | null => {
-  if (tags.hashtags.includes('cash')) return {
-    userUuid: '0a04ff42-a2c6-4e1f-bda9-80c493abefee',
-    content: `Wow, that's a really interesting comment!`
+
+const users = {
+  steve_p: '0a04ff42-a2c6-4e1f-bda9-80c493abefea',
+  dumboTheClown: '0a04ff42-a2c6-4e1f-bda9-80c493abefee',
+  fuckface99: '0a04ff42-a2c6-4e1f-bda9-80c493abefab',
+  vinceSlickson: '0a04ff42-a2c6-4e1f-bda9-80c493abefeb',
+}
+
+const automatedPosts: Array<AutomatedPostInfo> = [
+  // DumboThe Clown
+  { content: `Wow, that's a really interesting comment!`, userUuid: users.dumboTheClown },
+  { content: 'Interesting!', userUuid: users.dumboTheClown },
+  { content: `Hmm, I've never thought of that before!`, userUuid: users.dumboTheClown },
+  { content: `Wow!`, userUuid: users.dumboTheClown },
+  { content: `What a discussion!`, userUuid: users.dumboTheClown },
+
+  // fuckface99
+  { content: `LOL`, userUuid: users.fuckface99 },
+  { content: `WOW`, userUuid: users.fuckface99 },
+  { content: `WHAT ARE YOU EVEN TALKING ABOUT??`, userUuid: users.fuckface99 },
+  { content: `THIS GUY IS SUCH A FREAKING IDIOT ^`, userUuid: users.fuckface99 },
+
+  // vinceslickson
+  { content: `Haha, nice one. But seriously, if you ever want to make some *real* money, give me a shout.`, userUuid: users.vinceSlickson },
+]
+
+
+const getAutomatedPost = (
+  content: string,
+  authorUsername: string,
+  tags: Tags,
+  usernames: Usernames
+): AutomatedPostInfo | null => {
+
+  // TODO - 'WHAT DID YOU CALL ME?'
+  if (usernames.includes('fuckface99')) return null
+
+  if (tags.includes('fastcash')) return {
+    chance: 0.5,
+    content: `Hey @${authorUsername} If you're looking for a deal on that fastcash, let's talk. I've got a hookup that you wont't want to pass up.`,
+    userUuid: users.vinceSlickson,
+    usernames: [authorUsername],
+    tags: ['fastcash']
   }
 
-  return null
+  return _.sample(automatedPosts) as AutomatedPostInfo
 }
 
 
 const createAutomatedPost = async (args: any, context: any, resolveInfo: any) => {
-  const { input: { threadId, content, tags } } = args;
-  const post = getAutomatedPost(content, JSON.parse(tags) as Tags)
+  const { input: { threadId, content, tags, usernames } } = args;
+
+  const authorUserId = context.jwtClaims.user_id
+  const result = await context.pgClient.query(`select username from friendworld.users where id = '${authorUserId}';`)
+  const authorUsername = result.rows[0].username
+
+  const post = getAutomatedPost(
+    content,
+    authorUsername,
+    JSON.parse(tags) as Tags,
+    JSON.parse(usernames) as Usernames,
+  )
   const resolve = resolveInfo.graphile.build.graphql.graphql
 
-  if (!post) return
+  if (!post || (Math.random() < (post.chance || 0.2))) return
 
   try {
     await context.pgClient.query(`set local jwt.claims.user_id to '${post.userUuid}';`)
@@ -53,14 +105,14 @@ const createAutomatedPost = async (args: any, context: any, resolveInfo: any) =>
       input: {
         threadId: args.input.threadId,
         content: post.content,
-        tags: '{ "hashtags": [], "usernames": [] }'
+        usernames: JSON.stringify(post.usernames || []),
+        tags: JSON.stringify(post.tags || []),
       }
     })
   } catch (e) {
     console.log(e)
   }
 }
-
 
 export const createAutomatedPostPlugin = makeWrapResolversPlugin({
   Mutation: {
@@ -86,7 +138,7 @@ export const sendWelcomMessagePlugin = makeWrapResolversPlugin({
       const { username } = args.input
 
       try {
-        await context.pgClient.query(`set local jwt.claims.user_id to '0a04ff42-a2c6-4e1f-bda9-80c493abefea';`)
+        await context.pgClient.query(`set local jwt.claims.user_id to '${users.steve_p}';`)
         await execute(resolveInfo.schema, createMessageMutation, null, context, {
           input: {
             toUsername: username,

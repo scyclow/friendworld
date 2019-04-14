@@ -19,6 +19,7 @@
     "@google-cloud/storage": "^2.4.2",
     "@graphile-contrib/pg-simplify-inflector": "https://github.com/graphile-contrib/pg-simplify-inflector.git",
     "@types/cors": "^2.8.4",
+    "@types/lodash": "^4.14.123",
     "cors": "^2.8.5",
     "dotenv": "^6.2.0",
     "express": "^4.16.4",

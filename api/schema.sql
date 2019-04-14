@@ -6,7 +6,7 @@ begin;
 drop schema friendworld cascade;
 drop schema friendworld_private cascade;
 drop domain username_domain;
-drop domain tag_store;
+-- drop domain tag_store;
 drop role friendworld_root;
 drop role friendworld_anonymous;
 drop role friendworld_user;
@@ -136,10 +136,6 @@ grant insert on table friendworld.threads to friendworld_user;
 
 
 -- posts
-create domain tag_store as jsonb check (
-  (jsonb_typeof(value -> 'hashtags') = 'array') and
-  (jsonb_typeof(value -> 'usernames') = 'array')
-);
 
 create table friendworld.posts (
   id            serial primary key
@@ -148,7 +144,8 @@ create table friendworld.posts (
 , author_id     uuid not null references friendworld.users(id)
 , thread_id     int references friendworld.threads(id)
 , content       text not null check (content ~* '.+')
-, tags          tag_store default '{ "hashtags": [], "usernames": [] }'
+, usernames     jsonb default '[]'
+, tags          jsonb default '[]'
 );
 
 create trigger post_updated_at before update
@@ -379,7 +376,8 @@ grant execute on function friendworld.current_user_id() to friendworld_anonymous
 create function friendworld.create_thread(
   title     text
 , content   text
-, tags      tag_store default null
+, usernames jsonb default null
+, tags      jsonb default null
 ) returns friendworld.threads as $$
   declare
     thread friendworld.threads;
@@ -389,30 +387,32 @@ create function friendworld.create_thread(
       values (title)
       returning * into thread;
 
-    perform friendworld.create_post(content, tags, thread.id);
+    perform friendworld.create_post(content, thread.id, usernames, tags);
 
     return thread;
   end;
 $$ language plpgsql;
 
-grant execute on function friendworld.create_thread(text, text, tag_store) to friendworld_user;
+grant execute on function friendworld.create_thread(text, text, jsonb, jsonb) to friendworld_user;
 
 -- create post
 create function friendworld.create_post(
   content     text
-, tags        tag_store default null
 , thread_id   int default null
+, usernames   jsonb default null
+, tags        jsonb default null
 ) returns friendworld.posts as $$
+  #variable_conflict use_variable
   declare
     post        friendworld.posts;
     author      friendworld.users;
 
   begin
-    -- create the post
-    insert into friendworld.posts (author_id, content, tags, thread_id)
+    insert into friendworld.posts (author_id, content, usernames, tags, thread_id)
       values (
         nullif(current_setting('jwt.claims.user_id', true), '')::uuid
       , content
+      , usernames
       , tags
       , thread_id
       )
@@ -429,17 +429,17 @@ create function friendworld.create_post(
         friendworld.users.id as user_id
       , format('You were mentioned by @%s in /posts/%s !', author.username, post.id::text) as content
       from
-        jsonb_array_elements_text(tags -> 'usernames') as usernames
-        left join friendworld.users on usernames::citext = friendworld.users.username::citext
+        jsonb_array_elements_text(usernames::jsonb) as _usernames
+        left join friendworld.users on _usernames::citext = friendworld.users.username::citext
       where
-        usernames::citext = friendworld.users.username::citext
+        _usernames::citext = friendworld.users.username::citext
     );
 
     return post;
   end;
 $$ language plpgsql;
 
-grant execute on function friendworld.create_post(text, tag_store, int) to friendworld_user;
+grant execute on function friendworld.create_post(text, int, jsonb, jsonb) to friendworld_user;
 
 
 
@@ -515,7 +515,6 @@ create function friendworld.update_user(
 , religion     text default null
 , politics     text default null
 ) returns friendworld.users as $$
-  #variable_conflict use_variable
   declare
     user  friendworld.users;
 

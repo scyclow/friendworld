@@ -38,11 +38,8 @@ type CreateThreadInput = {
   input: {
     title: string,
     content: string,
-    tags: string
-    // {
-    //   hashtags: Array<string>,
-    //   usernames: Array<string>
-    // }
+    tags: string, // Array<string>,
+    usernames: string, // Array<string>,
   }
 }
 type CreateThreadResponse = { createThread: { thread: { id: string, title: string } } }
@@ -66,11 +63,13 @@ const NewThread: React.SFC<{}> = () => {
 
   const createThread = () => {
     if (!title || !content) return
+    const { tags, usernames } = getTags(title + ' ' + content)
     executeCreateThread({
       input: {
         title,
         content,
-        tags: getTags(title + ' ' + content),
+        tags,
+        usernames,
       }
     })
   }

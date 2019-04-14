@@ -1,3 +1,5 @@
+import keywords from './keywords'
+
 const externalLinkTest = /^(http|https):\/\/.+\..+/
 const imageTest = /(\.jpg$)|(\.jpeg$)|(\.png$)|(\.gif$)|(\.svg$)/
 const userTest = /^@.+/
@@ -35,6 +37,10 @@ export function isThreadRef(str: string) {
   return str.match(threadTest)
 }
 
+export function isKeyword(str: string) {
+  return keywords.has(str.toLowerCase())
+}
+
 export function hasNewline(str: string) {
   return str.match('\n')
 }
@@ -46,18 +52,26 @@ export function getUsernames(str: string) {
     .map(f => cleanFragment(f, /^@/))
 }
 
-export function getHashtags(str: string) {
+export function getHastags(str: string) {
   return str
     .split(' ')
     .filter(isHashtag)
     .map(f => cleanFragment(f, /^#/).toLowerCase())
 }
 
+export function getKeywords(str: string) {
+  return str
+    .split(' ')
+    .filter(isKeyword)
+    .map(f => cleanFragment(f).toLowerCase())
+}
+
+
 export function getTags(content: string) {
-  return JSON.stringify({
-    hashtags: getHashtags(content),
-    usernames: getUsernames(content)
-  })
+  return {
+    tags: JSON.stringify(getHastags(content).concat(getKeywords(content))),
+    usernames: JSON.stringify(getUsernames(content))
+  }
 }
 
 export function cleanFragment(fragment: string, test?: RegExp) {

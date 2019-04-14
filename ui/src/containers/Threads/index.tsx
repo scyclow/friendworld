@@ -71,11 +71,8 @@ type CreatePostInput = {
   input: {
     content: string,
     threadId: number,
-    tags: string,
-    // {
-    //   hashtags: Array<string>,
-    //   usernames: Array<string>
-    // }
+    tags: string, // Array<string>,
+    usernames: string, // Array<string>
   }
 }
 
@@ -90,11 +87,13 @@ const AddPost: React.SFC<AddPostProps> = ({ threadId, disabled }) => {
 
   const submit = (content: string) => {
     if (!content) return
+    const { tags, usernames } = getTags(content)
     executeCreatePost({
       input: {
         threadId,
         content,
-        tags: getTags(content)
+        tags,
+        usernames,
       }
     })
   }
