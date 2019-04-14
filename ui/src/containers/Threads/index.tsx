@@ -19,7 +19,7 @@ type ThreadQuery = {
   thread?: {
     id: number
     title: string
-    posts: Array<PostType>
+    posts: Array<PostType & { tags: string }>
   }
   currentUser?: {
     id: string
@@ -35,6 +35,7 @@ query threadById ($id: Int!) {
       id
       content
       createdAt
+      tags
       author {
         id
         username
@@ -125,6 +126,12 @@ const Threads: React.SFC<{ id: number }> = ({ id }) => {
 
   const isError = query.error && <DisplayError error={query.error} />
   const isLoading = query.fetching && <Loading />
+
+  const tags = (query.data && query.data.thread
+    ? query.data.thread.posts.flatMap(p => JSON.parse(p.tags))
+    : []
+  )
+
   const isData = query.data && (query.data.thread ? (
     <div className={styles.container}>
       <header className={styles.threadTitle}>
@@ -141,7 +148,7 @@ const Threads: React.SFC<{ id: number }> = ({ id }) => {
             <Fragment key={post.id}>
               {showAd(i) &&
                 <div className={styles.ad}>
-                  <AdContainer n={1}/>
+                  <AdContainer n={1} tag={tags[i]}/>
                 </div>
               }
               <Post post={post} />
@@ -169,7 +176,7 @@ const Threads: React.SFC<{ id: number }> = ({ id }) => {
           {isData}
         </div>
 
-        {isDesktop && <div className={styles.adContainer}><AdContainer n={3}/></div>}
+        {isDesktop && <div className={styles.adContainer}><AdContainer n={3} tags={tags}/></div>}
       </div>
     </section>
   )

@@ -62,8 +62,9 @@ type Props = {
   n?: number,
   offset?: number,
   tags?: Array<string>
+  tag?: string
 }
-const AdContainer = ({ n, tags, offset }: Props) => {
+const AdContainer = ({ n, tag, tags, offset }: Props) => {
   const [{ data, fetching }] = useQuery<AdQuery>({ query: adQuery })
   if (fetching) return <>loading...</>
   if (!data) return null
@@ -71,7 +72,7 @@ const AdContainer = ({ n, tags, offset }: Props) => {
   const parsedAds = data.ads.map(ad => ({ ...ad, tags: JSON.parse(ad.tags) }))
   const ads = orderAds(
     parsedAds,
-    tags || [],
+    tag ? [tag] : (tags || []),
     n || 1
   ).slice(offset || 0)
 

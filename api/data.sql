@@ -85,59 +85,68 @@ insert into friendworld.alerts (user_id, content, link) values (
 )
 ;
 
-insert into friendworld.ads (url, img, content, tags) values
+insert into friendworld.ads (url, img, content, tags, is_generic) values
   (
     'http://fastcashmoneyplus.biz'
   , 'https://www.washingtonpost.com/resizer/bmfQHooAGH6PmEv0qHjgf-ZUy-k=/480x0/arc-anglerfish-washpost-prod-washpost.s3.amazonaws.com/public/EBULPVFULQI6PG4TXFYEHZL2EI.jpg'
   , 'GET FAST CASH NOW'
-  , '["yes"]'
+  , '["fastcash", "fastcashmoneyplus", "fastcashmoneyplusbiz", "fastcashmoneybiz", "moneybucks", "bucks", "fast", "cash", "money", "rich", "wealth", "saving", "savings", "crypto", "cryptocurrency", "bitcoin", "btc", "ethereum", "eth", "invest", "investing", "finance", "ico", "fortune", "millionaire", "billionaire", "blockchain", "economy", "payment", "trick", "profit"]'
+  , true
+  )
+, (
+    'http://fastcashmoneyplus.biz'
+  , 'https://media.brstatic.com/2017/09/25112945/family-showing-young-member-piggy-bank-savings-getty_573x300.jpg'
+  , 'SAVE MORE MONEY WITH THIS WEIRD TRICK'
+  , '["fastcash", "fastcashmoneyplus", "money", "savings", "saving", "family"]'
+  , false
   )
 , (
     'http://fakebullshit.news'
   , 'https://i.imgur.com/94L6Q6X.jpg'
   , 'UH OH... WHAT DID SHILLARY DO THIS TIME?!'
-  , '[]'
+  , '["politics", "political", "government", "democrats", "republicans", "gop", "liberal", "liberals", "conservative", "conservatives", "libtards", "cucks", "cuck","clinton","socialist", "socialism", "shillary", "sjw", "sjws", "social", "justice", "warriors"]'
+  , false
   )
 , (
     'http://steviep.xyz'
   , 'https://www.thoughtco.com/thmb/_Wdk4z5X4uEhg4h88GTFPS8KQqw=/768x0/filters:no_upscale():max_bytes(150000):strip_icc()/h20-58e655f93df78c5162ea0a1f.jpg'
   , 'YOULL NEVER BELIEVE WHAT SCIENTISTS ARE FINDING IN YOUR FOOD'
   , '[]'
+  , true
   )
 , (
     'http://steviep.xyz'
   , 'https://targetedindividualscanada.files.wordpress.com/2011/01/psycho-electronic-weapon-effects-pic1.jpg'
   , 'THE GOVERNMENT JUST FREAKED ABOUT NEW INFO LEAKING'
-  , '[]'
+  , '["ti", "targeted", "target", "tracking", "conspiracy", "nuclear", "drone", "5g", "radiation", "alien", "aliens", "ufo", "ufos", "roswell", "brain", "mind-control", "chemtrails", "tracking"]'
+  , false
   )
 , (
     'http://steviep.xyz'
   , 'https://targetedindividualscanada.files.wordpress.com/2011/11/brain-inplants.jpg'
   , 'WHAT YOU DONT KNOW ABOUT YOUR BRAIN MAY KILL YOU'
-  , '[]'
+  , '["sad", "depressed", "melencholy", "anxious", "anxiety", "depression", "anhedonia", "motivation", "happy", "mental", "brain", "suicide", "suicidal", "ocd", "obsessed", "scared", "fear", "emptiness", "cbd", "antidepressant"]'
+  , false
   )
 , (
     'http://steviep.xyz'
   , 'https://www.chantellerenee.org/wp-content/uploads/2018/06/light-dimensions-ascension-1.jpg'
   , 'SUBMIT TO GOD BEFORE ITS TOO LATE'
-  , '[]'
+  , '["woo", "spirit", "spirituality", "god", "chakra", "chakras", "sound", "meditation", "reality", "dream", "dreams", "hypnosis", "mantra", "mantras", "technique", "energy", "karma", "cleanse", "vegan", "ascend", "ascension", "newage"]'
+  , false
   )
 , (
     'http://steviep.xyz'
   , 'https://a57.foxnews.com/a57.foxnews.com/static.foxnews.com/foxnews.com/content/uploads/2018/09/640/320/1862/1048/adacbcf6-640_brain.jpg'
   , 'IS SOMETHING WRONG WITH YOUR BRAIN? FIND OUT NOW'
-  , '[]'
+  , '["brain"]'
+  , true
   )
 , (
     'http://steviep.xyz'
   , 'https://3c1703fe8d.site.internapcdn.net/newman/csz/news/800/2018/20-neuroscienti.jpg'
   , 'Are You Forgetting to Remember?'
-  , '[]'
-  )
-, (
-    'http://fastcashmoneyplus.biz'
-  , 'https://media.brstatic.com/2017/09/25112945/family-showing-young-member-piggy-bank-savings-getty_573x300.jpg'
-  , 'SAVE MORE MONEY WITH THIS WEIRD TRICK'
-  , '[]'
+  , '["brain"]'
+  , true
   )
 ;

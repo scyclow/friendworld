@@ -55,8 +55,6 @@ const automatedPosts: Array<AutomatedPostInfo> = [
   { content: `WHAT ARE YOU EVEN TALKING ABOUT??`, userUuid: users.fuckface99 },
   { content: `THIS GUY IS SUCH A FREAKING IDIOT ^`, userUuid: users.fuckface99 },
 
-  // vinceslickson
-  { content: `Haha, nice one. But seriously, if you ever want to make some *real* money, give me a shout.`, userUuid: users.vinceSlickson },
 ]
 
 
@@ -68,7 +66,18 @@ const getAutomatedPost = (
 ): AutomatedPostInfo | null => {
 
   // TODO - 'WHAT DID YOU CALL ME?'
-  if (usernames.includes('fuckface99')) return null
+  if (usernames.includes('fuckface99')) return {
+    content: 'WHAT DID YOU JUST CALL ME?',
+    userUuid: users.fuckface99,
+    chance: 0.9
+  }
+
+  if (usernames.includes('vinceslickson')) return {
+    content: `Haha, nice one. But seriously, if you ever want to make some *real* money, give me a shout.`,
+    userUuid: users.vinceSlickson,
+    tags: ['money'],
+    chance: 0.9
+  }
 
   if (tags.includes('fastcash')) return {
     chance: 0.5,
