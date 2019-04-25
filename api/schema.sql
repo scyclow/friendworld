@@ -275,6 +275,7 @@ create trigger ad_updated_at before update
 
 grant select on table friendworld.ads to friendworld_anonymous, friendworld_user;
 
+
 -- (add as computed column on thread)
 -- function ad_for_thread
 --   take thread_id
@@ -284,6 +285,31 @@ grant select on table friendworld.ads to friendworld_anonymous, friendworld_user
 --     https://www.postgresql.org/docs/current/functions-json.html#FUNCTIONS-JSONB-OP-TABLE
 --     select '{ "blah": ["a", "b", "c"] }'::jsonb -> 'blah' ?| array['c', 'd', 'e'];
 
+
+
+create table friendworld.ad_clicks (
+  primary key (user_id, ad_id)
+, unique (user_id, ad_id)
+, ad_id         uuid not null references friendworld.ads(id)
+, user_id       uuid not null references friendworld.users(id)
+, created_at    timestamp default now()
+, updated_at    timestamp default now()
+, click_count   integer default 0
+);
+
+create trigger ad_click_updated_at before update
+  on friendworld.ad_clicks
+  for each row
+  execute procedure friendworld_private.set_updated_at();
+
+grant select on table friendworld.ad_clicks to friendworld_anonymous, friendworld_user;
+grant insert, update on table friendworld.ad_clicks to friendworld_user;
+
+create policy select_ad_clicks on friendworld.ad_clicks for select using (true);
+
+create policy insert_messages on friendworld.ad_clicks for insert with check (
+  user_id = nullif(current_setting('jwt.claims.user_id', true), '')::uuid
+);
 
 
 
@@ -559,3 +585,25 @@ $$ language sql stable;
 
 grant execute on function friendworld.user_stats()
   to friendworld_user, friendworld_anonymous;
+
+
+-- log_ad_click
+create function friendworld.log_ad_click(
+  ad     uuid
+) returns friendworld.ad_clicks as $$
+  declare
+    ad_click friendworld.ad_clicks;
+
+  begin
+
+    insert into friendworld.ad_clicks (ad_id, user_id)
+      values (ad, nullif(current_setting('jwt.claims.user_id', true), '')::uuid)
+    on conflict (ad_id, user_id) do update
+      set click_count = friendworld.ad_clicks.click_count + 1
+    returning * into ad_click;
+
+    return ad_click;
+  end;
+$$ language plpgsql;
+
+grant execute on function friendworld.log_ad_click(uuid) to friendworld_user;

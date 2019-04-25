@@ -95,6 +95,34 @@ insert into friendworld.ads (url, img, content, tags, is_generic) values
   )
 , (
     'http://fastcashmoneyplus.biz'
+  , 'https://kitchenreviewed.com/wp-content/uploads/2017/10/spending_too_on_meat_grinder.jpg'
+  , 'STOP THROWING AWAY YOUR MONEY'
+  , '["throwing", "fastcash", "fastcashmoneyplus", "fastcashmoneyplusbiz", "fastcashmoneybiz", "moneybucks", "bucks", "fast", "cash", "money", "rich", "wealth", "saving", "savings", "crypto", "cryptocurrency", "bitcoin", "btc", "ethereum", "eth", "invest", "investing", "finance", "ico", "fortune", "millionaire", "billionaire", "blockchain", "economy", "payment", "trick", "profit"]'
+  , true
+  )
+, (
+    'http://fastcashmoneyplus.biz'
+  , 'https://previews.123rf.com/images/belchonock/belchonock1801/belchonock180130743/95161261-elegant-man-in-suit-holding-money-isolated-on-white.jpg'
+  , 'SEE WHAT SUCCESS TASTES LIKE'
+  , '["success", "taste", "money", "cash", "profit", "suit", "wealth"]'
+  , true
+  )
+, (
+    'https://www.amazon.com/Quick-Turn-Real-Estate-Millionaire/dp/B005ZOBAS2'
+  , 'https://images-na.ssl-images-amazon.com/images/I/61G83WP73VL._SX258_BO1,204,203,200_.jpg'
+  , 'YOU CAN BECOME THE NEXT MILLIONAIRE'
+  , '["millionaire", "billionaire", "fast", "cash", "money", "rich", "wealth", "suit"]'
+  , true
+  )
+, (
+    'http://fastcashmoneyplus.biz'
+  , 'https://www.oneworldnews.com/wp-content/uploads/2017/12/57.jpg'
+  , 'ACHIEVE YOUR FINANCIAL DREAMS TODAY'
+  , '["dream", "dreams", "sleep", "pillow", "fastcash", "fastcashmoneyplus", "fastcashmoneyplusbiz", "fastcashmoneybiz", "moneybucks", "bucks", "fast", "cash", "money", "rich", "wealth", "saving", "savings", "invest", "investing", "finance", "fortune", "millionaire", "profit"]'
+  , true
+  )
+, (
+    'http://fastcashmoneyplus.biz'
   , 'https://media.brstatic.com/2017/09/25112945/family-showing-young-member-piggy-bank-savings-getty_573x300.jpg'
   , 'SAVE MORE MONEY WITH THIS WEIRD TRICK'
   , '["fastcash", "fastcashmoneyplus", "money", "savings", "saving", "family"]'
@@ -113,6 +141,19 @@ insert into friendworld.ads (url, img, content, tags, is_generic) values
   , 'YOULL NEVER BELIEVE WHAT SCIENTISTS ARE FINDING IN YOUR FOOD'
   , '[]'
   , true
+  )
+, (
+    'https://target.com'
+  , 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c5/Target_Corporation_logo_%28vector%29.svg/1200px-Target_Corporation_logo_%28vector%29.svg.png'
+  , 'TARGET: EXPECT MORE PAY LESS'
+  , '["target", "targeted", "targeting"]'
+  , false
+  ), (
+    'http://steviep.xyz'
+  , 'https://www.consciouslifestylemag.com/wp-content/uploads/2016/04/chakra-diagram-in-the-body.jpg'
+  , 'CLEAN YOUR CHAKRAS WITH THESE 3 SPIRITUAL TECHNIQUES'
+  , '["woo", "spirit", "mental", "spirituality", "god", "chakra", "chakras", "sound", "meditation", "reality", "dream", "dreams", "hypnosis", "mantra", "mantras", "technique", "energy", "karma", "cleanse", "vegan", "ascend", "ascension", "newage", "consciousness"]'
+  , false
   )
 , (
     'http://steviep.xyz'
@@ -139,14 +180,126 @@ insert into friendworld.ads (url, img, content, tags, is_generic) values
     'http://steviep.xyz'
   , 'https://a57.foxnews.com/a57.foxnews.com/static.foxnews.com/foxnews.com/content/uploads/2018/09/640/320/1862/1048/adacbcf6-640_brain.jpg'
   , 'IS SOMETHING WRONG WITH YOUR BRAIN? FIND OUT NOW'
-  , '["brain"]'
+  , '["brain", "wrong", "psychology", "sad", "anhedonia", "depressed", "anxious", "anxiety"]'
   , true
   )
 , (
     'http://steviep.xyz'
   , 'https://3c1703fe8d.site.internapcdn.net/newman/csz/news/800/2018/20-neuroscienti.jpg'
-  , 'Are You Forgetting to Remember?'
-  , '["brain"]'
+  , 'ARE YOU FORGETTING TO REMEMBER?'
+  , '["brain", "remember", "forget", "forgetting"]'
+  , true
+  )
+, (
+    'http://steviep.xyz'
+  , 'https://corespirit.com/api/Containers/corespirit-static/download/size_1200_880ab40a-c7be-43be-9223-49fea6bfeb8e.jpg'
+  , 'FIND OUT WHAT HAPPENS TO PEOPLE WITH THIS STRAIN OF TONAIL FUNGUS'
+  , '["foot", "death", "toenail", "nail", "fungus", "feet", "elderly"]'
+  , false
+  )
+, (
+    'http://steviep.xyz'
+  , 'https://i.pinimg.com/originals/fc/a3/18/fca31854ca2e944467184d58a381d8ec.jpg'
+  , 'YOUR BACK PAIN MIGHT NOT BE SO SIMPLE'
+  , '["back", "pain", "organ", "organs", "accupuncture", "intestine", "liver", "heart"]'
+  , false
+  )
+, (
+    'https://secure.ngagelive.com/chat/index.aspx?websiteid=92-90-134-193-83-0-152-30&alt=false&wl=false&loc=https%3A//wegrowhair.com/&mode=AutoEngage&visitorId=a422fd99-ab43-4b5a-a8bc-aa1d00368c4c'
+  , 'http://3.bp.blogspot.com/-SWo3Fi7Kb5I/Ue9EP7ITfJI/AAAAAAAAD6A/5xacI3uWLLQ/s1600/h9991572_001.jpg'
+  , 'YOUR BACK PAIN MIGHT NOT BE SO SIMPLE'
+  , '["male", "man", "testosterone", "hair", "loss", "bald", "balding"]'
+  , false
+  )
+, (
+    'https://news.trycapsifit.com/'
+  , 'http://d1nnx3nhddxmeh.cloudfront.net/wp-content/uploads/2018/05/01122237/Overweight-Problems-Heres-How-to-Reset-Your-Melt-Fat-Hormones.jpg'
+  , 'GET THAT BIKINI BODY FAST'
+  , '["woman", "female", "fat", "skinny", "pepper", "hot", "furnace", "drip"]'
+  , false
+  )
+, (
+    'https://news.trycapsifit.com/'
+  , 'https://i.pinimg.com/originals/fb/99/31/fb9931fc50a7e72fc9a708e960db3935.jpg'
+  , 'WATCH FAT DRIP OFF YOUR BODY LIKE A FAT MELTING FURNACE'
+  , '["man", "male", "fat", "skinny", "pepper", "hot", "furnace", "drip"]'
+  , false
+  )
+, (
+    'https://news.trycapsifit.com/'
+  , 'http://media1.s-nbcnews.com/i/streams/2012/August/120827/504274-g-tdy-091221-belly-2p.jpg'
+  , 'WATCH FAT DRIP OFF YOUR BODY LIKE A FAT MELTING FURNACE'
+  , '["fat", "skinny", "pepper", "hot", "furnace", "drip"]'
+  , true
+  )
+, (
+    'https://www.youtube.com/watch?v=SyvOPXeg4ig'
+  , 'https://cdn1.medicalnewstoday.com/content/images/articles/320/320227/cancer-cell.jpg'
+  , 'STOP CANCER DEAD IN ITS TRACKS'
+  , '["cancer", "stop", "dead", "death", "blood", "cells"]'
+  , true
+  )
+, (
+    'https://www.youtube.com/watch?v=SyvOPXeg4ig'
+  , 'https://i.ytimg.com/vi/Bey3c8kVm7M/maxresdefault.jpg'
+  , 'ARE YOU AN INDIGO CHILD? FIND OUT NOW'
+  , '["add", "indigo", "child", "children", "chakra", "special", "energy", "collective"]'
+  , true
+  )
+, (
+    'https://weliveinamadworld.com/5g-and-intelligent-connectivity-a-plague-to-consume-humanity/'
+  , 'https://weliveinamadworld.com/wp-content/uploads/2019/02/5g.jpg'
+  , '5G AND THE COMING PLAGUE TO CONSUME HUMANITY'
+  , '["illuminati", "5g", "holocaust", "internet-of-things", "iot", "vr", "virtual", "reality", "individuality"]'
+  , true
+  )
+, (
+    'https://renegadevids.com/category/jews/'
+  , 'http://www.conspirazzi.com/wp-content/uploads/2010/06/eternal-jew-illuminati.jpg'
+  , 'SEMETIC SUBLIMINALS AND THE JEWISH QUESTION'
+  , '["semetic", "subliminal", "jew", "jewish", "illuminati"]'
+  , false
+  )
+, (
+    'http://universeinsideyou.net/experiments-proving-astral-projection-is-real/'
+  , 'https://cdn.shopify.com/s/files/1/0823/4911/products/CD260-3_1024x1024.jpg'
+  , 'Are you curious to see where your spirit travels unrestrained from your body?'
+  , '["astral", "projection", "subliminal", "chakra", "energy", "sound", "light", "healing", "consciousness", "dream", "sleep"]'
+  , true
+  )
+, (
+    'https://www.youtube.com/watch?v=ZOvk1DfLO6c'
+  , 'https://i.ytimg.com/vi/ZOvk1DfLO6c/hqdefault.jpg'
+  , 'DONT LET YOUR LUCK RUN OUT'
+  , '["luck", "clover", "horseshoe", "subliminal", "sexy", "vortex", "fortune"]'
+  , true
+  )
+, (
+    'https://www.youtube.com/watch?v=OK40AYHL97I'
+  , 'https://www.institutobernabeu.com/foro/en/files/2014/02/021.jpg'
+  , 'INCREASE YOUR SPERM COUNT WITHOUT TOUCHING A BUTTON'
+  , '["male", "man", "binaural", "beats", "music", "sperm", "seamen", "sex"]'
+  , false
+  )
+, (
+    'https://www.crystalinks.com/reality.html'
+  , 'https://www.crystalinks.com/binarycodebrain350.jpg'
+  , 'REALITY MAY NOT BE WHAT YOU THINK! CLICK HERE TO FIND OUT'
+  , '["reality", "digital", "consciousness", "brain", "hologram", "simulation", "illusion", "dream", "numbers", "numeric", "dna", "information"]'
+  , true
+  )
+, (
+    'https://www.theblackvault.com/documentarchive/mind-control-collection/'
+  , 'https://www.theblackvault.com/documentarchive/wp-content/uploads/2015/02/Mind-Control-731x411.jpg'
+  , 'ARE YOU REALLY IN CONTROL OF YOUR OWN THOUGHTS?'
+  , '["technology", "mind", "control", "digital", "thoughts"]'
+  , false
+  )
+, (
+    'http://steviep.xyz'
+  , 'https://www.scienceabc.com/wp-content/uploads/2016/01/shutterstock_338992685.jpg'
+  , 'WHATS SO FUNNY?'
+  , '["funny", "laugh", "laughing"]'
   , true
   )
 ;
