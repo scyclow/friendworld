@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { useQuery } from 'urql'
 import styles from './styles.module.scss'
 import { Link } from 'react-router-dom'
@@ -8,22 +8,7 @@ import ParsedText from '../../components/ParsedText'
 import Loading from '../../components/Loading'
 import useResponsive from '../../utils/useResponsive'
 
-const userProps = `
-  id
-  createdAt
-  username
-  avatarUrl
-  email
-  gender
-  birthday
-  bio
-  job
-  interests
-  websites
-  media
-  religion
-  politics
-`
+
 const userQuery = `
 query userByUsername ($username: UsernameDomain!){
   user: userByUsername (username: $username) {

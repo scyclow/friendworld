@@ -1,7 +1,6 @@
-import React, { useMemo, useCallback } from 'react'
+import React, { useMemo } from 'react'
 import { compact, find, sampleSize } from 'lodash'
 import { useQuery, useMutation } from 'urql'
-import { Link } from 'react-router-dom'
 import Ad from '../../components/Ad'
 import styles from './styles.module.scss'
 
@@ -93,7 +92,7 @@ type Props = {
 }
 const AdContainer = ({ n, tag, tags, offset }: Props) => {
   const [{ data, fetching }] = useQuery<AdQuery>({ query: adQuery })
-  const [response, executeLogAdClick] = useMutation<LogAdClickResponse, LogAdClickInput>(logAdClickMutation)
+  const [response, executeLogAdClick] = useMutation<LogAdClickResponse, LogAdClickInput>(logAdClickMutation) // eslint-disable-line
 
   const ads = useMemo(() => {
     if (!data) return []

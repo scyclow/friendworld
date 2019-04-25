@@ -102,7 +102,7 @@ export default function MessagePanel ({ username }: Props) {
     variables: { username: username || '' }
   })
   const [
-    response,
+    response, // eslint-disable-line
     executeCreateMessage
   ] = useMutation<CreateMessagePayload, CreateMessageInput>(createMessageMutation)
 

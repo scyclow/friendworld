@@ -1,4 +1,4 @@
-import React, { Component, useEffect } from 'react'
+import React, { useEffect } from 'react'
 import cx from 'classnames'
 import styles from './styles.module.scss'
 

@@ -1,6 +1,5 @@
 import * as React from 'react';
-import { useMutation, useQuery } from 'urql'
-import { RouteChildrenProps } from 'react-router'
+import { useQuery } from 'urql'
 import { Link } from 'react-router-dom'
 import styles from './styles.module.scss'
 import Post, { PostType } from '../../components/Post'

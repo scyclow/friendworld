@@ -1,4 +1,4 @@
-import React, { Fragment, useState } from 'react'
+import React, { useState } from 'react'
 import { useMutation } from 'urql'
 import cx from 'classnames'
 
@@ -48,7 +48,7 @@ export default function NewMessagePanel() {
   const [messageToSend, setMessageToSend] = useState<string>('')
   const [newUser, setNewUser] = useState<string>('')
   const [
-    response,
+    response, // eslint-disable-line
     executeCreateMessage
   ] = useMutation<CreateMessagePayload, CreateMessageInput>(createMessageMutation)
 

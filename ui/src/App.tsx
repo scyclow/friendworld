@@ -1,7 +1,6 @@
 import * as React from 'react'
 import { withRouter, Route, Switch } from 'react-router-dom'
 import { RouteComponentProps } from 'react-router'
-import jwt from './utils/jwt'
 
 import Body, { Width } from './components/Body'
 import Nav from './containers/Nav'

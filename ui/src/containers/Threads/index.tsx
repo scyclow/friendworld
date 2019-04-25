@@ -1,6 +1,5 @@
-import React, { Fragment, useCallback } from 'react';
+import React, { Fragment } from 'react';
 import { useMutation, useQuery } from 'urql'
-import { RouteChildrenProps } from 'react-router'
 import { Link } from 'react-router-dom'
 import cx from 'classnames'
 import styles from './styles.module.scss'
@@ -84,7 +83,7 @@ type AddPostProps = {
   disabled?: boolean
 }
 const AddPost: React.SFC<AddPostProps> = ({ threadId, disabled }) => {
-  const [response, executeCreatePost] = useMutation<CreatePostResponse, CreatePostInput>(createPostMutation)
+  const [response, executeCreatePost] = useMutation<CreatePostResponse, CreatePostInput>(createPostMutation) // eslint-disable-line
 
   const submit = (content: string) => {
     if (!content) return
@@ -116,35 +115,35 @@ const AddPost: React.SFC<AddPostProps> = ({ threadId, disabled }) => {
 
 const Threads: React.SFC<{ id: number }> = ({ id }) => {
   const { isMobile, isDesktop } = useResponsive(820)
-  const [query, executeQuery] = useQuery<ThreadQuery>({ query: threadQuery, variables: { id } })
+  const [{ data, error, fetching }] = useQuery<ThreadQuery>({ query: threadQuery, variables: { id } })
 
-  const refetch = useCallback(
-    () => executeQuery({ requestPolicy: 'network-only' }),
-    []
-  );
+  // const refetch = useCallback(
+  //   () => executeQuery({ requestPolicy: 'network-only' }),
+  //   []
+  // );
   const showAd = (i: number) => isMobile && !((i + 1) % 4)
 
-  const isError = query.error && <DisplayError error={query.error} />
-  const isLoading = query.fetching && <Loading />
+  const isError = error && <DisplayError error={error} />
+  const isLoading = fetching && <Loading />
 
-  const tags = (query.data && query.data.thread
-    ? query.data.thread.posts.flatMap(p => JSON.parse(p.tags))
+  const tags = (data && data.thread
+    ? data.thread.posts.flatMap(p => JSON.parse(p.tags))
     : []
   )
 
-  const isData = query.data && (query.data.thread ? (
+  const isData = data && (data.thread ? (
     <div className={styles.container}>
       <header className={styles.threadTitle}>
-        <h2 >{profanityFilter(query.data.thread.title)}</h2>
+        <h2 >{profanityFilter(data.thread.title)}</h2>
       </header>
       <div>
-        <Link to={`/threads/${query.data.thread.id}`}>
+        <Link to={`/threads/${data.thread.id}`}>
           <div className={styles.threadLink}>
-            /threads/{query.data.thread.id}
+            /threads/{data.thread.id}
           </div>
         </Link>
         <>
-          {query.data.thread.posts.map((post, i) =>
+          {data.thread.posts.map((post, i) =>
             <Fragment key={post.id}>
               {showAd(i) &&
                 <div className={styles.ad}>
@@ -156,8 +155,8 @@ const Threads: React.SFC<{ id: number }> = ({ id }) => {
           )}
         </>
         <AddPost
-          threadId={query.data.thread.id}
-          disabled={!query.data.currentUser}
+          threadId={data.thread.id}
+          disabled={!data.currentUser}
         />
       </div>
     </div>

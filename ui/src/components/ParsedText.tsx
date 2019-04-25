@@ -1,5 +1,4 @@
 import * as React from 'react'
-import replace from 'lodash/replace'
 import { Link } from 'react-router-dom'
 import {
   isExternalLink,
@@ -8,7 +7,7 @@ import {
   isUsername,
   isPostRef,
   isThreadRef,
-  hasNewline,
+  // hasNewline,
   cleanFragment,
 } from '../utils/parsers'
 import Img from './Img'

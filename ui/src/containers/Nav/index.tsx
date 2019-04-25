@@ -1,4 +1,4 @@
-import React, { Component, useState, useEffect, useCallback } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import cx from 'classnames'
 import { useQuery, useMutation } from 'urql'
@@ -74,8 +74,8 @@ export type State = {
 
 function Nav(props: Props) {
   const [dropdownState, setDropdownState] = useState<State['dropdownState']>(null)
-  const [{ data, fetching }, executeQuery] = useQuery<CurrentUserQuery>({ query: currentUserQuery })
-  const [response, executeReadAlert] = useMutation<ReadAlertResponse, ReadAlertInput>(readAlertMutation)
+  const [{ data, fetching }] = useQuery<CurrentUserQuery>({ query: currentUserQuery })
+  const [response, executeReadAlert] = useMutation<ReadAlertResponse, ReadAlertInput>(readAlertMutation) // eslint-disable-line
   const currentUser = (data && data.currentUser) || null
 
   const readAlert = (alertId: string) => executeReadAlert({ input: { alertId } })

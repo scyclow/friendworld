@@ -4,12 +4,9 @@ import { Link, Redirect } from 'react-router-dom'
 import { RouteComponentProps } from 'react-router'
 
 import styles from './styles.module.scss'
-import Post, { PostType } from '../../components/Post'
 import DisplayError from '../../components/DisplayError'
 import Loading from '../../components/Loading'
 import useResponsive from '../../utils/useResponsive'
-
-import { RouteChildrenProps } from 'react-router'
 
 type CurrentUser = {
   id: string
@@ -91,15 +88,15 @@ type UpdateUserPayload = {
   user: UpdateUserInput['input']
 }
 
-const formatDate = (date: string) => new Date(date).toLocaleString('en-US', {
-  weekday: 'long',
-  year: 'numeric',
-  month: 'long',
-  day: 'numeric',
-  hour: 'numeric',
-  minute: 'numeric',
-  second: 'numeric'
-})
+// const formatDate = (date: string) => new Date(date).toLocaleString('en-US', {
+//   weekday: 'long',
+//   year: 'numeric',
+//   month: 'long',
+//   day: 'numeric',
+//   hour: 'numeric',
+//   minute: 'numeric',
+//   second: 'numeric'
+// })
 
 type Props = RouteComponentProps
 
@@ -260,6 +257,16 @@ function ProfileContent ({ currentUser, goto }: ContentProps) {
                   value={job}
                   placeholder="Accountant"
                   onChange={e => setJob(e.target.value)}
+                />
+              </div>
+
+              <div className={styles.inputSection}>
+                <h3>Interestes</h3>
+                <input
+                  className={styles.contentInput}
+                  value={interests}
+                  placeholder="Bowling, Stamp Collecting, Family"
+                  onChange={e => setInterests(e.target.value)}
                 />
               </div>
 

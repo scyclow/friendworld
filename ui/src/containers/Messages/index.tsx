@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { Link, Redirect } from 'react-router-dom'
 
 import { useQuery } from 'urql'
-import orderBy from 'lodash/orderBy'
 import styles from './styles.module.scss'
 import useResponsive from '../../utils/useResponsive'
 import DisplayError from '../../components/DisplayError'
@@ -36,6 +35,9 @@ const Messages: React.SFC<Props> = ({ username }) => {
   const { isMobile, isDesktop } = useResponsive(450)
   const [newMessage, setNewMessage] = useState<State['newMessage']>(false)
   const [{ data, error, fetching }] = useQuery<CurrentUserQuery>({ query: currentUserQuery })
+
+  if (error) return <DisplayError error={error} />
+  if (fetching) return <Loading />
 
   if (data && !data.currentUser) {
     return <Redirect to="/signup" />

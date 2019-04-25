@@ -1,7 +1,5 @@
 import { useState, useEffect } from 'react'
 
-const MOBILE = 540
-
 type WindowSize = {
   innerHeight: number
   innerWidth: number

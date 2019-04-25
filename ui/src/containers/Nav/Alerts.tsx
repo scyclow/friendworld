@@ -1,11 +1,9 @@
-import React, { Component } from 'react'
+import React  from 'react'
 import { Link } from 'react-router-dom'
 import cx from 'classnames'
 
 import X from '../../components/X'
 import ParsedText from '../../components/ParsedText'
-import DisplayError from '../../components/DisplayError'
-import Loading from '../../components/Loading'
 import styles from './styles.module.scss'
 import { CurrentUser } from './index'
 

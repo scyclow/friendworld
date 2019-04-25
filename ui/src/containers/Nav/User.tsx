@@ -1,16 +1,16 @@
-import React, { Component } from 'react'
+import React from 'react'
 import { Link } from 'react-router-dom'
 import jwt from '../../utils/jwt'
 import styles from './styles.module.scss'
 
 const switchUser = (username: string) => {
   jwt.setCurrentUser(username)
-  location.reload()
+  window.location.reload()
 }
 
 const logout = () => {
   jwt.clearCurrentUser()
-  location.reload()
+  window.location.reload()
 }
 
 export const UserDropdown: React.SFC<{}> = () => {
@@ -18,7 +18,7 @@ export const UserDropdown: React.SFC<{}> = () => {
 
   return (
     <ul className={styles.userDropdown}>
-      <a href="#" onClick={logout}>
+      <a href="#logout" onClick={logout}>
         <li>Logout</li>
       </a>
 
