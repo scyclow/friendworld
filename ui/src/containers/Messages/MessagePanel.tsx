@@ -2,9 +2,9 @@ import React, { useState, useRef, useEffect } from 'react';
 import { useQuery, useMutation } from 'urql'
 import { Link, Redirect } from 'react-router-dom'
 import orderBy from 'lodash/orderBy'
-import DisplayError from '../../components/DisplayError'
-import Loading from '../../components/Loading'
-import ParsedText from '../../components/ParsedText'
+import DisplayError from 'components/DisplayError'
+import Loading from 'components/Loading'
+import ParsedText from 'components/ParsedText'
 import styles from './styles.module.scss'
 
 

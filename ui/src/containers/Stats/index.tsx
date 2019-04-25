@@ -1,7 +1,7 @@
 import React from 'react';
 import { useQuery } from 'urql'
-import DisplayError from '../../components/DisplayError'
-import Loading from '../../components/Loading'
+import DisplayError from 'components/DisplayError'
+import Loading from 'components/Loading'
 import styles from './styles.module.scss'
 
 

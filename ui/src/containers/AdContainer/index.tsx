@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react'
 import { compact, find, sampleSize } from 'lodash'
 import { useQuery, useMutation } from 'urql'
-import Ad from '../../components/Ad'
+import Ad from 'components/Ad'
 import styles from './styles.module.scss'
 
 const adQuery = `{

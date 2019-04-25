@@ -9,9 +9,9 @@ import {
   isThreadRef,
   // hasNewline,
   cleanFragment,
-} from '../utils/parsers'
+} from 'utils/parsers'
 import Img from './Img'
-import profanityFilter from '../utils/profanityFilter'
+import profanityFilter from 'utils/profanityFilter'
 
 
 type Fragment = string | React.ReactNode;

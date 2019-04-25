@@ -1,6 +1,6 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
-import jwt from '../../utils/jwt'
+import jwt from 'utils/jwt'
 import styles from './styles.module.scss'
 
 const switchUser = (username: string) => {

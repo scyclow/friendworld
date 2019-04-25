@@ -2,11 +2,11 @@ import React from 'react';
 import { useQuery } from 'urql'
 import styles from './styles.module.scss'
 import { Link } from 'react-router-dom'
-import Post from '../../components/Post'
-import DisplayError from '../../components/DisplayError'
-import ParsedText from '../../components/ParsedText'
-import Loading from '../../components/Loading'
-import useResponsive from '../../utils/useResponsive'
+import Post from 'components/Post'
+import DisplayError from 'components/DisplayError'
+import ParsedText from 'components/ParsedText'
+import Loading from 'components/Loading'
+import useResponsive from 'utils/useResponsive'
 
 
 const userQuery = `

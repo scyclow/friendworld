@@ -2,8 +2,8 @@ import React  from 'react'
 import { Link } from 'react-router-dom'
 import cx from 'classnames'
 
-import X from '../../components/X'
-import ParsedText from '../../components/ParsedText'
+import X from 'components/X'
+import ParsedText from 'components/ParsedText'
 import styles from './styles.module.scss'
 import { CurrentUser } from './index'
 

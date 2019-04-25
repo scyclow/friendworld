@@ -4,9 +4,9 @@ import { Link, Redirect } from 'react-router-dom'
 import { RouteComponentProps } from 'react-router'
 
 import styles from './styles.module.scss'
-import DisplayError from '../../components/DisplayError'
-import Loading from '../../components/Loading'
-import useResponsive from '../../utils/useResponsive'
+import DisplayError from 'components/DisplayError'
+import Loading from 'components/Loading'
+import useResponsive from 'utils/useResponsive'
 
 type CurrentUser = {
   id: string

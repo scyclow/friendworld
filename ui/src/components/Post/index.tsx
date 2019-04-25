@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Link } from 'react-router-dom'
 import cx from 'classnames'
 import ParsedText from '../ParsedText'
-import profanityFilter from '../../utils/profanityFilter'
+import profanityFilter from 'utils/profanityFilter'
 import styles from './styles.module.scss';
 
 

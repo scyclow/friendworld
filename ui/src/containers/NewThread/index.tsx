@@ -5,10 +5,10 @@ import cx from 'classnames'
 
 
 import styles from './styles.module.scss';
-import { getTags } from '../../utils/parsers'
-import profanityFilter from '../../utils/profanityFilter'
-import TextInput from '../../components/TextInput'
-import Post from '../../components/Post'
+import { getTags } from 'utils/parsers'
+import profanityFilter from 'utils/profanityFilter'
+import TextInput from 'components/TextInput'
+import Post from 'components/Post'
 
 
 

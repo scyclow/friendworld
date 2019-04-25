@@ -2,11 +2,11 @@ import React, { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import cx from 'classnames'
 import { useQuery, useMutation } from 'urql'
-import useResponsive from '../../utils/useResponsive'
+import useResponsive from 'utils/useResponsive'
 
 
 import styles from './styles.module.scss'
-import { Width } from '../../components/Body'
+import { Width } from 'components/Body'
 
 import { AlertDropdown, AlertCircle } from './Alerts'
 import { UserDropdown } from './User'

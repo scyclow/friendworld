@@ -2,8 +2,8 @@ import React, { Fragment } from 'react';
 import { Link } from 'react-router-dom'
 import { useQuery } from 'urql'
 import orderBy from 'lodash/orderBy'
-import DisplayError from '../../components/DisplayError'
-import Loading from '../../components/Loading'
+import DisplayError from 'components/DisplayError'
+import Loading from 'components/Loading'
 import styles from './styles.module.scss'
 
 const messagesDataQuery = `{

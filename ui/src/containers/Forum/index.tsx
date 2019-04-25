@@ -2,11 +2,11 @@ import * as React from 'react';
 import { useQuery } from 'urql'
 import { Link } from 'react-router-dom'
 import styles from './styles.module.scss'
-import useResponsive from '../../utils/useResponsive'
-import profanityFilter from '../../utils/profanityFilter'
+import useResponsive from 'utils/useResponsive'
+import profanityFilter from 'utils/profanityFilter'
 
-import DisplayError from '../../components/DisplayError'
-import Loading from '../../components/Loading'
+import DisplayError from 'components/DisplayError'
+import Loading from 'components/Loading'
 import AdContainer from '../AdContainer'
 
 

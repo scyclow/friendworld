@@ -2,9 +2,9 @@ import * as React from 'react';
 import { useQuery } from 'urql'
 import { Link } from 'react-router-dom'
 import styles from './styles.module.scss'
-import Post, { PostType } from '../../components/Post'
-import DisplayError from '../../components/DisplayError'
-import Loading from '../../components/Loading'
+import Post, { PostType } from 'components/Post'
+import DisplayError from 'components/DisplayError'
+import Loading from 'components/Loading'
 
 
 type PostQuery = {

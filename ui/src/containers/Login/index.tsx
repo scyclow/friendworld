@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { useMutation } from 'urql'
-import jwt from '../../utils/jwt'
-import DisplayError from '../../components/DisplayError'
-import Loading from '../../components/Loading'
+import jwt from 'utils/jwt'
+import DisplayError from 'components/DisplayError'
+import Loading from 'components/Loading'
 import styles from './styles.module.scss'
 
 
