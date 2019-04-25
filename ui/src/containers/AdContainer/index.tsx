@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { compact, find, sampleSize } from 'lodash'
-import { useQuery } from 'urql'
+import { useQuery, useMutation } from 'urql'
 import { Link } from 'react-router-dom'
 import Ad from '../../components/Ad'
 import styles from './styles.module.scss'
@@ -15,7 +15,6 @@ const adQuery = `{
     isGeneric
   }
 }`
-
 
 
 type AdQuery = {
@@ -36,6 +35,34 @@ type Ad = {
   content: string,
   isGeneric: boolean
   tags: Array<string>
+}
+
+
+const logAdClickMutation = `
+mutation logAdClick($input: LogAdClickInput!) {
+  logAdClick(input: $input) {
+    adClick {
+      adId
+      userId
+      clickCount
+    }
+  }
+}`
+
+type LogAdClickInput = {
+  input: {
+    ad: string
+  }
+}
+
+type LogAdClickResponse = {
+  logAdClick: {
+    adClick: {
+      adId: string
+      userId: string
+      clickCount: number
+    }
+  }
 }
 
 function orderAds(allAds: Array<Ad>, tagsOrderedByPreference: Array<string>, atLeast: number) {
@@ -66,6 +93,8 @@ type Props = {
 }
 const AdContainer = ({ n, tag, tags, offset }: Props) => {
   const [{ data, fetching }] = useQuery<AdQuery>({ query: adQuery })
+  const [response, executeLogAdClick] = useMutation<LogAdClickResponse, LogAdClickInput>(logAdClickMutation)
+
   if (fetching) return <>loading...</>
   if (!data) return null
 
@@ -76,14 +105,18 @@ const AdContainer = ({ n, tag, tags, offset }: Props) => {
     n || 1
   ).slice(offset || 0)
 
+  const logAdClick = (id: string) =>
+    setTimeout(() =>
+      executeLogAdClick({ input: { ad: id }
+    }), 200)
 
   return (
     <section className={styles.adContainer}>
       <div className={styles.label}>SPONSORED CONTENT</div>
       {ads.map((ad, i) => (
-        <React.Fragment key={i}>
-          <Ad {...ad} />
-        </React.Fragment>
+        <div className={styles.adWrapper} key={i}>
+          <Ad {...ad} onClick={() => logAdClick(ad.id)} />
+        </div>
       ))}
     </section>
   )

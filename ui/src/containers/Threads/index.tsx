@@ -1,5 +1,5 @@
 import React, { Fragment, useCallback } from 'react';
-import { useMutation, useQuery, OperationResult } from 'urql'
+import { useMutation, useQuery } from 'urql'
 import { RouteChildrenProps } from 'react-router'
 import { Link } from 'react-router-dom'
 import cx from 'classnames'

@@ -294,7 +294,7 @@ create table friendworld.ad_clicks (
 , user_id       uuid not null references friendworld.users(id)
 , created_at    timestamp default now()
 , updated_at    timestamp default now()
-, click_count   integer default 0
+, click_count   integer default 1
 );
 
 create trigger ad_click_updated_at before update
