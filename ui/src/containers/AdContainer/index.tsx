@@ -1,4 +1,4 @@
-import * as React from 'react'
+import React, { useMemo, useCallback } from 'react'
 import { compact, find, sampleSize } from 'lodash'
 import { useQuery, useMutation } from 'urql'
 import { Link } from 'react-router-dom'
@@ -95,15 +95,22 @@ const AdContainer = ({ n, tag, tags, offset }: Props) => {
   const [{ data, fetching }] = useQuery<AdQuery>({ query: adQuery })
   const [response, executeLogAdClick] = useMutation<LogAdClickResponse, LogAdClickInput>(logAdClickMutation)
 
+  const ads = useMemo(() => {
+    if (!data) return []
+    const parsedAds = data.ads.map(ad => ({ ...ad, tags: JSON.parse(ad.tags) }))
+    return orderAds(
+      parsedAds,
+      tag ? [tag] : (tags || []),
+      n || 1
+    ).slice(offset || 0)
+  }, [n, tag, tags, offset, data])
+
+
+
+
   if (fetching) return <>loading...</>
   if (!data) return null
 
-  const parsedAds = data.ads.map(ad => ({ ...ad, tags: JSON.parse(ad.tags) }))
-  const ads = orderAds(
-    parsedAds,
-    tag ? [tag] : (tags || []),
-    n || 1
-  ).slice(offset || 0)
 
   const logAdClick = (id: string) =>
     setTimeout(() =>
