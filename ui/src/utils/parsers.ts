@@ -1,4 +1,5 @@
-import keywords from './keywords'
+import keywords, { gender } from './keywords'
+import intersection from 'lodash/intersection'
 
 const externalLinkTest = /^(http|https):\/\/.+\..+/
 const imageTest = /(\.jpg$)|(\.jpeg$)|(\.png$)|(\.gif$)|(\.svg$)/
@@ -38,7 +39,7 @@ export function isThreadRef(str: string) {
 }
 
 export function isKeyword(str: string) {
-  return keywords.has(str.toLowerCase())
+  return keywords.has(cleanFragment(str.toLowerCase()))
 }
 
 export function hasNewline(str: string) {
@@ -62,8 +63,18 @@ export function getHastags(str: string) {
 export function getKeywords(str: string) {
   return str
     .split(' ')
-    .filter(isKeyword)
     .map(f => cleanFragment(f).toLowerCase())
+    .filter(isKeyword)
+}
+
+export function getGender(str: string) {
+  const genderWords = str
+    .split(' ')
+    .map(f => cleanFragment(f).toLowerCase())
+
+  if (intersection(genderWords, gender.male).length) return 'male'
+  else if (intersection(genderWords, gender.female).length) return 'female'
+  else return 'other'
 }
 
 

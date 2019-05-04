@@ -1,10 +1,22 @@
 import React, { useMemo } from 'react'
-import { compact, find, sampleSize } from 'lodash'
+import { sampleSize, shuffle, isObject } from 'lodash'
 import { useQuery, useMutation } from 'urql'
 import Ad from 'components/Ad'
 import styles from './styles.module.scss'
 
+const safeParse = (str?: any) => {
+  try {
+    const obj = JSON.parse(str)
+    return isObject(obj) ? obj : {}
+  } catch(e) {
+    return {}
+  }
+}
 const adQuery = `{
+  currentUser {
+    id
+    trackingInfo
+  }
   ads: adsList {
     id
     url
@@ -12,8 +24,16 @@ const adQuery = `{
     content
     tags
     isGeneric
+    weight
+    targetTags
+    primaryTags
   }
 }`
+
+// , weight        int default 1
+// , target_tags   jsonb default '[]'
+// , primary_tags  jsonb default '[]'
+// , tags          jsonb default '[]'
 
 
 type AdQuery = {
@@ -23,8 +43,15 @@ type AdQuery = {
     img: string
     content: string
     isGeneric: boolean
+    weight: number
     tags: string
+    targetTags: string
+    primaryTags: string
   }>
+  currentUser?: {
+    id: string
+    trackingInfo: string
+  }
 }
 
 type Ad = {
@@ -33,7 +60,10 @@ type Ad = {
   img: string
   content: string,
   isGeneric: boolean
+  weight: number
   tags: Array<string>
+  primaryTags: Array<string>
+  targetTags: Array<string>
 }
 
 
@@ -64,52 +94,86 @@ type LogAdClickResponse = {
   }
 }
 
-function orderAds(allAds: Array<Ad>, tagsOrderedByPreference: Array<string>, atLeast: number) {
-  const usedAds = new Set()
-  const adsAndNulls = tagsOrderedByPreference.map(tag => {
-    const found = find(allAds, ad => !usedAds.has(ad.id) && ad.tags.includes(tag))
-    if (found) usedAds.add(found.id)
-    return found
-  })
-  const priorityAds = compact(adsAndNulls)
+type Filter = {
+  tags?: Array<string>,
+  targetTags?: Array<string>,
+  restricted?: boolean,
+}
 
-  const unusedAds = allAds.filter(ad => !usedAds.has(ad.id) && ad.isGeneric)
-  const adsLeft = atLeast - priorityAds.length
+function filterAds(
+  allAds: Array<Ad>,
+  filter: Filter = {},
+  n: number = 1,
+): Array<Ad> {
+  const restricted = filter.restricted === false ? filter.restricted : true
+  const tags = new Set(filter.tags || [])
+  const targetTags = new Set(filter.targetTags || [])
 
-  const ads = adsLeft > 0
-    ? priorityAds.concat(sampleSize(unusedAds, adsLeft))
-    : priorityAds
+  const viableAds = restricted ? allAds.filter(ad => ad.isGeneric) : allAds
+  const primaryAds = viableAds.filter(ad => ad.primaryTags.some(a => tags.has(a)))
 
-  return ads
+  if (primaryAds.length >= n) {
+    return sampleSize(primaryAds, n)
+  }
+  const secondaryAds = viableAds.filter(ad =>
+    ad.tags.some(a => tags.has(a))
+    && !primaryAds.includes(ad)
+  )
 
+  if (primaryAds.length + secondaryAds.length >= n) {
+    return [...shuffle(primaryAds), ...sampleSize(secondaryAds, n - primaryAds.length)]
+  }
+
+  const taggedAds = [...shuffle(primaryAds), ...shuffle(secondaryAds)]
+
+  const targetAds = viableAds.filter(ad =>
+    ad.targetTags.some(a => targetTags.has(a))
+    && !taggedAds.includes(ad)
+  )
+
+  if (taggedAds.length + targetAds.length >= n) {
+    return [...taggedAds, ...sampleSize(targetAds, n - taggedAds.length)]
+  }
+
+  const usedAds = [...taggedAds, ...shuffle(targetAds)]
+  const remainingAds = viableAds.filter(ad => !usedAds.includes(ad))
+
+  return [...usedAds, ...sampleSize(remainingAds, n - usedAds.length)]
+}
+
+export function useAds(n: number = 1, filter: Filter = {}) {
+  const [{ data, fetching }] = useQuery<AdQuery>({ query: adQuery })
+  const ads = useMemo(() => {
+    if (!data) return []
+    const parsedAds = data.ads.map(ad => ({
+      ...ad,
+      tags: JSON.parse(ad.tags),
+      primaryTags: JSON.parse(ad.primaryTags),
+      targetTags: JSON.parse(ad.targetTags),
+    }))
+    const trackingInfo = data.currentUser ? safeParse(data.currentUser.trackingInfo) : {}
+    const targetTags = [
+      trackingInfo.gender,
+      ...(trackingInfo.profileTags || [])
+    ]
+
+    const restricted = filter.restricted || !data.currentUser
+
+    return filterAds(parsedAds, {...filter, restricted, targetTags}, n)
+  }, [n, filter, data])
+
+  return { ads, fetchingAds: fetching }
 }
 
 type Props = {
-  n?: number,
-  offset?: number,
-  tags?: Array<string>
-  tag?: string
+  ads: Array<Ad>,
+  fetching?: boolean,
 }
-const AdContainer = ({ n, tag, tags, offset }: Props) => {
-  const [{ data, fetching }] = useQuery<AdQuery>({ query: adQuery })
+const AdContainer = ({ ads, fetching }: Props) => {
   const [response, executeLogAdClick] = useMutation<LogAdClickResponse, LogAdClickInput>(logAdClickMutation) // eslint-disable-line
 
-  const ads = useMemo(() => {
-    if (!data) return []
-    const parsedAds = data.ads.map(ad => ({ ...ad, tags: JSON.parse(ad.tags) }))
-    return orderAds(
-      parsedAds,
-      tag ? [tag] : (tags || []),
-      n || 1
-    ).slice(offset || 0)
-  }, [n, tag, tags, offset, data])
-
-
-
-
   if (fetching) return <>loading...</>
-  if (!data) return null
-
+  if (!ads) return null
 
   const logAdClick = (id: string) =>
     setTimeout(() =>
@@ -127,5 +191,6 @@ const AdContainer = ({ n, tag, tags, offset }: Props) => {
     </section>
   )
 }
+
 
 export default AdContainer

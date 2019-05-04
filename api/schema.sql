@@ -264,8 +264,11 @@ create table friendworld.ads (
 , url           text
 , img           text default null
 , content       text default null
-, tags          jsonb default '[]'
 , is_generic    boolean default true
+, weight        int default 1
+, target_tags   jsonb default '[]'
+, primary_tags  jsonb default '[]'
+, tags          jsonb default '[]'
 );
 
 create trigger ad_updated_at before update
@@ -529,35 +532,39 @@ $$ language plpgsql;
 grant execute on function friendworld.read_alert(uuid) to friendworld_user;
 
 create function friendworld.update_user(
-  avatar_url   text default null
-, email        text default null
-, gender       text default null
-, birthday     timestamp default null
-, bio          text default null
-, job          text default null
-, interests    text default null
-, websites     text default null
-, media        text default null
-, religion     text default null
-, politics     text default null
+  avatar_url     text default null
+, email          text default null
+, gender         text default null
+, birthday       timestamp default null
+, bio            text default null
+, job            text default null
+, interests      text default null
+, websites       text default null
+, media          text default null
+, religion       text default null
+, politics       text default null
+, tracking_info  jsonb default null
 ) returns friendworld.users as $$
+  #variable_conflict use_variable
+
   declare
     user  friendworld.users;
 
   begin
     update friendworld.users
     set
-      avatar_url    = coalesce(avatar_url, friendworld.users.avatar_url)
-    , email         = coalesce(email, friendworld.users.email)
-    , gender        = coalesce(gender, friendworld.users.gender)
-    , birthday      = coalesce(birthday, friendworld.users.birthday)
-    , bio           = coalesce(bio, friendworld.users.bio)
-    , job           = coalesce(job, friendworld.users.job)
-    , interests     = coalesce(interests, friendworld.users.interests)
-    , websites      = coalesce(websites, friendworld.users.websites)
-    , media         = coalesce(media, friendworld.users.media)
-    , religion      = coalesce(religion, friendworld.users.religion)
-    , politics      = coalesce(politics, friendworld.users.politics)
+      avatar_url     = coalesce(avatar_url, friendworld.users.avatar_url)
+    , email          = coalesce(email, friendworld.users.email)
+    , gender         = coalesce(gender, friendworld.users.gender)
+    , birthday       = coalesce(birthday, friendworld.users.birthday)
+    , bio            = coalesce(bio, friendworld.users.bio)
+    , job            = coalesce(job, friendworld.users.job)
+    , interests      = coalesce(interests, friendworld.users.interests)
+    , websites       = coalesce(websites, friendworld.users.websites)
+    , media          = coalesce(media, friendworld.users.media)
+    , religion       = coalesce(religion, friendworld.users.religion)
+    , politics       = coalesce(politics, friendworld.users.politics)
+    , tracking_info  = coalesce(tracking_info, friendworld.users.tracking_info)
     where friendworld.users.id = nullif(current_setting('jwt.claims.user_id', true), '')::uuid
     returning * into user;
 
@@ -565,7 +572,7 @@ create function friendworld.update_user(
   end;
 $$ language plpgsql;
 
-grant execute on function friendworld.update_user(text, text, text, timestamp, text, text, text, text, text, text, text)
+grant execute on function friendworld.update_user(text, text, text, timestamp, text, text, text, text, text, text, text, jsonb)
   to friendworld_user;
 
 

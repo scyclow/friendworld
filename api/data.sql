@@ -86,11 +86,14 @@ insert into friendworld.alerts (user_id, content, link) values (
 ;
 
 -- TODO FIGURE OUT WHICH ONES SHOULD BE OFF BY DEFAULT
-insert into friendworld.ads (url, img, content, tags, is_generic) values
+insert into friendworld.ads (url, img, content, weight, target_tags, primary_tags, tags, is_generic) values
   (
     'http://fastcashmoneyplus.biz'
   , 'https://www.washingtonpost.com/resizer/bmfQHooAGH6PmEv0qHjgf-ZUy-k=/480x0/arc-anglerfish-washpost-prod-washpost.s3.amazonaws.com/public/EBULPVFULQI6PG4TXFYEHZL2EI.jpg'
   , 'MAKE FAST CASH NOW'
+  , 1
+  , '[]'
+  , '[]'
   , '["fastcash", "fastcashmoneyplus", "fastcashmoneyplusbiz", "fastcashmoneybiz", "moneybucks", "bucks", "fast", "cash", "money", "rich", "wealth", "saving", "savings", "crypto", "cryptocurrency", "bitcoin", "btc", "ethereum", "eth", "invest", "investing", "finance", "ico", "fortune", "millionaire", "billionaire", "blockchain", "economy", "payment", "trick", "profit"]'
   , true
   )
@@ -98,34 +101,69 @@ insert into friendworld.ads (url, img, content, tags, is_generic) values
     'http://fastcashmoneyplus.biz'
   , 'https://kitchenreviewed.com/wp-content/uploads/2017/10/spending_too_on_meat_grinder.jpg'
   , 'STOP THROWING AWAY YOUR MONEY'
-  , '["throwing", "fastcash", "fastcashmoneyplus", "fastcashmoneyplusbiz", "fastcashmoneybiz", "moneybucks", "bucks", "fast", "cash", "money", "rich", "wealth", "saving", "savings", "crypto", "cryptocurrency", "bitcoin", "btc", "ethereum", "eth", "invest", "investing", "finance", "ico", "fortune", "millionaire", "billionaire", "blockchain", "economy", "payment", "trick", "profit"]'
+  , 1
+  , '[]'
+  , '["throwing"]'
+  , '["fastcash", "fastcashmoneyplus", "fastcashmoneyplusbiz", "fastcashmoneybiz", "moneybucks", "bucks", "fast", "cash", "money", "rich", "wealth", "saving", "savings", "crypto", "cryptocurrency", "bitcoin", "btc", "ethereum", "eth", "invest", "investing", "finance", "ico", "fortune", "millionaire", "billionaire", "blockchain", "economy", "payment", "trick", "profit"]'
+  , true
+  )
+, (
+    'http://fastcashmoneyplus.biz'
+  , 'https://previews.123rf.com/images/artoleshko/artoleshko1712/artoleshko171200224/92625649-big-bomb-of-money-hundred-dollar-bills-with-a-burning-wick-little-time-before-the-explosion-the-conc.jpg'
+  , 'ARE YOU READY FOR THE ECONOMIC EXPLOSION?'
+  , 1
+  , '[]'
+  , '["economic", "explosion"]'
+  , '["fastcash", "fastcashmoneyplus", "fastcashmoneyplusbiz", "fastcashmoneybiz", "moneybucks", "bucks", "fast", "cash", "money", "rich", "wealth", "saving", "savings", "crypto", "cryptocurrency", "bitcoin", "btc", "ethereum", "eth", "invest", "investing", "finance", "ico", "fortune", "millionaire", "billionaire", "blockchain", "economy", "economic", "explosion", "payment", "market", "profit"]'
+  , true
+  )
+, (
+    'http://fastcashmoneyplus.biz'
+  , 'https://image.shutterstock.com/image-illustration/happy-man-laptop-money-explosion-450w-75571285.jpg'
+  , 'MAKE MONEY FROM THE COMFORT OF YOUR OWN HOME'
+  , 1
+  , '[]'
+  , '["comfort", "money", "home", "house", "apartment"]'
+  , '["fastcash", "fastcashmoneyplus", "fastcashmoneyplusbiz", "fastcashmoneybiz", "moneybucks", "bucks", "fast", "cash", "money", "rich", "wealth", "saving", "savings", "crypto", "cryptocurrency", "bitcoin", "btc", "ethereum", "eth", "invest", "investing", "finance", "ico", "fortune", "millionaire", "billionaire", "blockchain", "economy", "payment", "trick", "profit"]'
   , true
   )
 , (
     'http://fastcashmoneyplus.biz'
   , 'https://previews.123rf.com/images/belchonock/belchonock1801/belchonock180130743/95161261-elegant-man-in-suit-holding-money-isolated-on-white.jpg'
   , 'SEE WHAT SUCCESS TASTES LIKE'
-  , '["success", "taste", "money", "cash", "profit", "suit", "wealth"]'
+  , 1
+  , '[]'
+  , '["success"]'
+  , '["food", "taste", "money", "cash", "profit", "suit", "wealth"]'
   , true
   )
 , (
     'https://www.amazon.com/Quick-Turn-Real-Estate-Millionaire/dp/B005ZOBAS2'
   , 'https://images-na.ssl-images-amazon.com/images/I/61G83WP73VL._SX258_BO1,204,203,200_.jpg'
   , 'YOU CAN BECOME THE NEXT MILLIONAIRE'
-  , '["millionaire", "billionaire", "fast", "cash", "money", "rich", "wealth", "suit"]'
+  , 1
+  , '[]'
+  , '["millionaire", "billionaire"]'
+  , '["fast", "cash", "money", "rich", "wealth", "suit"]'
   , true
   )
 , (
     'http://fastcashmoneyplus.biz'
   , 'https://www.oneworldnews.com/wp-content/uploads/2017/12/57.jpg'
   , 'ACHIEVE YOUR FINANCIAL DREAMS TODAY'
-  , '["dream", "dreams", "sleep", "pillow", "fastcash", "fastcashmoneyplus", "fastcashmoneyplusbiz", "fastcashmoneybiz", "moneybucks", "bucks", "fast", "cash", "money", "rich", "wealth", "saving", "savings", "invest", "investing", "finance", "fortune", "millionaire", "profit"]'
+  , 1
+  , '[]'
+  , '["dream", "dreams", "sleep", "pillow"]'
+  , '["fastcash", "fastcashmoneyplus", "fastcashmoneyplusbiz", "fastcashmoneybiz", "moneybucks", "bucks", "fast", "cash", "money", "rich", "wealth", "saving", "savings", "invest", "investing", "finance", "fortune", "millionaire", "profit"]'
   , true
   )
 , (
     'http://fastcashmoneyplus.biz'
   , 'https://media.brstatic.com/2017/09/25112945/family-showing-young-member-piggy-bank-savings-getty_573x300.jpg'
   , 'SAVE MORE MONEY WITH THIS WEIRD TRICK'
+  , 1
+  , '[]'
+  , '["weird"]'
   , '["fastcash", "fastcashmoneyplus", "money", "savings", "saving", "family"]'
   , true
   )
@@ -133,6 +171,9 @@ insert into friendworld.ads (url, img, content, tags, is_generic) values
     'http://fakebullshit.news'
   , 'https://i.imgur.com/94L6Q6X.jpg'
   , 'UH OH... WHAT DID SHILLARY DO THIS TIME?!'
+  , 1
+  , '[]'
+  , '["hillary", "clinton"]'
   , '["politics", "political", "government", "democrats", "republicans", "gop", "liberal", "liberals", "conservative", "conservatives", "libtards", "cucks", "cuck","clinton","socialist", "socialism", "shillary", "sjw", "sjws", "social", "justice", "warriors"]'
   , true
   )
@@ -140,19 +181,28 @@ insert into friendworld.ads (url, img, content, tags, is_generic) values
     'http://steviep.xyz'
   , 'https://www.thoughtco.com/thmb/_Wdk4z5X4uEhg4h88GTFPS8KQqw=/768x0/filters:no_upscale():max_bytes(150000):strip_icc()/h20-58e655f93df78c5162ea0a1f.jpg'
   , 'YOULL NEVER BELIEVE WHAT SCIENTISTS ARE FINDING IN YOUR FOOD'
+  , 1
   , '[]'
+  , '[]'
+  , '["food", "science", "chemicals", "chemtrails"]'
   , true
   )
 , (
     'https://target.com'
   , 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c5/Target_Corporation_logo_%28vector%29.svg/1200px-Target_Corporation_logo_%28vector%29.svg.png'
   , 'TARGET: EXPECT MORE PAY LESS'
+  , 1
+  , '[]'
   , '["target", "targeted", "targeting"]'
-  , true
+  , '[]'
+  , false
   ), (
     'http://steviep.xyz'
   , 'https://www.consciouslifestylemag.com/wp-content/uploads/2016/04/chakra-diagram-in-the-body.jpg'
   , 'CLEAN YOUR CHAKRAS WITH THESE 3 SPIRITUAL TECHNIQUES'
+  , 1
+  , '[]'
+  , '[]'
   , '["woo", "spirit", "mental", "spirituality", "god", "chakra", "chakras", "sound", "meditation", "reality", "dream", "dreams", "hypnosis", "mantra", "mantras", "technique", "energy", "karma", "cleanse", "vegan", "ascend", "ascension", "newage", "consciousness"]'
   , true
   )
@@ -160,6 +210,9 @@ insert into friendworld.ads (url, img, content, tags, is_generic) values
     'http://steviep.xyz'
   , 'https://targetedindividualscanada.files.wordpress.com/2011/01/psycho-electronic-weapon-effects-pic1.jpg'
   , 'THE GOVERNMENT JUST FREAKED ABOUT NEW INFO LEAKING'
+  , 1
+  , '[]'
+  , '[]'
   , '["ti", "targeted", "target", "targeting", "tracking", "conspiracy", "nuclear", "drone", "5g", "radiation", "alien", "aliens", "ufo", "ufos", "roswell", "brain", "mind-control", "chemtrails", "tracking"]'
   , true
   )
@@ -167,20 +220,29 @@ insert into friendworld.ads (url, img, content, tags, is_generic) values
     'http://steviep.xyz'
   , 'https://targetedindividualscanada.files.wordpress.com/2011/11/brain-inplants.jpg'
   , 'WHAT YOU DONT KNOW ABOUT YOUR BRAIN MAY KILL YOU'
+  , 1
+  , '[]'
+  , '[]'
   , '["sad", "depressed", "melencholy", "anxious", "anxiety", "depression", "anhedonia", "motivation", "happy", "mental", "brain", "suicide", "suicidal", "ocd", "obsessed", "scared", "fear", "emptiness", "cbd", "antidepressant"]'
   , true
   )
 , (
     'http://steviep.xyz'
   , 'https://www.chantellerenee.org/wp-content/uploads/2018/06/light-dimensions-ascension-1.jpg'
-  , 'SUBMIT TO GOD BEFORE ITS TOO LATE'
-  , '["woo", "spirit", "spirituality", "god", "chakra", "chakras", "sound", "meditation", "reality", "dream", "dreams", "hypnosis", "mantra", "mantras", "technique", "energy", "karma", "cleanse", "vegan", "ascend", "ascension", "newage"]'
+  , 'EVACUATE THE PLANET BEFORE ITS TOO LATE'
+  , 1
+  , '[]'
+  , '["evacuate", "planet"]'
+  , '["spirit", "spirituality", "god", "meditation", "energy", "karma", "ascend", "ascension", "newage"]'
   , true
   )
 , (
     'http://steviep.xyz'
   , 'https://a57.foxnews.com/a57.foxnews.com/static.foxnews.com/foxnews.com/content/uploads/2018/09/640/320/1862/1048/adacbcf6-640_brain.jpg'
   , 'IS SOMETHING WRONG WITH YOUR BRAIN? FIND OUT NOW'
+  , 1
+  , '[]'
+  , '[]'
   , '["brain", "wrong", "psychology", "sad", "anhedonia", "depressed", "anxious", "anxiety"]'
   , true
   )
@@ -188,6 +250,9 @@ insert into friendworld.ads (url, img, content, tags, is_generic) values
     'http://steviep.xyz'
   , 'https://3c1703fe8d.site.internapcdn.net/newman/csz/news/800/2018/20-neuroscienti.jpg'
   , 'ARE YOU FORGETTING TO REMEMBER?'
+  , 1
+  , '[]'
+  , '[]'
   , '["brain", "remember", "forget", "forgetting"]'
   , true
   )
@@ -195,6 +260,9 @@ insert into friendworld.ads (url, img, content, tags, is_generic) values
     'http://steviep.xyz'
   , 'https://corespirit.com/api/Containers/corespirit-static/download/size_1200_880ab40a-c7be-43be-9223-49fea6bfeb8e.jpg'
   , 'FIND OUT WHAT HAPPENS TO PEOPLE WITH THIS STRAIN OF TONAIL FUNGUS'
+  , 1
+  , '[]'
+  , '[]'
   , '["foot", "death", "toenail", "nail", "fungus", "feet", "elderly"]'
   , true
   )
@@ -202,13 +270,19 @@ insert into friendworld.ads (url, img, content, tags, is_generic) values
     'http://steviep.xyz'
   , 'https://i.pinimg.com/originals/fc/a3/18/fca31854ca2e944467184d58a381d8ec.jpg'
   , 'YOUR BACK PAIN MIGHT NOT BE SO SIMPLE'
+  , 1
+  , '[]'
+  , '[]'
   , '["back", "pain", "organ", "organs", "accupuncture", "intestine", "liver", "heart"]'
   , true
   )
 , (
     'https://secure.ngagelive.com/chat/index.aspx?websiteid=92-90-134-193-83-0-152-30&alt=false&wl=false&loc=https%3A//wegrowhair.com/&mode=AutoEngage&visitorId=a422fd99-ab43-4b5a-a8bc-aa1d00368c4c'
   , 'http://3.bp.blogspot.com/-SWo3Fi7Kb5I/Ue9EP7ITfJI/AAAAAAAAD6A/5xacI3uWLLQ/s1600/h9991572_001.jpg'
-  , 'YOUR BACK PAIN MIGHT NOT BE SO SIMPLE'
+  , 'PREVENT UGLY HAIR LOSS NOW'
+  , 1
+  , '["male", "man"]'
+  , '[]'
   , '["male", "man", "testosterone", "hair", "loss", "bald", "balding"]'
   , true
   )
@@ -216,20 +290,29 @@ insert into friendworld.ads (url, img, content, tags, is_generic) values
     'https://news.trycapsifit.com/'
   , 'http://d1nnx3nhddxmeh.cloudfront.net/wp-content/uploads/2018/05/01122237/Overweight-Problems-Heres-How-to-Reset-Your-Melt-Fat-Hormones.jpg'
   , 'GET THAT BIKINI BODY FAST'
-  , '["woman", "female", "fat", "skinny", "pepper", "hot", "furnace", "drip"]'
+  , 1
+  , '["woman", "female"]'
+  , '[]'
+  , '["fat", "skinny", "pepper", "hot", "furnace", "drip"]'
   , true
   )
 , (
     'https://news.trycapsifit.com/'
   , 'https://i.pinimg.com/originals/fb/99/31/fb9931fc50a7e72fc9a708e960db3935.jpg'
   , 'WATCH FAT DRIP OFF YOUR BODY LIKE A FAT MELTING FURNACE'
-  , '["man", "male", "fat", "skinny", "pepper", "hot", "furnace", "drip"]'
+  , 1
+  , '["man", "male"]'
+  , '[]'
+  , '["fat", "skinny", "pepper", "hot", "furnace", "drip"]'
   , true
   )
 , (
     'https://news.trycapsifit.com/'
   , 'http://media1.s-nbcnews.com/i/streams/2012/August/120827/504274-g-tdy-091221-belly-2p.jpg'
   , 'WATCH FAT DRIP OFF YOUR BODY LIKE A FAT MELTING FURNACE'
+  , 1
+  , '[]'
+  , '[]'
   , '["fat", "skinny", "pepper", "hot", "furnace", "drip"]'
   , true
   )
@@ -237,6 +320,9 @@ insert into friendworld.ads (url, img, content, tags, is_generic) values
     'https://www.youtube.com/watch?v=SyvOPXeg4ig'
   , 'https://cdn1.medicalnewstoday.com/content/images/articles/320/320227/cancer-cell.jpg'
   , 'STOP CANCER DEAD IN ITS TRACKS'
+  , 1
+  , '[]'
+  , '[]'
   , '["cancer", "stop", "dead", "death", "blood", "cells"]'
   , true
   )
@@ -244,6 +330,9 @@ insert into friendworld.ads (url, img, content, tags, is_generic) values
     'https://www.youtube.com/watch?v=SyvOPXeg4ig'
   , 'https://i.ytimg.com/vi/Bey3c8kVm7M/maxresdefault.jpg'
   , 'ARE YOU AN INDIGO CHILD? FIND OUT NOW'
+  , 1
+  , '[]'
+  , '[]'
   , '["add", "indigo", "child", "children", "chakra", "special", "energy", "collective"]'
   , true
   )
@@ -251,6 +340,9 @@ insert into friendworld.ads (url, img, content, tags, is_generic) values
     'https://weliveinamadworld.com/5g-and-intelligent-connectivity-a-plague-to-consume-humanity/'
   , 'https://weliveinamadworld.com/wp-content/uploads/2019/02/5g.jpg'
   , '5G AND THE COMING PLAGUE TO CONSUME HUMANITY'
+  , 1
+  , '[]'
+  , '[]'
   , '["illuminati", "5g", "holocaust", "internet-of-things", "iot", "vr", "virtual", "reality", "individuality"]'
   , true
   )
@@ -258,6 +350,9 @@ insert into friendworld.ads (url, img, content, tags, is_generic) values
     'https://renegadevids.com/category/jews/'
   , 'http://www.conspirazzi.com/wp-content/uploads/2010/06/eternal-jew-illuminati.jpg'
   , 'SEMETIC SUBLIMINALS AND THE JEWISH QUESTION'
+  , 1
+  , '[]'
+  , '[]'
   , '["semetic", "subliminal", "jew", "jewish", "illuminati"]'
   , true
   )
@@ -265,6 +360,9 @@ insert into friendworld.ads (url, img, content, tags, is_generic) values
     'http://universeinsideyou.net/experiments-proving-astral-projection-is-real/'
   , 'https://cdn.shopify.com/s/files/1/0823/4911/products/CD260-3_1024x1024.jpg'
   , 'Are you curious to see where your spirit travels unrestrained from your body?'
+  , 1
+  , '[]'
+  , '[]'
   , '["astral", "projection", "subliminal", "chakra", "energy", "sound", "light", "healing", "consciousness", "dream", "sleep"]'
   , true
   )
@@ -272,6 +370,9 @@ insert into friendworld.ads (url, img, content, tags, is_generic) values
     'https://www.youtube.com/watch?v=ZOvk1DfLO6c'
   , 'https://i.ytimg.com/vi/ZOvk1DfLO6c/hqdefault.jpg'
   , 'DONT LET YOUR LUCK RUN OUT'
+  , 1
+  , '[]'
+  , '[]'
   , '["luck", "clover", "horseshoe", "subliminal", "sexy", "vortex", "fortune"]'
   , true
   )
@@ -279,13 +380,19 @@ insert into friendworld.ads (url, img, content, tags, is_generic) values
     'https://www.youtube.com/watch?v=OK40AYHL97I'
   , 'https://www.institutobernabeu.com/foro/en/files/2014/02/021.jpg'
   , 'INCREASE YOUR SPERM COUNT WITHOUT TOUCHING A BUTTON'
-  , '["male", "man", "binaural", "beats", "music", "sperm", "seamen", "sex"]'
-  , true
+  , 1
+  , '["male", "man"]'
+  , '[]'
+  , '["binaural", "beats", "music", "sperm", "seamen", "sex"]'
+  , false
   )
 , (
     'https://www.crystalinks.com/reality.html'
   , 'https://www.crystalinks.com/binarycodebrain350.jpg'
   , 'REALITY MAY NOT BE WHAT YOU THINK! CLICK HERE TO FIND OUT'
+  , 1
+  , '[]'
+  , '[]'
   , '["reality", "digital", "consciousness", "brain", "hologram", "simulation", "illusion", "dream", "numbers", "numeric", "dna", "information"]'
   , true
   )
@@ -293,6 +400,9 @@ insert into friendworld.ads (url, img, content, tags, is_generic) values
     'https://www.theblackvault.com/documentarchive/mind-control-collection/'
   , 'https://www.theblackvault.com/documentarchive/wp-content/uploads/2015/02/Mind-Control-731x411.jpg'
   , 'ARE YOU REALLY IN CONTROL OF YOUR OWN THOUGHTS?'
+  , 1
+  , '[]'
+  , '[]'
   , '["technology", "mind", "control", "digital", "thoughts"]'
   , true
   )
@@ -300,6 +410,9 @@ insert into friendworld.ads (url, img, content, tags, is_generic) values
     'http://steviep.xyz'
   , 'https://www.scienceabc.com/wp-content/uploads/2016/01/shutterstock_338992685.jpg'
   , 'WHATS SO FUNNY?'
+  , 1
+  , '[]'
+  , '[]'
   , '["funny", "laugh", "laughing"]'
   , true
   )
@@ -307,6 +420,9 @@ insert into friendworld.ads (url, img, content, tags, is_generic) values
     'http://steviep.xyz#your-computer-is-infected'
   , 'https://i.ytimg.com/vi/-HE3jj5Ah2M/maxresdefault.jpg'
   , 'CLICK THE KITTY'
+  , 1
+  , '[]'
+  , '[]'
   , '["kitty", "kitten", "cat", "meow", "laugh", "happy", "virus", "infected", "scared"]'
   , true
   )
@@ -314,7 +430,39 @@ insert into friendworld.ads (url, img, content, tags, is_generic) values
     'https://www.youtube.com/watch?v=luN8xx2LG8g'
   , 'https://i1.wp.com/www.indianinthemachine.com/wp-content/uploads/2016/07/ashtar-semjase.jpg'
   , 'A MESSAGE FROM OUR COSMIC BROTHERS/SISTERS'
+  , 1
+  , '[]'
+  , '[]'
   , '["pleiadians", "ufo", "alien", "aliens", "ufos", "space", "physics"]'
   , true
   )
+, (
+    'https://www.youtube.com/watch?v=luN8xx2LG8g'
+  , 'https://www.veteranstoday.com/wp-content/uploads/2015/04/08/nuke-nyc.jpg'
+  , 'ARE YOU READY FOR THE NUCLEAR EVENT?'
+  , 1
+  , '[]'
+  , '[]'
+  , '["nuke", "nuclear", "war", "disaster", "apocalypse", "bomb"]'
+  , true
+  )
+, (
+    'https://steviep.xyz#flush-bowels'
+  , 'https://st2.depositphotos.com/1345122/5547/i/950/depositphotos_55471531-stock-photo-female-large-intestine-anatomy.jpg'
+  , '"TOP DRs RECCOMEND THIS ONE DRUG TO COMPLETELY FLUSH YOUR BOWELS"'
+  , 1
+  , '["woman", "female", "girl"]'
+  , '[]'
+  , '["doctor", "bowels", "shit", "poop", "constipated", "intestine"]'
+  , true
+  )
 ;
+-- take control of your sex life
+
+
+-- SOMETHIN ABOUT TI
+-- http://www.torturedinamerica.org/
+-- http://discovermagazine.com/~/media/Images/Issues/2015/may/DBSgraphic.jpg
+
+
+

@@ -162,6 +162,46 @@ export const general = [
 
 ]
 
+export const gender = {
+  male: [
+    'man',
+    'male',
+    'm',
+    'boy',
+    'guy',
+    'b',
+    'dude',
+    'bro',
+    'penis',
+    'dick',
+    'cock',
+  ],
+  female: [
+    'woman',
+    'female',
+    'f',
+    'girl',
+    'g',
+    'gal',
+    'broad',
+    'bitch',
+    'vagina'
+  ],
+  other: [
+    'transgender',
+    'transexual',
+    'trans',
+    't',
+    'transmasculine',
+    'transfeminine',
+    'intergender',
+    'agender',
+    'androgynous'
+  ]
+}
+
+const imFuckingLazy = ["fastcash","fastcashmoneyplus","fastcashmoneyplusbiz","fastcashmoneybiz","moneybucks","bucks","fast","cash","money","rich","wealth","saving","savings","crypto","cryptocurrency","bitcoin","btc","ethereum","eth","invest","investing","finance","ico","fortune","millionaire","billionaire","blockchain","economy","payment","trick","profit","throwing","economic","explosion","market","comfort","home","house","apartment","success","food","taste","suit","dream","dreams","sleep","pillow","weird","family","hillary","clinton","politics","political","government","democrats","republicans","gop","liberal","liberals","conservative","conservatives","libtards","cucks","cuck","socialist","socialism","shillary","sjw","sjws","social","justice","warriors","science","chemicals","chemtrails","target","targeted","targeting","woo","spirit","mental","spirituality","god","chakra","chakras","sound","meditation","reality","hypnosis","mantra","mantras","technique","energy","karma","cleanse","vegan","ascend","ascension","newage","consciousness","ti","tracking","conspiracy","nuclear","drone","5g","radiation","alien","aliens","ufo","ufos","roswell","brain","mind-control","sad","depressed","melencholy","anxious","anxiety","depression","anhedonia","motivation","happy","suicide","suicidal","ocd","obsessed","scared","fear","emptiness","cbd","antidepressant","evacuate","planet","wrong","psychology","remember","forget","forgetting","foot","death","toenail","nail","fungus","feet","elderly","back","pain","organ","organs","accupuncture","intestine","liver","heart","male","man","testosterone","hair","loss","bald","balding","woman","female","fat","skinny","pepper","hot","furnace","drip","cancer","stop","dead","blood","cells","add","indigo","child","children","special","collective","illuminati","holocaust","internet-of-things","iot","vr","virtual","individuality","semetic","subliminal","jew","jewish","astral","projection","light","healing","luck","clover","horseshoe","sexy","vortex","binaural","beats","music","sperm","seamen","sex","digital","hologram","simulation","illusion","numbers","numeric","dna","information","technology","mind","control","thoughts","funny","laugh","laughing","kitty","kitten","cat","meow","virus","infected","pleiadians","space","physics","nuke","war","disaster","apocalypse","bomb","girl","doctor","bowels","shit","poop","constipated"]
+
 export default new Set([
   ...fastcash,
   ...woo,
@@ -169,4 +209,8 @@ export default new Set([
   ...politics,
   ...general,
   ...conspiracy,
+  ...gender.male,
+  ...gender.female,
+  ...gender.other,
+  ...imFuckingLazy,
 ])

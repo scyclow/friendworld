@@ -7,7 +7,7 @@ import profanityFilter from 'utils/profanityFilter'
 
 import DisplayError from 'components/DisplayError'
 import Loading from 'components/Loading'
-import AdContainer from '../AdContainer'
+import AdContainer, { useAds } from '../AdContainer'
 
 
 const threadQuery = `{
@@ -69,7 +69,19 @@ const ThreadPost = ({ thread }: { thread: Thread }) => {
 const Forum: React.SFC<{}> = () => {
   const { isMobile, isDesktop } = useResponsive(540)
   const [{ fetching, error, data }] = useQuery<ThreadQuery>({ query: threadQuery })
-  const showAd = (i: number) => isMobile && !((i + 1) % 6)
+  const { ads, fetchingAds } = useAds(4, { restricted: true })
+  const showMobileAd = (i: number) => {
+    if (!isMobile) return false
+    if ((i + 1) % 6) return false
+
+    const adIx = (((i + 1) / 6) - 1) % ads.length
+
+    return (
+      <div className={styles.adContainer}>
+        <AdContainer ads={[ads[adIx]]} fetching={fetchingAds} />
+      </div>
+    )
+  }
 
   return (
     <section className={styles.forum}>
@@ -94,14 +106,14 @@ const Forum: React.SFC<{}> = () => {
             </header>
             {data.threads.map((thread, i) =>
               <React.Fragment key={thread.id}>
-                {showAd(i) && <div className={styles.adContainer}><AdContainer n={1} /></div>}
+                {showMobileAd(i)}
                 <ThreadPost thread={thread} />
               </React.Fragment>
             )}
           </>
         )}
       </section>
-      {isDesktop && <AdContainer n={3}/>}
+      {isDesktop && <AdContainer ads={ads} fetching={fetchingAds}/>}
     </section>
 
   )

@@ -7,6 +7,7 @@ import styles from './styles.module.scss'
 import DisplayError from 'components/DisplayError'
 import Loading from 'components/Loading'
 import useResponsive from 'utils/useResponsive'
+import { getGender, getKeywords } from 'utils/parsers'
 
 type CurrentUser = {
   id: string
@@ -23,7 +24,7 @@ type CurrentUser = {
   media: string
   religion: string
   politics: string
-  trackingInfo: unknown
+  trackingInfo: string
   postStats: {
     totalCount: number
   }
@@ -47,6 +48,7 @@ const userProps = `
   media
   religion
   politics
+  trackingInfo
 `
 
 const currentUserQuery = `{
@@ -81,6 +83,7 @@ type UpdateUserInput = {
     media?: string
     religion?: string
     politics?: string
+    trackingInfo?: string
   }
 }
 
@@ -111,6 +114,21 @@ export default function Profile({ history }: Props) {
 
 
   return <ProfileContent currentUser={data.currentUser} goto={goto} />
+}
+
+function getTrackingInfo(fields: UpdateUserInput['input']) {
+  const trackingInfo = fields.trackingInfo ? JSON.parse(fields.trackingInfo) : {}
+  const gender = fields.gender ? getGender(fields.gender) : undefined
+  const profileTags = getKeywords([
+    fields.bio,
+    fields.job,
+    fields.interests,
+    fields.media,
+    fields.religion,
+    fields.politics,
+  ].join(' '))
+
+  return JSON.stringify({ ...trackingInfo, gender, profileTags })
 }
 
 const validDate = (dateStr: string) => Date.parse(dateStr) ? new Date(dateStr).toISOString() : null
@@ -155,21 +173,23 @@ function ProfileContent ({ currentUser, goto }: ContentProps) {
   const updateUser = async () => {
     setSubmitted(true)
     setIsFakeLoading(true)
+    const fields = {
+        email: validEmail(email),
+        birthday: validDate(birthday),
+        avatarUrl,
+        gender,
+        bio,
+        job,
+        interests,
+        websites,
+        media,
+        religion,
+        politics,
+      }
+    const trackingInfo = getTrackingInfo({ ...fields, trackingInfo: currentUser.trackingInfo })
     await Promise.all([
       executeUpdateUser({
-        input: {
-          email: validEmail(email),
-          birthday: validDate(birthday),
-          avatarUrl,
-          gender,
-          bio,
-          job,
-          interests,
-          websites,
-          media,
-          religion,
-          politics
-        }
+        input: { ...fields, trackingInfo }
       }),
       wait(1000)
     ])

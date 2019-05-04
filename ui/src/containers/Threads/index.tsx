@@ -3,7 +3,7 @@ import { useMutation, useQuery } from 'urql'
 import { Link } from 'react-router-dom'
 import cx from 'classnames'
 import styles from './styles.module.scss'
-import AdContainer from '../AdContainer'
+import AdContainer, { useAds } from '../AdContainer'
 import Post, { PostType } from 'components/Post'
 import TextInput from 'components/TextInput'
 import DisplayError from 'components/DisplayError'
@@ -117,19 +117,32 @@ const Threads: React.SFC<{ id: number }> = ({ id }) => {
   const { isMobile, isDesktop } = useResponsive(820)
   const [{ data, error, fetching }] = useQuery<ThreadQuery>({ query: threadQuery, variables: { id } })
 
-  // const refetch = useCallback(
-  //   () => executeQuery({ requestPolicy: 'network-only' }),
-  //   []
-  // );
-  const showAd = (i: number) => isMobile && !((i + 1) % 4)
-
-  const isError = error && <DisplayError error={error} />
-  const isLoading = fetching && <Loading />
-
   const tags = (data && data.thread
     ? data.thread.posts.flatMap(p => JSON.parse(p.tags))
     : []
   )
+  const { ads, fetchingAds } = useAds(4, { tags, restricted: false })
+
+  // const refetch = useCallback(
+  //   () => executeQuery({ requestPolicy: 'network-only' }),
+  //   []
+  // );
+  const showMobileAd = (i: number) => {
+    if (!isMobile) return false
+    if ((i + 1) % 4) return false
+
+    const adIx = (((i + 1) / 4) - 1) % ads.length
+
+    return (
+      <div className={styles.ad}>
+        <AdContainer ads={[ads[adIx]]} fetching={fetchingAds} />
+      </div>
+    )
+  }
+
+  const isError = error && <DisplayError error={error} />
+  const isLoading = fetching && <Loading />
+
 
   const isData = data && (data.thread ? (
     <div className={styles.container}>
@@ -145,11 +158,7 @@ const Threads: React.SFC<{ id: number }> = ({ id }) => {
         <>
           {data.thread.posts.map((post, i) =>
             <Fragment key={post.id}>
-              {showAd(i) &&
-                <div className={styles.ad}>
-                  <AdContainer n={1} tag={tags[i]}/>
-                </div>
-              }
+              {showMobileAd(i)}
               <Post post={post} />
             </Fragment>
           )}
@@ -175,7 +184,11 @@ const Threads: React.SFC<{ id: number }> = ({ id }) => {
           {isData}
         </div>
 
-        {isDesktop && <div className={styles.adContainer}><AdContainer n={3} tags={tags}/></div>}
+        {isDesktop && (
+          <div className={styles.adContainer}>
+            <AdContainer ads={ads} fetching={fetchingAds} />
+          </div>
+        )}
       </div>
     </section>
   )

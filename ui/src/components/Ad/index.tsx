@@ -5,8 +5,8 @@ import Img from '../Img'
 
 type Props = {
   url: string
+  content: string
   img?: string
-  content?: string
   onClick?: () => unknown
 }
 
