@@ -464,6 +464,8 @@ create function friendworld.create_post(
         _usernames::citext = friendworld.users.username::citext
     );
 
+
+
     return post;
   end;
 $$ language plpgsql;

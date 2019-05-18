@@ -10,7 +10,10 @@ import useResponsive from 'utils/useResponsive'
 
 
 const userQuery = `
-query userByUsername ($username: UsernameDomain!){
+query userByUsername ($username: UsernameDomain!) {
+  ads {
+    totalCount
+  }
   user: userByUsername (username: $username) {
     id
     createdAt
@@ -30,6 +33,9 @@ query userByUsername ($username: UsernameDomain!){
     postStats: authoredPosts {
       totalCount
     }
+    adClicks {
+      totalCount
+    }
     posts: authoredPostsList (first: 10, orderBy: [CREATED_AT_DESC]) {
       id
       content
@@ -43,6 +49,9 @@ query userByUsername ($username: UsernameDomain!){
 }`
 
 type UserQuery = {
+  ads: {
+    totalCount: number
+  }
   user: {
     id: string
     createdAt: string
@@ -59,6 +68,9 @@ type UserQuery = {
     religion: string | null
     politics: string | null
     postStats: {
+      totalCount: number
+    }
+    adClicks: {
       totalCount: number
     }
     posts: Array<{
@@ -109,12 +121,13 @@ const User: React.SFC<Props> = ({ username }) => {
     </div>
   )
 
-  const { user } = data
+  const { user, ads } = data
 
   const header = (
     <header className={styles.header}>
       <h1 className={styles.intro}>Welcome to {user.username}'s Profile!</h1>
       <h4 className={styles.memberSince}>{user.username} has been a member since {formatDate(user.createdAt)}</h4>
+      <h4 className={styles.memberSince}>{user.username} has engaged with {user.adClicks.totalCount}/{ads.totalCount} pieces of sponsored content!</h4>
     </header>
   )
 

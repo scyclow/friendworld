@@ -8,6 +8,7 @@ insert into friendworld.users (id, username, avatar_url, gender) values
 , ('0a04ff42-a2c6-4e1f-bda9-80c493abefaa'::uuid, 'TargetedTom', 'https://cdn.business2community.com/wp-content/uploads/2012/12/Targeted-User-Education.jpg', '')
 , ('0a04ff42-a2c6-4e1f-bda9-80c493abefab'::uuid, 'fuckface99', 'https://i.ytimg.com/vi/sM-O4ZOwB2U/hqdefault.jpg', '')
 , ('0a04ff42-a2c6-4e1f-bda9-80c493abefac'::uuid, 'BullseyeBob', 'https://images-na.ssl-images-amazon.com/images/I/71UgYrtHFnL._SX425_.jpg', '')
+, ('0a04ff42-a2c6-4e1f-bda9-80c493abefad'::uuid, 'heatherhot6', 'https://hdwallsource.com/img/2016/6/hot-woman-wallpaper-49861-51542-hd-wallpapers.jpg', '')
 ;
 
 insert into friendworld_private.accounts (user_id, password_hash) values
@@ -167,6 +168,16 @@ insert into friendworld.ads (url, img, content, weight, target_tags, primary_tag
   , '["fastcash", "fastcashmoneyplus", "money", "savings", "saving", "family"]'
   , true
   )
+  , (
+    'http://fastcashmoneyplus.biz'
+  , 'https://waterfm.com/wp-content/uploads/money-vortex.jpg'
+  , 'DON'||E'\''||'T GET SUCKED INTO THIS MONEY VORTEX'
+  , 1
+  , '[]'
+  , '["vortex"]'
+  , '["fastcash", "fastcashmoneyplus", "fastcashmoneyplusbiz", "fastcashmoneybiz", "moneybucks", "bucks", "fast", "cash", "money", "rich", "wealth", "saving", "savings", "invest", "investing", "finance", "fortune", "millionaire", "profit"]'
+  , true
+  )
 , (
     'http://fakebullshit.news'
   , 'https://i.imgur.com/94L6Q6X.jpg'
@@ -199,10 +210,10 @@ insert into friendworld.ads (url, img, content, weight, target_tags, primary_tag
   ), (
     'http://steviep.xyz'
   , 'https://www.consciouslifestylemag.com/wp-content/uploads/2016/04/chakra-diagram-in-the-body.jpg'
-  , 'CLEAN YOUR CHAKRAS WITH THESE 3 SPIRITUAL TECHNIQUES'
+  , 'CLEANSE YOUR CHAKRAS WITH THESE 7 SOUND BATH TECHNIQUES'
   , 1
   , '[]'
-  , '[]'
+  , '["cleanse"]'
   , '["woo", "spirit", "mental", "spirituality", "god", "chakra", "chakras", "sound", "meditation", "reality", "dream", "dreams", "hypnosis", "mantra", "mantras", "technique", "energy", "karma", "cleanse", "vegan", "ascend", "ascension", "newage", "consciousness"]'
   , true
   )
@@ -213,8 +224,8 @@ insert into friendworld.ads (url, img, content, weight, target_tags, primary_tag
   , 1
   , '[]'
   , '[]'
-  , '["ti", "targeted", "target", "targeting", "tracking", "conspiracy", "nuclear", "drone", "5g", "radiation", "alien", "aliens", "ufo", "ufos", "roswell", "brain", "mind-control", "chemtrails", "tracking"]'
-  , true
+  , '["ti", "targeted", "individual", "target", "targeting", "tracking", "conspiracy", "nuclear", "drone", "5g", "radiation", "alien", "aliens", "ufo", "ufos", "roswell", "brain", "mind-control", "chemtrails", "tracking"]'
+  , false
   )
 , (
     'http://steviep.xyz'
@@ -228,6 +239,16 @@ insert into friendworld.ads (url, img, content, weight, target_tags, primary_tag
   )
 , (
     'http://steviep.xyz'
+  , 'https://www.healthyplace.com/sites/default/files/images/stories/seroquel/1-internet-addiction-online-addiction-healthyplace.jpg'
+  , 'ARE YOU ADDICTED TO THE INTERNET'
+  , 1
+  , '[]'
+  , '["addicted", "addicting", "addiction", "internet"]'
+  , '["sad", "depressed", "melencholy", "anxious", "anxiety", "depression", "anhedonia", "motivation", "happy", "mental", "brain", "suicide", "suicidal", "ocd", "obsessed", "scared", "fear", "emptiness", "cbd", "antidepressant"]'
+  , true
+  )
+, (
+    'http://www.heavensgate.com/'
   , 'https://www.chantellerenee.org/wp-content/uploads/2018/06/light-dimensions-ascension-1.jpg'
   , 'EVACUATE THE PLANET BEFORE ITS TOO LATE'
   , 1
@@ -284,7 +305,7 @@ insert into friendworld.ads (url, img, content, weight, target_tags, primary_tag
   , '["male", "man"]'
   , '[]'
   , '["male", "man", "testosterone", "hair", "loss", "bald", "balding"]'
-  , true
+  , false
   )
 , (
     'https://news.trycapsifit.com/'
@@ -294,7 +315,7 @@ insert into friendworld.ads (url, img, content, weight, target_tags, primary_tag
   , '["woman", "female"]'
   , '[]'
   , '["fat", "skinny", "pepper", "hot", "furnace", "drip"]'
-  , true
+  , false
   )
 , (
     'https://news.trycapsifit.com/'
@@ -304,17 +325,17 @@ insert into friendworld.ads (url, img, content, weight, target_tags, primary_tag
   , '["man", "male"]'
   , '[]'
   , '["fat", "skinny", "pepper", "hot", "furnace", "drip"]'
-  , true
+  , false
   )
 , (
     'https://news.trycapsifit.com/'
   , 'http://media1.s-nbcnews.com/i/streams/2012/August/120827/504274-g-tdy-091221-belly-2p.jpg'
   , 'WATCH FAT DRIP OFF YOUR BODY LIKE A FAT MELTING FURNACE'
   , 1
-  , '[]'
+  , '["male"]'
   , '[]'
   , '["fat", "skinny", "pepper", "hot", "furnace", "drip"]'
-  , true
+  , false
   )
 , (
     'https://www.youtube.com/watch?v=SyvOPXeg4ig'
@@ -327,7 +348,7 @@ insert into friendworld.ads (url, img, content, weight, target_tags, primary_tag
   , true
   )
 , (
-    'https://www.youtube.com/watch?v=SyvOPXeg4ig'
+    'https://steviep.xyz#indigo'
   , 'https://i.ytimg.com/vi/Bey3c8kVm7M/maxresdefault.jpg'
   , 'ARE YOU AN INDIGO CHILD? FIND OUT NOW'
   , 1
@@ -397,16 +418,6 @@ insert into friendworld.ads (url, img, content, weight, target_tags, primary_tag
   , true
   )
 , (
-    'https://www.theblackvault.com/documentarchive/mind-control-collection/'
-  , 'https://www.theblackvault.com/documentarchive/wp-content/uploads/2015/02/Mind-Control-731x411.jpg'
-  , 'ARE YOU REALLY IN CONTROL OF YOUR OWN THOUGHTS?'
-  , 1
-  , '[]'
-  , '[]'
-  , '["technology", "mind", "control", "digital", "thoughts"]'
-  , true
-  )
-, (
     'http://steviep.xyz'
   , 'https://www.scienceabc.com/wp-content/uploads/2016/01/shutterstock_338992685.jpg'
   , 'WHATS SO FUNNY?'
@@ -437,13 +448,13 @@ insert into friendworld.ads (url, img, content, weight, target_tags, primary_tag
   , true
   )
 , (
-    'https://www.youtube.com/watch?v=luN8xx2LG8g'
+    'https://www.atlassurvivalshelters.com/'
   , 'https://www.veteranstoday.com/wp-content/uploads/2015/04/08/nuke-nyc.jpg'
   , 'ARE YOU READY FOR THE NUCLEAR EVENT?'
   , 1
   , '[]'
-  , '[]'
-  , '["nuke", "nuclear", "war", "disaster", "apocalypse", "bomb"]'
+  , '["bunker", "atlas"]'
+  , '["nuke", "nuclear", "war", "disaster", "apocalypse", "bomb", "survival", "shelter"]'
   , true
   )
 , (
@@ -454,15 +465,255 @@ insert into friendworld.ads (url, img, content, weight, target_tags, primary_tag
   , '["woman", "female", "girl"]'
   , '[]'
   , '["doctor", "bowels", "shit", "poop", "constipated", "intestine"]'
+  , false
+  )
+, (
+    'https://steviep.xyz#your-computer-is-infected'
+  , 'https://pmdvod.nationalgeographic.com/NG_Video/940/191/47574_1_1280x720_640x360_177143875948.jpg'
+  , 'YOU'||E'\''||'LL NEVER BELIEVE WHAT THIS WOMAN FOUND UNDER HER SINK'
+  , 1
+  , '[]'
+  , '["octopus"]'
+  , '[]'
+  , true
+  )
+, (
+    'https://steviep.xyz#puzzle'
+  , 'https://images2.minutemediacdn.com/image/upload/c_fill,g_auto,h_1248,w_2220/f_auto,q_auto,w_1100/v1555930491/shape/mentalfloss/434arms_6.jpg'
+  , 'HOW FAST CAN YOU SOLVE THIS PUZZLE?'
+  , 1
+  , '[]'
+  , '["octopus", "puzzle"]'
+  , '[]'
+  , true
+  )
+, (
+    'https://steviep.xyz#puzzle'
+  , 'https://pi.tedcdn.com/r/talkstar-assets.s3.amazonaws.com/production/playlists/playlist_468/overcome_fears_1200x627.jpg'
+  , 'OH NO, YOU'||E'\''||'RE NOT GOING TO BELIEVE THIS'
+  , 1
+  , '[]'
+  , '["octopus", "puzzle"]'
+  , '[]'
+  , true
+  )
+, (
+    'https://steviep.xyz'
+  , 'https://andreabeaman.com/wp-content/uploads/2015/09/ascaris-worm-parasite.jpg'
+  , 'GOT PARASITES IN YOUR BODY?'
+  , 1
+  , '[]'
+  , '["octopus", "puzzle"]'
+  , '[]'
+  , true
+  )
+, (
+    'https://steviep.xyz#ti'
+  , 'http://discovermagazine.com/~/media/Images/Issues/2015/may/DBSgraphic.jpg'
+  , 'TRY DEEP BRAIN STIMULATION THERAPY'
+  , 1
+  , '[]'
+  , '["stimulation", "electrode", "dbs"]'
+  , '["deep", "brain", "therapy", "depressed", "depression", "targeted", "scanners", "scanner", "tracker", "target", "targeted", "individual", "ti"]'
+  , true
+  )
+, (
+    'https://steviep.xyz#ti'
+  , 'http://www.ccplasticsurgery.com/media/site_assets/f61261e989d144a40e5578c1743298b1/assets/woman_sketched.jpg'
+  , 'ARE YOU UGLY?'
+  , 1
+  , '["female"]'
+  , '["beauty", "ugly"]'
+  , '["surgery", "plastic"]'
+  , false
+  )
+, (
+    'https://steviep.xyz#constipated'
+  , 'https://cdn.images.express.co.uk/img/dynamic/11/590x/Worms-in-humans-845437.jpg'
+  , 'CONSTIPATED??'
+  , 1
+  , '[]'
+  , '["constipated", "constipation", "constipate"]'
+  , '["shit", "poop", "poo",  "intestine"]'
+  , false
+  )
+, (
+    'https://www.youtube.com/watch?v=q-Oq_NUiA88&feature=youtu.be'
+  , 'https://cdn-images-1.medium.com/max/1200/0*i9Ff80qVKtQP_K4J.jpg'
+  , 'WATCH OUT FOR THESE 12 THINGS THAT CAN RUIN YOUR DAY'
+  , 1
+  , '[]'
+  , '[]'
+  , '["sad", "depressed", "melencholy", "anxious", "anxiety", "depression", "anhedonia", "motivation", "happy", "mental", "brain", "suicide", "suicidal", "ocd", "obsessed", "scared", "fear", "emptiness", "cbd", "antidepressant"]'
+  , true
+  )
+, (
+    'https://steviep.xyz#self-help'
+  , 'http://dailyvibes.co/wp-content/uploads/2018/03/shutterstock_336693212.jpg'
+  , 'YOU JUST READ MY MIND'
+  , 1
+  , '["female"]'
+  , '[]'
+  , '[]'
+  , false
+  )
+, (
+    'https://steviep.xyz#self-help'
+  , 'http://tall-white-aliens.com/wp-content/uploads/2017/10/Human-to-Human-Telepathic-Communication.jpg'
+  , 'YOU JUST READ MY MIND'
+  , 1
+  , '["male"]'
+  , '[]'
+  , '[]'
+  , false
+  )
+, (
+    'https://prepareforchange.net/2018/12/16/secret-darpa-mind-control-project-revealed-leaked-document/'
+  , 'https://upload.wikimedia.org/wikipedia/commons/d/d1/IAO-logo.png'
+  , 'DARPA MIND CONTROL SECRET DOCUMENT LEAKED'
+  , 1
+  , '[]'
+  , '["darpa"]'
+  , '["mind", "control", "5g", "ti", "targeted", "individual"]'
+  , true
+  )
+, (
+    'https://www.davidicke.com/article/498293/cbd-oil-im-still-alive-skin-cancer-sufferer-crowdfunded-funeral-given-six-weeks-live-claims-cannabis-supplement-helped-prove-doctors-wrong'
+  , 'https://www.incredmed.com/wp-content/uploads/2018/07/cbd_science_placeholder.jpg'
+  , 'SOLVE YOUR PAIN WITH CBD OIL'
+  , 1
+  , '[]'
+  , '["cbd"]'
+  , '["pot", "weed", "drugs", "marijuana", "pain"]'
+  , true
+  )
+, (
+    'https://steviep.xyz/#7-steps'
+  , 'https://purepng.com/public/uploads/large/purepng.com-men-in-suitmanpeoplepersonsmalesuit-1121525121301szwqf.png'
+  , 'I WANT TO SHOW YOU THE SEVEN STEPS TO DATING SUCCESS'
+  , 1
+  , '["male"]'
+  , '["seduction", "dating"]'
+  , '["romance", "sex"]'
+  , false
+  )
+, (
+    'https://steviep.xyz/#sexy-singles'
+  , 'https://trippadvice.com/wp-content/uploads/2016/07/Depositphotos_8346080_m-2015-500x334.jpg'
+  , 'FIND SEXY SINGLES IN YOUR AREA'
+  , 1
+  , '["female"]'
+  , '["sex"]'
+  , '["sexy", "dating", "singles"]'
+  , false
+  )
+, (
+    'http://www.anusha.com/'
+  , 'http://www.chessdom.com/wp-content/uploads/cache/66631_BnHover.jpg'
+  , 'LEARN CHESS AND THE SECRETS OF 666'
+  , 1
+  , '[]'
+  , '["chess", "666"]'
+  , '[]'
+  , true
+  )
+, (
+    'https://www.amazon.in/Freemasonry-666-Universal-Emperor-Months/dp/0954310152'
+  , 'https://images-na.ssl-images-amazon.com/images/I/51HvZ2-sqGL._SX348_BO1,204,203,200_.jpg'
+  , 'The Freemasonry (666) Universal Emperor for 42 Months: 666, 999, Miracle Hell, Genesis, Symbol of Freemasonry'
+  , 1
+  , '[]'
+  , '["freemasonry", "666"]'
+  , '["universal", "emperor", "42", "miracle", "hell", "genesis"]'
+  , true
+  )
+, (
+    'http://obeyjesus.org'
+  , 'https://www.thespruceeats.com/thmb/9n3YM4RVKSWyUWQ0JCl7BwHrl1U=/4288x2848/filters:fill(auto,1)/loaf-of-bread-182835505-58a7008c5f9b58a3c91c9a14.jpg'
+  , 'JESUS is the BREAD of LIFE'
+  , 1
+  , '[]'
+  , '["bread", "jesus"]'
+  , '["christianity", "god", "sandwich", "miracle", "hell", "genesis", "bible"]'
+  , true
+  )
+, (
+    'https://steviep.xyz#virus'
+  , 'http://www.soidergi.com/wp-content/uploads/ph/photostock-vector-man-silhouette-isolated-on-white-background-in-falling-pose.jpg'
+  , 'DONT FALL FOR THIS ONE TRICK'
+  , 1
+  , '[]'
+  , '[]'
+  , '["safe", "safety", "virus", "spyware", "malware", "security"]'
+  , true
+  )
+, (
+    'http://www.radiationdangers.com/cell-phones/how-big-technology-companies-control-the-minds-of-the-masses-through-smart-phone-addiction/'
+  , 'http://www.radiationdangers.com/wp-content/uploads/2018/08/Screen-Shot-2018-08-12-at-1.41.56-PM-768x453.png'
+  , 'HOW BIG TECH IS CONTROLLING YOU'
+  , 1
+  , '[]'
+  , '["5g", "addiction"]'
+  , '["5g", "internet", "addiction", "mind", "control", "towers", "smartphone"]'
+  , false
+  )
+, (
+    'https://askclaudia.com/voice-god-weaponized-mind-control-frequency-technology-2/'
+  , 'https://www.theblackvault.com/documentarchive/wp-content/uploads/2015/02/Mind-Control-731x411.jpg'
+  , 'VOICE GOD WEAPONIZED MIND CONTROL FREQUENCY TECHNOLOGY'
+  , 1
+  , '[]'
+  , '["weaponized"]'
+  , '["5g", "internet", "addiction", "mind", "control", "towers", "smartphone", "digital", "thoughts", "ti", "targeted"]'
+  , false
+  )
+, (
+    'https://www.wanttoknow.info/mindcontrolinformation'
+  , 'https://www.wanttoknow.info/mk/nsa-images/scalartech12_03.gif'
+  , 'YOU'||E'\''||'VE NEVER SEEN COGNITIVE MAPPING KNOWLEDGE-PROCESSING LIKE THIS'
+  , 1
+  , '[]'
+  , '["cognitive", "knowledge", "processing"]'
+  , '["radio", "transmission", "mind", "control", "nsa", "microwave", "frequency", "ti", "targeted"]'
+  , false
+  )
+, (
+    'http://www.torturedinamerica.org/'
+  , 'http://www.torturedinamerica.org/nonwo.jpg'
+  , ''
+  , 1
+  , '["politics"]'
+  , '["nwo"]'
+  , '["new", "world", "order", "deep", "state", "politics", "corruption", "ti", "targeted"]'
+  , false
+  )
+, (
+    'http://fastcashmoneyplus.biz'
+  , 'https://i.imgur.com/BzrG85K.png'
+  , 'GOT MONEY ON THE BRAIN?'
+  , 1
+  , '[""]'
+  , '["x-ray"]'
+  , '["money", "brain", "cash", "skull", "rich", "profit", "dopamine", "wealth", "fastcash"]'
+  , true
+  )
+, (
+    'https://steviep.xyz#self-help'
+  , 'https://i.imgur.com/BzrG85K.png'
+  , 'ARE YOU SICK OF GOING TO WORK?'
+  , 1
+  , '[""]'
+  , '["driving"]'
+  , '["depressed", "sad", "anxious", "anxiety", "muscle", "work", "hate"]'
   , true
   )
 ;
+
+-- TODO more cross referencing depression with ads preying on depression
+-- TODO make most TI ads restricted - only pick up on ti key words
+-- TODO make new agey ads more inclusive feeling. everyone hates you, bt this will make things better
+
 -- take control of your sex life
 
 
--- SOMETHIN ABOUT TI
--- http://www.torturedinamerica.org/
--- http://discovermagazine.com/~/media/Images/Issues/2015/may/DBSgraphic.jpg
-
-
-
+--

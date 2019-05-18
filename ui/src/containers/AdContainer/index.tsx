@@ -126,19 +126,18 @@ function filterAds(
 
   const taggedAds = [...shuffle(primaryAds), ...shuffle(secondaryAds)]
 
-  const targetAds = viableAds.filter(ad =>
+  const targetAds = allAds.filter(ad =>
     ad.targetTags.some(a => targetTags.has(a))
     && !taggedAds.includes(ad)
   )
 
-  if (taggedAds.length + targetAds.length >= n) {
-    return [...taggedAds, ...sampleSize(targetAds, n - taggedAds.length)]
-  }
 
-  const usedAds = [...taggedAds, ...shuffle(targetAds)]
-  const remainingAds = viableAds.filter(ad => !usedAds.includes(ad))
+  const remainingAds = [
+    ...targetAds,
+    ...viableAds.filter(ad => !taggedAds.includes(ad))
+  ]
 
-  return [...usedAds, ...sampleSize(remainingAds, n - usedAds.length)]
+  return [...taggedAds, ...sampleSize(remainingAds, n - taggedAds.length)]
 }
 
 export function useAds(n: number = 1, filter: Filter = {}) {
