@@ -4,7 +4,7 @@ import cors from 'cors'
 import postgraphile from 'postgraphile'
 import config, { pgConfig } from './config'
 
-// import knex from 'knex'
+import knex from 'knex'
 
 // const knexConfig = config.ENV === 'production'
 //   ? {

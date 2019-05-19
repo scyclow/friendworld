@@ -3,7 +3,7 @@ import { useQuery, useMutation } from 'urql'
 import { Link, Redirect } from 'react-router-dom'
 import orderBy from 'lodash/orderBy'
 import DisplayError from 'components/DisplayError'
-import Loading from 'components/Loading'
+// import Loading from 'components/Loading'
 import ParsedText from 'components/ParsedText'
 import styles from './styles.module.scss'
 
@@ -94,10 +94,31 @@ type Props = {
   username?: string | null
 }
 
+// function useInterval(callback: Function, delay: number) {
+//   const savedCallback = useRef<any>(null)
+
+//   // Remember the latest callback.
+//   useEffect(() => {
+//     savedCallback.current = callback;
+//   }, [callback]);
+
+//   // Set up the interval.
+//   useEffect(() => {
+//     function tick() {
+//       savedCallback.current();
+//     }
+//     if (delay !== null) {
+//       let id = setInterval(tick, delay);
+//       return () => clearInterval(id);
+//     }
+//   }, [delay]);
+// }
+
 export default function MessagePanel ({ username }: Props) {
   const $sentMessages = useRef<any>(null)
   const [messageToSend, setMessageToSend] = useState<string>('')
-  const [{ error, fetching, data }] = useQuery<RequestedUserQuery>({
+  // const [{ error, data }, executeQuery] = useQuery<RequestedUserQuery>({
+  const [{ error, data }] = useQuery<RequestedUserQuery>({
     query: requestedUserQuery,
     variables: { username: username || '' }
   })
@@ -106,11 +127,17 @@ export default function MessagePanel ({ username }: Props) {
     executeCreateMessage
   ] = useMutation<CreateMessagePayload, CreateMessageInput>(createMessageMutation)
 
+  // useInterval(() => {
+  //   executeQuery({ requestPolicy: 'network-only' })
+  // }, 1000)
+
+
   useEffect(() => {
     if ($sentMessages.current) {
       $sentMessages.current.scrollTop = $sentMessages.current.scrollHeight
     }
   })
+
 
   const sendMessage = (keyPressed?: string) => {
     if (keyPressed === 'Enter' && !!messageToSend) {
@@ -125,8 +152,9 @@ export default function MessagePanel ({ username }: Props) {
   }
 
   if (error) return <DisplayError error={error} />
-  if (fetching) return <Loading />
+  // if (fetching && !stopLoadDisplay) return <Loading />
   if (!data || !data.currentUser) return null
+
 
   if (data.currentUser.username === username) return <Redirect to="/messages" />
 

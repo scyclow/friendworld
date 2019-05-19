@@ -37,7 +37,7 @@ function Stats() {
       <h2>Top Posters:</h2>
       <ol>
         {data.userStatsList.map((stat, i) => (
-          <li>
+          <li key={i}>
             {i + 1}. {stat.username}: {stat.postCount}
           </li>
         ))}

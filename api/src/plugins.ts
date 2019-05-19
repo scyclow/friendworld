@@ -4,7 +4,16 @@ import {
   gql,
 } from 'graphile-utils'
 import _ from 'lodash'
+import knex from 'knex'
 
+export const knexConnection = process.env.ENV === 'production'
+  ? { user: 'postgres', password: process.env.SQL_PASSWORD, database: 'postgres', host: `/cloudsql/friendworld:us-central1:paget` }
+  : { user: 'spikelny', database: 'friendworld' }
+
+const k = knex({
+  client: 'pg',
+  connection: knexConnection
+})
 
 const createPostMutation = `
   mutation createPost($input: CreatePostInput!) {
@@ -116,7 +125,7 @@ const createAutomatedPost = async (args: any, context: any, resolveInfo: any) =>
   )
   const resolve = createResolve(resolveInfo, context)
 
-  if (!post || (Math.random() < (post.chance || 0.2))) return
+  if (!post || (Math.random() < (post.chance || 0.7))) return
 
   try {
     await setUserUuid(context, post.userUuid)
@@ -135,16 +144,7 @@ const createAutomatedPost = async (args: any, context: any, resolveInfo: any) =>
 }
 
 
-export const createAutomatedPostPlugin = makeWrapResolversPlugin({
-  Mutation: {
-    async createPost(resolve, source, args, context, resolveInfo: any) {
-      const response = await resolve(source, args, context, resolveInfo)
-      await createAutomatedPost(args, context, resolveInfo)
-      await sendAutomatedMessage(args, context, resolveInfo)
-      return response
-    }
-  },
-})
+
 
 
 const createMessageMutation = `
@@ -152,88 +152,133 @@ const createMessageMutation = `
     createMessage(input: $input) { message { id } }
   }
 `
-export const sendWelcomMessagePlugin = makeWrapResolversPlugin({
-  Mutation: {
-    async signup(resolve, source, args, context, resolveInfo: any) {
-      const response = await resolve(source, args, context, resolveInfo)
-      const execute = createResolve(resolveInfo, context)
 
-      const { username } = args.input
-
-      try {
-        await setUserUuid(context, users.steve_p)
-
-        await execute(createMessageMutation, {
-          input: {
-            toUsername: username,
-            content: `Hi, ${username}! Welcome to Friendworld!
-            I'm really glad you decided to sign up. Friendworld truely has a one-of-a-kind community with unique, intelligent, and thoughtful members. Here on Friendworld, we
-
-            I'm sure that you'll help contribute to the community, and I'm really looking forward to reading you posts :)
-            Unlike all of the other mainstream social networks, I'll *never* collect or sell any of you personal data. So feel free to let loose and be your honest and true self. For once, you can be whoever you want to be.
-
-            Best,
-            Steve
-            P.S. If you have any questions or concerns, please let me know. I'm always looking to make your experience better, so I'm always be happy to see a bug report or feature request in my inbox.
-            `,
-          }
-        })
-        return response
-      } catch (e) {
-        console.log(e)
-      }
-      return response
-    }
-  },
-})
 
 
 const sendAutomatedMessage = async (args: any, context: any, resolveInfo: any) => {
   const authorUserId = context.jwtClaims.user_id
-
   try {
 
     const result = await context.pgClient.query(`
       select username, count(*) as post_count
       from friendworld.posts
       join friendworld.users on users.id = '${authorUserId}'
+      where friendworld.posts.author_id = '${authorUserId}'
       group by username;
     `)
     const postCount = result.rows[0].post_count
     const toUsername = result.rows[0].username
 
-    const execute = createResolve(resolveInfo, context)
+    // if (Number(postCount) === 3) {
+    //   return k.raw(`
+    //     begin;
+    //       set local jwt.claims.user_id to '${users.heatherhot6}';
+    //       select friendworld.create_message('${toUsername}', 'hey');
+    //     commit;
+    //   `)
 
+    const execute = createResolve(resolveInfo, context)
     if (postCount === 3) {
       await setUserUuid(context, users.heatherhot6)
       return execute(createMessageMutation, {
         input: { toUsername, content: `hey` }
       })
     }
+
+
   } catch (e) {
     console.log(e)
   }
 }
 
 const heatherHotMessages = [
-  `Hi my real name is Amanda, I'm 21/f and pretty bored searching for some1 2 talk too... how old are you?`,
-  `I love chatting with horny people.. Would you like to have a conversation today? Where are you from??`,
-  `Im frm new york, Please answer my next  quest?`,
-  `Do you like big booty women with big boobs? LMAO but for real cuz thats what i am/have..Is that too much for you to handle?`,
-  `Have you ever heard of a whooty? Would you like to watch me i'll show you my Whooty....`,
-  `lol Whooty is a White Girl with a big BOOTY!`,
-  `i wanna show u mine...`,
-  `ok let me set up my camera for you sweetheart..ok?`,
-  `um go to this website FNGirl dot com and you'll see me.  all you have to do is click Accept Invite on the bottom left!, if the page doesn't load then use your phone or computer`,
-  `You do not have to worry babe its absolutely free to join this website all you have to do is signup`,
-  ` fill out your credit card info for Age verification ONLY, your credit card wont be charged..`,
-  `ok i'm ready for you now`,
+  {
+    content: `Hi my real name is Amanda, I'm 21/f and pretty bored searching for some1 2 talk too... how old are you\\?`
+  }, {
+    content: `I love chatting with horny people.. Would you like to have a conversation today\\?`,
+    followUp: {
+      wait: 1000,
+      content: `Where are you from\\?\\?`
+    }
+  }, {
+    content: `Im frm new york, Please answer my next  quest\\?`
+  }, {
+    content: `Do you like big booty women with big boobs\\? LMAO but for real cuz thats what i am/have..Is that too much for you to handle\\?`
+  }, {
+    content: `Have you ever heard of a whooty\\? Would you like to watch me i'll show you my Whooty....`
+  }, {
+    content: `lol Whooty is a White Girl with a big BOOTY!`
+  }, {
+    content: `i wanna show u mine...`
+  }, {
+    content: `ok let me set up my camera for you sweetheart..ok\\?`
+  }, {
+    content: `um go to this website FNGirl dot com and you'll see me.  all you have to do is click Accept Invite on the bottom left!, if the page doesn't load then use your phone or computer`,
+    followUp: {
+      wait: 3000,
+      content: `You do not have to worry babe its absolutely free to join this website all you have to do is signup`
+    }
+  }, {
+    content: ` fill out your credit card info for Age verification ONLY, your credit card wont be charged..`
+  }, {
+    content: `ok i'm ready for you now`
+  }
 ]
+// const handleHeatherhotMessage = async (senderId: string) => {
+//   try {
+
+//     const result = await k.raw(`
+//       select username, count(*) as message_count
+//       from friendworld.messages
+//       left join friendworld.users on friendworld.users.id = friendworld.messages.from_id
+//       where friendworld.messages.from_id = '${senderId}'and friendworld.messages.to_id = '${users.heatherhot6}'
+//       group by username;
+//     `)
+//     const debug = await k.raw(`
+//       select content
+//       from friendworld.messages
+//       where friendworld.messages.from_id = '${senderId}'and friendworld.messages.to_id = '${users.heatherhot6}';
+//     `)
+
+//     if (!result.rows.length) return
+//     const toUsername = result.rows[0].username
+//     const messageCount = result.rows[0].message_count - 1
+
+//     const msg = heatherHotMessages[messageCount]
+//     console.log('===================EXISTING SENT MSGS\n', `(${debug.rows.length})`,debug.rows)
+//     console.log('\n\n===================NEXT BOT MSG:\n', messageCount, msg, '\n\n\n')
+
+//     if (!msg) return
+//     await new Promise(res => setTimeout(res, Math.random() * 3000))
+//     const { content, followUp } = msg
+//     await k.raw(`
+//       begin;
+//         set local jwt.claims.user_id to '${users.heatherhot6}';
+//         select friendworld.create_message('${toUsername}', '${content.replace(/'/g, "''")}');
+//       commit;
+//     `)
+//     if (followUp) {
+//       await new Promise(res => setTimeout(res, Math.random() * 3000 + followUp.wait))
+//       await k.raw(`
+//         begin;
+//           set local jwt.claims.user_id to '${users.heatherhot6}';
+//           select friendworld.create_message('${toUsername}', '${followUp.content.replace(/'/g, "''")}');
+//         commit;
+//       `)
+//     }
+
+//   } catch (e) {
+//     console.log(e)
+//   }
+// }
+
+
 const handleHeatherhotMessage = async (resolveInfo: any, context: any) => {
   const execute = createResolve(resolveInfo, context)
   const senderId = context.jwtClaims.user_id
 
   try {
+
     const result = await context.pgClient.query(`
       select username, count(*) as message_count
       from friendworld.messages
@@ -241,15 +286,18 @@ const handleHeatherhotMessage = async (resolveInfo: any, context: any) => {
       where friendworld.messages.from_id = '${senderId}'and friendworld.messages.to_id = '${users.heatherhot6}'
       group by username;
     `)
+
+    if (!result.rows.length) return
     const toUsername = result.rows[0].username
     const messageCount = result.rows[0].message_count - 1
 
-    const content = heatherHotMessages[messageCount]
-    if (!content) return
-    await setUserUuid(context, users.heatherhot6)
-    await new Promise(res => setTimeout(res, 3000))
+    const msg = heatherHotMessages[messageCount]
+    if (!msg) return
+
+    const { content, followUp } = msg
+
     return execute(createMessageMutation, {
-      input: { toUsername, content }
+      input: { toUsername, content: followUp ? content + followUp.content : content }
     })
 
   } catch (e) {
@@ -334,16 +382,67 @@ const handleVinceSlicksonMessage = async (resolveInfo: any, context: any) => {
 
 const sendBotMessage = async (args: any, context: any, resolveInfo: any) => {
   const { toUsername } = args.input
+  // if (toUsername.toLowerCase() === 'heatherhot6') return handleHeatherhotMessage(context.jwtClaims.user_id)
   if (toUsername.toLowerCase() === 'heatherhot6') return handleHeatherhotMessage(resolveInfo, context)
   if (toUsername.toLowerCase() === 'fuckface99') return handleFuckfaceMessage(resolveInfo, context)
   if (toUsername.toLowerCase() === 'vinceslickson') return handleVinceSlicksonMessage(resolveInfo, context)
 }
 
+
+export const createAutomatedPostPlugin = makeWrapResolversPlugin({
+  Mutation: {
+    async createPost(resolve, source, args, context, resolveInfo: any) {
+      const response = await resolve(source, args, context, resolveInfo)
+      await sendAutomatedMessage(args, context, resolveInfo)
+      await createAutomatedPost(args, context, resolveInfo)
+      return response
+    }
+  },
+})
+
+
+export const sendWelcomMessagePlugin = makeWrapResolversPlugin({
+  Mutation: {
+    async signup(resolve, source, args, context, resolveInfo: any) {
+      const response = await resolve(source, args, context, resolveInfo)
+      const execute = createResolve(resolveInfo, context)
+
+      const { username } = args.input
+
+      try {
+        await setUserUuid(context, users.steve_p)
+
+        await execute(createMessageMutation, {
+          input: {
+            toUsername: username,
+            content: `Hi, ${username}! Welcome to Friendworld!
+            I'm really glad you decided to sign up. Friendworld truely has a one-of-a-kind community with unique, intelligent, and thoughtful members. Here on Friendworld, we
+
+            I'm sure that you'll help contribute to the community, and I'm really looking forward to reading you posts :)
+            Unlike all of the other mainstream social networks, I'll *never* collect or sell any of you personal data. So feel free to let loose and be your honest and true self. For once, you can be whoever you want to be.
+
+            Best,
+            Steve
+            P.S. If you have any questions or concerns, please let me know. I'm always looking to make your experience better, so I'm always be happy to see a bug report or feature request in my inbox.
+            `,
+          }
+        })
+        return response
+      } catch (e) {
+        console.log(e)
+      }
+      return response
+    }
+  },
+})
+
 export const createMessageBotPlugin = makeWrapResolversPlugin({
   Mutation: {
     async createMessage(resolve, source, args, context, resolveInfo: any) {
       const response = await resolve(source, args, context, resolveInfo)
-      await sendBotMessage(args, context, resolveInfo)
+      // setTimeout(() => sendBotMessage(args, context, resolveInfo), 200)
+      // debugger
+      // console.log('\n\n====================================== MSG SENT\n', args.input,'\n\n')
       return response
     }
   },

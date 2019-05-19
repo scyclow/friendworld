@@ -8,6 +8,9 @@ import {
 import { Request } from 'express'
 import _ from 'lodash'
 
+
+import knex from 'knex'
+
 require('dotenv').config()
 const isDev = process.env.NODE_ENV === 'development'
 
@@ -18,20 +21,21 @@ const config = {
   SQL_PASSWORD: process.env.SQL_PASSWORD || '',
   DB_URL: isDev
     ? 'postgres:///friendworld'
-/* for connecting with the proxy:
-    ? {
-      password: process.env.SQL_PASSWORD,
-      user: 'postgres',
-      database: 'postgres',
-    }
-*/
     : {
       password: process.env.SQL_PASSWORD,
       user: 'postgres',
       database: 'postgres',
       host: `/cloudsql/friendworld:us-central1:paget`
     }
+    /* for connecting with the proxy:
+    ? {
+      password: process.env.SQL_PASSWORD,
+      user: 'postgres',
+      database: 'postgres',
+    }
+    */
 }
+
 
 
 export const pgConfig = {
@@ -45,6 +49,7 @@ export const pgConfig = {
   graphiql: isDev,
   enhanceGraphiql: isDev,
   watchPg: isDev,
+  disableQueryLog: true, //!isDev,
   additionalGraphQLContextFromRequest: async (req: any) => ({ req }),
 
   appendPlugins: [
@@ -55,5 +60,6 @@ export const pgConfig = {
     createAccountMetadataPlugin
   ],
 }
+
 
 export default config

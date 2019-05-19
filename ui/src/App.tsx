@@ -62,7 +62,7 @@ class App extends React.Component<RouteComponentProps> {
             <Route exact path="/profile" component={Profile} />
             <Route exact path="/stats" component={Stats} />
             <Route exact path="/onboarding" component={Onboarding} />
-            <Route exact path="/dev/ads" component={DevAds} />
+            <Route exact path="/dev/ads" component={(DevAds as any)} />
 
           </Switch>
         </Body>

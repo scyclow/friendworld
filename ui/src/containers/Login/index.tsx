@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { useMutation } from 'urql'
 import jwt from 'utils/jwt'
 import DisplayError from 'components/DisplayError'
@@ -37,14 +37,22 @@ type State = {
 function Login() {
   const [username, setUsername] = useState<string>('')
   const [password, setPassword] = useState<string>('')
+  const [errorText, setErrorText] = useState<string>('')
+
 
   const [{ error, fetching, data }, executeLogin] = useMutation<LoginResponse, LoginInput>(loginMutation)
 
-  if (data) {
-    jwt.set(username, data.login.jwtToken)
-    jwt.setCurrentUser(username)
-    window.location.href = '/'
-  }
+  useMemo(() => {
+    if (data && data.login) {
+      if (data.login.jwtToken) {
+        jwt.set(username, data.login.jwtToken)
+        jwt.setCurrentUser(username)
+        window.location.href = '/'
+      } else {
+        setErrorText('Incorrect username/password combination')
+      }
+    }
+  }, [username, data])
 
   return (
     <section className={styles.login}>
@@ -72,12 +80,15 @@ function Login() {
               onClick={(e) => {
                 e.preventDefault()
                 if (username && password) {
+                  setErrorText('')
                   executeLogin({ input: { username, password } })
                 }
               }}
             >
               Submit
             </button>
+            {errorText && <DisplayError error={errorText} />}
+
           </form>
         )}
       </div>

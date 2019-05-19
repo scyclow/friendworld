@@ -25,9 +25,8 @@ const client = createClient({
     } else {
       return {
         headers: {
-          Authorization: '',
           trackingToken: jwt.getTrackingToken() || ''
-        }
+        } as any
       }
     }
   }
