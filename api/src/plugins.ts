@@ -349,3 +349,13 @@ export const createMessageBotPlugin = makeWrapResolversPlugin({
   },
 })
 
+
+export const createAccountMetadataPlugin = makeWrapResolversPlugin({
+  Mutation: {
+    async signup(resolve, source, args, context, resolveInfo: any) {
+      args.input.ip = context.req.ip
+      args.input.trackingToken = context.req.headers.trackingtoken
+      return resolve(source, args, context, resolveInfo)
+    }
+  },
+})

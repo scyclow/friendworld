@@ -2,6 +2,8 @@ import React from 'react'
 
 import { useQuery } from 'urql'
 import Ad from 'components/Ad'
+import DisplayError from 'components/DisplayError'
+import Loading from 'components/Loading'
 
 const adQuery = `{
   stats: ads {
@@ -20,11 +22,11 @@ const adQuery = `{
   }
 }`
 
-export default () => {
+function DevAds() {
   const [{ data, fetching, error }] = useQuery({ query: adQuery })
   if (process.env.NODE_ENV !== 'development') return 'ads'
-  if (fetching) return 'loading'
-  if (error) return error
+  if (error) return <DisplayError error={error} />
+  if (fetching) return <Loading />
   if (!data) return 'no data'
 
   return (
@@ -41,3 +43,5 @@ export default () => {
     </div>
   )
 }
+
+export default DevAds

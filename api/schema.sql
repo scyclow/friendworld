@@ -62,6 +62,7 @@ create table friendworld.users (
 , updated_at     timestamp default now()
 , username       username_domain not null unique
 , email          citext check (email ~* '^.+@.+\..+$')
+, flair          text default ''
 , avatar_url     text default 'http://simpleicon.com/wp-content/uploads/user-4.png'
 , gender         text default ''
 , birthday       timestamp
@@ -78,6 +79,8 @@ create table friendworld.users (
 create table friendworld_private.accounts (
   user_id        uuid primary key references friendworld.users(id)
 , password_hash  text not null
+, tracking_token text default ''
+, ip             text default ''
 );
 
 create unique index username_index on friendworld.users(username);
@@ -334,6 +337,8 @@ create type friendworld_private.jwt_token as (
 create function friendworld.signup(
   username username_domain
 , password text
+, ip text default null
+, tracking_token text default null
 , email text default null
 ) returns friendworld_private.jwt_token as $$
   declare
@@ -344,8 +349,8 @@ create function friendworld.signup(
       values (username, email)
       returning * into u;
 
-    insert into friendworld_private.accounts (user_id, password_hash)
-      values (u.id, crypt(password, gen_salt('bf')));
+    insert into friendworld_private.accounts (user_id, password_hash, ip, tracking_token)
+      values (u.id, crypt(password, gen_salt('bf')), ip, tracking_token);
 
     return (
       'friendworld_user',
@@ -355,7 +360,7 @@ create function friendworld.signup(
   end;
 $$ language plpgsql;
 
-grant execute on function friendworld.signup(username_domain, text, text) to friendworld_anonymous, friendworld_user;
+grant execute on function friendworld.signup(username_domain, text, text, text, text) to friendworld_anonymous, friendworld_user;
 
 
 -- login

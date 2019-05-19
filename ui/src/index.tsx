@@ -6,6 +6,8 @@ import { Provider, createClient } from 'urql';
 import App from './App';
 import jwt from './utils/jwt'
 
+jwt.setTrackingToken()
+
 const isProd = process.env.NODE_ENV === 'production'
 const client = createClient({
   url: isProd
@@ -16,11 +18,17 @@ const client = createClient({
     if (jwtToken) {
       return {
         headers: {
-          Authorization: `Bearer ${jwtToken}`
+          Authorization: `Bearer ${jwtToken}`,
+          trackingToken: jwt.getTrackingToken() || ''
         }
       }
     } else {
-      return {}
+      return {
+        headers: {
+          Authorization: '',
+          trackingToken: jwt.getTrackingToken() || ''
+        }
+      }
     }
   }
 })

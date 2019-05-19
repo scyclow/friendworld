@@ -55,10 +55,31 @@ const clearCurrentUser = () => {
   localStorage.setItem(JWT, JSON.stringify(mapping))
 }
 
+const TRACKING_TOKEN = '__TRACKING_TOKEN__'
+const setTrackingToken = () => {
+  try {
+    const existingToken = getTrackingToken()
+    if (!existingToken) {
+      const token = `${Date.now()}-${Math.random()}`
+      localStorage.setItem(TRACKING_TOKEN, token)
+      return token
+    } else {
+      return existingToken
+    }
+
+  } catch(e) {
+    console.log('could not set trakcing token: ', e)
+  }
+}
+
+const getTrackingToken = (): string => localStorage.getItem(TRACKING_TOKEN) || ''
+
 export default {
   get,
   getCurrentUser,
   getInnactiveUserList,
+  getTrackingToken,
+  setTrackingToken,
   set,
   setCurrentUser,
   clearCurrentUser

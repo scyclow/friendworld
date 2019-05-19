@@ -1,4 +1,12 @@
-import { createAutomatedPostPlugin, sendWelcomMessagePlugin, createMessageBotPlugin } from './plugins'
+import {
+  createAutomatedPostPlugin,
+  sendWelcomMessagePlugin,
+  createMessageBotPlugin,
+  createAccountMetadataPlugin
+} from './plugins'
+
+import { Request } from 'express'
+import _ from 'lodash'
 
 require('dotenv').config()
 const isDev = process.env.NODE_ENV === 'development'
@@ -37,12 +45,14 @@ export const pgConfig = {
   graphiql: isDev,
   enhanceGraphiql: isDev,
   watchPg: isDev,
+  additionalGraphQLContextFromRequest: async (req: any) => ({ req }),
 
   appendPlugins: [
     require('@graphile-contrib/pg-simplify-inflector'),
     createAutomatedPostPlugin,
     sendWelcomMessagePlugin,
     createMessageBotPlugin,
+    createAccountMetadataPlugin
   ],
 }
 
