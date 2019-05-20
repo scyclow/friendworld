@@ -25,10 +25,10 @@ import knex from 'knex'
 
 const app = express()
 app.use(cors())
-app.use(logger(
-  '[:date[web]] :method :url :status :response-time ms - :res[content-length]',
-  { skip: (req, res) => req.originalUrl === '/favicon.ico' }
-))
+// app.use(logger(
+//   '[:date[web]] :method :url :status :response-time ms - :res[content-length]',
+//   { skip: (req, res) => req.originalUrl === '/favicon.ico' }
+// ))
 
 app.use(postgraphile(config.DB_URL, 'friendworld', pgConfig))
 

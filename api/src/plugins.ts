@@ -224,62 +224,9 @@ const heatherHotMessages = [
     content: `ok i'm ready for you now`
   }
 ]
-// const handleHeatherhotMessage = async (senderId: string) => {
-//   try {
-
-//     const result = await k.raw(`
-//       select username, count(*) as message_count
-//       from friendworld.messages
-//       left join friendworld.users on friendworld.users.id = friendworld.messages.from_id
-//       where friendworld.messages.from_id = '${senderId}'and friendworld.messages.to_id = '${users.heatherhot6}'
-//       group by username;
-//     `)
-//     const debug = await k.raw(`
-//       select content
-//       from friendworld.messages
-//       where friendworld.messages.from_id = '${senderId}'and friendworld.messages.to_id = '${users.heatherhot6}';
-//     `)
-
-//     if (!result.rows.length) return
-//     const toUsername = result.rows[0].username
-//     const messageCount = result.rows[0].message_count - 1
-
-//     const msg = heatherHotMessages[messageCount]
-//     console.log('===================EXISTING SENT MSGS\n', `(${debug.rows.length})`,debug.rows)
-//     console.log('\n\n===================NEXT BOT MSG:\n', messageCount, msg, '\n\n\n')
-
-//     if (!msg) return
-//     await new Promise(res => setTimeout(res, Math.random() * 3000))
-//     const { content, followUp } = msg
-//     await k.raw(`
-//       begin;
-//         set local jwt.claims.user_id to '${users.heatherhot6}';
-//         select friendworld.create_message('${toUsername}', '${content.replace(/'/g, "''")}');
-//       commit;
-//     `)
-//     if (followUp) {
-//       await new Promise(res => setTimeout(res, Math.random() * 3000 + followUp.wait))
-//       await k.raw(`
-//         begin;
-//           set local jwt.claims.user_id to '${users.heatherhot6}';
-//           select friendworld.create_message('${toUsername}', '${followUp.content.replace(/'/g, "''")}');
-//         commit;
-//       `)
-//     }
-
-//   } catch (e) {
-//     console.log(e)
-//   }
-// }
-
-
-const handleHeatherhotMessage = async (resolveInfo: any, context: any) => {
-  const execute = createResolve(resolveInfo, context)
-  const senderId = context.jwtClaims.user_id
-
+const handleHeatherhotMessage = async (senderId: string) => {
   try {
-
-    const result = await context.pgClient.query(`
+    const result = await k.raw(`
       select username, count(*) as message_count
       from friendworld.messages
       left join friendworld.users on friendworld.users.id = friendworld.messages.from_id
@@ -292,18 +239,77 @@ const handleHeatherhotMessage = async (resolveInfo: any, context: any) => {
     const messageCount = result.rows[0].message_count - 1
 
     const msg = heatherHotMessages[messageCount]
+
     if (!msg) return
-
+    await new Promise(res => setTimeout(res, Math.random() * 3000))
     const { content, followUp } = msg
-
-    return execute(createMessageMutation, {
-      input: { toUsername, content: followUp ? content + followUp.content : content }
-    })
+    await k.raw(`
+      commit;
+      begin;
+        set local jwt.claims.user_id to '${users.heatherhot6}';
+        select friendworld.create_message('${toUsername}', '${content.replace(/'/g, "''")}');
+      commit;
+    `)
+    if (followUp) {
+      await new Promise(res => setTimeout(res, Math.random() * 3000 + followUp.wait))
+      await k.raw(`
+        begin;
+          set local jwt.claims.user_id to '${users.heatherhot6}';
+          select friendworld.create_message('${toUsername}', '${followUp.content.replace(/'/g, "''")}');
+        commit;
+      `)
+    }
 
   } catch (e) {
     console.log(e)
   }
 }
+
+
+const dumboMessages = [
+  { content: `Hello, would you like to be my friend? :)` },
+  { content: `Great! I love making new friends! What is your name?` },
+  { content: `My name is Fred! Have you seen any good movies lately?` },
+  { content: `Oh, I heard that one was super great! I really want to see it! What a fun conversation! What do you want to talk about next?` },
+  { content: `LOL. Now *there* is a good idea. I've wanted to talk about that for ages. Why don't you start?` },
+  { content: `Interesting! I never thought of it like that before. All of my other friends said the exact opposite... But I guess that's what makes https://friendworld.social such a special place! Where else would I be introduced to a unique perspective like that?` },
+  { content: `I'm really glad I made a new friend today. Thank you for the conversation! I have to go now. Good bye.` },
+  { content: `So long!` },
+]
+const handleDumboMessage = async (senderId: string) => {
+  try {
+    const result = await k.raw(`
+      select username, count(*) as message_count
+      from friendworld.messages
+      left join friendworld.users on friendworld.users.id = friendworld.messages.from_id
+      where friendworld.messages.from_id = '${senderId}'and friendworld.messages.to_id = '${users.dumbotheclown}'
+      group by username;
+    `)
+
+    if (!result.rows.length) return
+    const toUsername = result.rows[0].username
+    const messageCount = result.rows[0].message_count - 1
+
+    const msg = dumboMessages[messageCount]
+
+    if (!msg) return
+    await new Promise(res => setTimeout(res, Math.random() * 3000))
+    const { content } = msg
+    const cleaned = content.replace(/'/g, "''").replace(/\?/g, '\\?')
+    await k.raw(`
+      commit;
+      begin;
+        set local jwt.claims.user_id to '${users.dumbotheclown}';
+        select friendworld.create_message('${toUsername}', '${cleaned}');
+      commit;
+    `)
+
+
+  } catch (e) {
+    console.log(e)
+  }
+}
+
 
 const fuckfaceMessages = [
   'HI THERE, WHAT\'S YOUR NAME?',
@@ -382,8 +388,9 @@ const handleVinceSlicksonMessage = async (resolveInfo: any, context: any) => {
 
 const sendBotMessage = async (args: any, context: any, resolveInfo: any) => {
   const { toUsername } = args.input
-  // if (toUsername.toLowerCase() === 'heatherhot6') return handleHeatherhotMessage(context.jwtClaims.user_id)
-  if (toUsername.toLowerCase() === 'heatherhot6') return handleHeatherhotMessage(resolveInfo, context)
+
+  if (toUsername.toLowerCase() === 'heatherhot6') handleHeatherhotMessage(context.jwtClaims.user_id)
+  if (toUsername.toLowerCase() === 'dumbotheclown') handleDumboMessage(context.jwtClaims.user_id)
   if (toUsername.toLowerCase() === 'fuckface99') return handleFuckfaceMessage(resolveInfo, context)
   if (toUsername.toLowerCase() === 'vinceslickson') return handleVinceSlicksonMessage(resolveInfo, context)
 }
@@ -440,9 +447,7 @@ export const createMessageBotPlugin = makeWrapResolversPlugin({
   Mutation: {
     async createMessage(resolve, source, args, context, resolveInfo: any) {
       const response = await resolve(source, args, context, resolveInfo)
-      // setTimeout(() => sendBotMessage(args, context, resolveInfo), 200)
-      // debugger
-      // console.log('\n\n====================================== MSG SENT\n', args.input,'\n\n')
+      setTimeout(() => sendBotMessage(args, context, resolveInfo), 200)
       return response
     }
   },

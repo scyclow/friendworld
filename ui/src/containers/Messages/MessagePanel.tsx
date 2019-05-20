@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useMemo } from 'react';
 import { useQuery, useMutation } from 'urql'
 import { Link, Redirect } from 'react-router-dom'
 import orderBy from 'lodash/orderBy'
@@ -94,31 +94,31 @@ type Props = {
   username?: string | null
 }
 
-// function useInterval(callback: Function, delay: number) {
-//   const savedCallback = useRef<any>(null)
+function useInterval(callback: Function, delay: number) {
+  const savedCallback = useRef<any>(null)
 
-//   // Remember the latest callback.
-//   useEffect(() => {
-//     savedCallback.current = callback;
-//   }, [callback]);
+  // Remember the latest callback.
+  useEffect(() => {
+    savedCallback.current = callback;
+  }, [callback]);
 
-//   // Set up the interval.
-//   useEffect(() => {
-//     function tick() {
-//       savedCallback.current();
-//     }
-//     if (delay !== null) {
-//       let id = setInterval(tick, delay);
-//       return () => clearInterval(id);
-//     }
-//   }, [delay]);
-// }
+  // Set up the interval.
+  useEffect(() => {
+    function tick() {
+      savedCallback.current();
+    }
+    if (delay !== null) {
+      let id = setInterval(tick, delay);
+      return () => clearInterval(id);
+    }
+  }, [delay]);
+}
 
 export default function MessagePanel ({ username }: Props) {
   const $sentMessages = useRef<any>(null)
   const [messageToSend, setMessageToSend] = useState<string>('')
-  // const [{ error, data }, executeQuery] = useQuery<RequestedUserQuery>({
-  const [{ error, data }] = useQuery<RequestedUserQuery>({
+  const [{ error, data }, executeQuery] = useQuery<RequestedUserQuery>({
+  // const [{ error, data }] = useQuery<RequestedUserQuery>({
     query: requestedUserQuery,
     variables: { username: username || '' }
   })
@@ -127,16 +127,19 @@ export default function MessagePanel ({ username }: Props) {
     executeCreateMessage
   ] = useMutation<CreateMessagePayload, CreateMessageInput>(createMessageMutation)
 
-  // useInterval(() => {
-  //   executeQuery({ requestPolicy: 'network-only' })
-  // }, 1000)
+  useInterval(() => {
+    if (!document.hidden) {
+      console.log('executing', Date.now())
+      executeQuery({ requestPolicy: 'network-only' })
+    }
+  }, 1000)
 
-
-  useEffect(() => {
+  useMemo(() => {
     if ($sentMessages.current) {
       $sentMessages.current.scrollTop = $sentMessages.current.scrollHeight
     }
-  })
+  // eslint-disable-next-line
+  }, [data])
 
 
   const sendMessage = (keyPressed?: string) => {

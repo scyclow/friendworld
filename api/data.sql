@@ -101,7 +101,7 @@ insert into friendworld.ads (url, img, content, weight, target_tags, primary_tag
   )
 , (
     'http://fastcashmoneyplus.biz'
-  , 'https://kitchenreviewed.com/wp-content/uploads/2017/10/spending_too_on_meat_grinder.jpg'
+  , 'https://i.imgur.com/vyzpT7O.jpg'
   , 'STOP THROWING AWAY YOUR MONEY'
   , 1
   , '[]'
@@ -376,7 +376,7 @@ insert into friendworld.ads (url, img, content, weight, target_tags, primary_tag
   , '[]'
   , '[]'
   , '["semetic", "subliminal", "jew", "jewish", "illuminati"]'
-  , true
+  , false
   )
 , (
     'http://universeinsideyou.net/experiments-proving-astral-projection-is-real/'
@@ -700,7 +700,7 @@ insert into friendworld.ads (url, img, content, weight, target_tags, primary_tag
   )
 , (
     'https://steviep.xyz#self-help'
-  , 'https://i.imgur.com/BzrG85K.png'
+  , 'https://d3b3by4navws1f.cloudfront.net/iStock-629568880.jpg'
   , 'ARE YOU SICK OF GOING TO WORK?'
   , 1
   , '[""]'

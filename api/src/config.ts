@@ -49,7 +49,7 @@ export const pgConfig = {
   graphiql: isDev,
   enhanceGraphiql: isDev,
   watchPg: isDev,
-  disableQueryLog: true, //!isDev,
+  disableQueryLog: true,//!isDev,
   additionalGraphQLContextFromRequest: async (req: any) => ({ req }),
 
   appendPlugins: [
