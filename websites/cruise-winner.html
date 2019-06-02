@@ -1,0 +1,171 @@
+<html>
+  <style>
+    body {
+      background-color: #c1c1c1;
+      font-family: sans-serif;
+    }
+
+    h1 {
+      margin: 5px 0;
+      text-align: center;
+      background-color: yellow;
+      border: 1px solid green;
+      padding: 10px;
+    }
+
+    .container {
+      margin-top: 10px;
+      box-shadow: 0px 0px 60px #000;
+      max-width: 500px;
+      margin: auto;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      background-color: #fdfefe;
+      border: 1px solid black;
+    }
+    .red {
+      color: red;
+      text-decoration: underline;
+      font-weight: bold;
+      margin: 10px 0;
+    }
+
+    .form {
+      margin-top: 40px;
+      font-family: sans-serif;
+      background-color: #d9f7fe;
+      border: 4px solid #126172;
+      max-width: 410px;
+      border-radius: 3px;
+      display: flex;
+      align-items: center;
+      flex-direction: column;
+    }
+
+    .form-content {
+      padding: 10px 20px;
+
+    }
+
+    .label {
+      display: inline-block;
+      min-width: 120px;
+    }
+
+    #timer {
+      font-size: 50px;
+      font-family: sans-serif;
+      border: 4px solid red;
+      display: inline-block;
+      padding: 5px;
+    }
+
+    .form h2 {
+      background-color: #126172;
+      margin-top: 0;
+      padding: 10px;
+      color: #fff;
+    }
+
+    button {
+      cursor: pointer;
+      font-size: 30px;
+      padding: 10px;
+      color:  #126172;
+      background: linear-gradient(#fce34d, #f5a604);
+      border: 3px solid;
+      border-radius: 5px;
+      margin-bottom: 20px;
+    }
+
+    .form-field {
+      margin-bottom: 10px;
+
+    }
+  </style>
+  <body>
+    <div class="container">
+      <h1>Hurry - Act NOW... Before it's TOO LATE</h1>
+
+      <div class=form>
+
+        <h2>This page will expire in:</h2>
+
+
+        <div id="timer"></div>
+        <div class="red">ONLY 2 Spots left are available</div>
+
+      </div>
+
+
+      <div class="form">
+        <h2>To get started, please fill in the information below:</h2>
+        <div class="form-content">
+          <div class="form-field">
+            <strong class="label">First Name:</strong> <input>
+          </div>
+          <div class="form-field">
+            <strong class="label">Last Name:</strong> <input>
+          </div>
+          <div class="form-field">
+            <strong class="label">Phone Number:</strong> <input>
+          </div>
+          <div class="form-field">
+            <strong class="label">Home Address:</strong> <input>
+          </div>
+          <div class="form-field">
+            <strong class="label">City/Suburb:</strong> <input>
+          </div>
+          <div class="form-field">
+            <strong class="label">Credit Card Number</strong> <input>
+          </div>
+
+        </div>
+        <button id="submit">GET INSTANT ACCESS</button>
+      </div>
+    </div>
+
+  </body>
+  <script>
+    const timer = document.getElementById('timer')
+    let timeLeft = 10000
+    const with0 = x => x < 10 ? '0' + Math.floor(x) : Math.floor(x)
+    const interval = setInterval(() => {
+      timeLeft -= 1
+      const minutes = with0(timeLeft / 6000)
+      const seconds = with0(timeLeft % 6000 / 100)
+      const cseconds = timeLeft % 100
+      timer.innerHTML = `${minutes}:${seconds}:${cseconds}`
+    }, 5)
+
+    const speak = () => {
+      console.log('start')
+      const interval = setInterval(() => {
+        console.log('.')
+        const voices = window.speechSynthesis.getVoices()
+
+        if (voices.length) {
+          console.log('!')
+          clearInterval(interval)
+          const utterance = new window.SpeechSynthesisUtterance('Hurry! Act now before it\'s too late! This page will expire in: one minute and 40 seconds. ONLY 2 Spots left are available . To get started, please fill in the information below: First Name. Last Name. Phone Number. Home Address. City/Suburb. Credit Card Number. GET INSTANT ACCESS')
+          utterance.voice = voices[67]
+          window.speechSynthesis.speak(utterance)
+          console.log()
+        }
+      }, 100)
+    }
+
+    document.addEventListener('click', speak)
+
+    document.getElementById('submit').addEventListener('click', () => {
+      clearInterval(interval)
+      window.location.hash = 'complete'
+      document.removeEventListener('mousedown', speak)
+      document.body.style.fontFamily = 'serif'
+      document.body.style.backgroundColor = '#fff'
+      document.body.innerHTML = 'THANK YOU'
+    })
+  </script>
+</html>

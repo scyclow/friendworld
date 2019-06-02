@@ -1,0 +1,532 @@
+<html>
+
+<style>
+  img {
+    width: 300px;
+  }
+
+  .ad {
+    border: 1px solid;
+    margin: 5px;
+  }
+</style>
+<body>
+  <div id="content">
+
+  </div>
+</body>
+<script>
+  const ads = [
+    {
+      url: 'http://fastcashmoneyplus.biz'
+    , img: 'https://www.washingtonpost.com/resizer/bmfQHooAGH6PmEv0qHjgf-ZUy-k=/480x0/arc-anglerfish-washpost-prod-washpost.s3.amazonaws.com/public/EBULPVFULQI6PG4TXFYEHZL2EI.jpg'
+    , content: `MAKE FAST CASH NOW`
+    , targetTags: '[]'
+    , primaryTags: '[]'
+    , tags: '["fastcash", "fastcashmoneyplus", "fastcashmoneyplusbiz", "fastcashmoneybiz", "moneybucks", "bucks", "fast", "cash", "money", "rich", "wealth", "saving", "savings", "crypto", "cryptocurrency", "bitcoin", "btc", "ethereum", "eth", "invest", "investing", "finance", "ico", "fortune", "millionaire", "billionaire", "blockchain", "economy", "payment", "trick", "profit"]'
+    }, {
+      url: 'http://fastcashmoneyplus.biz'
+    , img: 'https://i.imgur.com/vyzpT7O.jpg'
+    , content: `STOP THROWING AWAY YOUR MONEY`
+    , targetTags: '[]'
+    , primaryTags: '["throwing"]'
+    , tags: '["fastcash", "fastcashmoneyplus", "fastcashmoneyplusbiz", "fastcashmoneybiz", "moneybucks", "bucks", "fast", "cash", "money", "rich", "wealth", "saving", "savings", "crypto", "cryptocurrency", "bitcoin", "btc", "ethereum", "eth", "invest", "investing", "finance", "ico", "fortune", "millionaire", "billionaire", "blockchain", "economy", "payment", "trick", "profit"]'
+    }, {
+      url: 'http://fastcashmoneyplus.biz'
+    , img: 'https://previews.123rf.com/images/artoleshko/artoleshko1712/artoleshko171200224/92625649-big-bomb-of-money-hundred-dollar-bills-with-a-burning-wick-little-time-before-the-explosion-the-conc.jpg'
+    , content: `WHEN WILL THIS BOMB GO OFF?`
+    , targetTags: '[]'
+    , primaryTags: '["economic", "explosion", "bomb"]'
+    , tags: '["fastcash", "fastcashmoneyplus", "fastcashmoneyplusbiz", "fastcashmoneybiz", "moneybucks", "bucks", "fast", "cash", "money", "rich", "wealth", "saving", "savings", "crypto", "cryptocurrency", "bitcoin", "btc", "ethereum", "eth", "invest", "investing", "finance", "ico", "fortune", "millionaire", "billionaire", "blockchain", "economy", "economic", "explosion", "payment", "market", "profit"]'
+    }, {
+      url: 'http://fastcashmoneyplus.biz'
+    , img: 'https://image.shutterstock.com/image-illustration/happy-man-laptop-money-explosion-450w-75571285.jpg'
+    , content: `MAKE MONEY FROM THE COMFORT OF YOUR OWN HOME`
+    , targetTags: '[]'
+    , primaryTags: '["comfort", "money", "home", "house", "apartment"]'
+    , tags: '["fastcash", "fastcashmoneyplus", "fastcashmoneyplusbiz", "fastcashmoneybiz", "moneybucks", "bucks", "fast", "cash", "money", "rich", "wealth", "saving", "savings", "crypto", "cryptocurrency", "bitcoin", "btc", "ethereum", "eth", "invest", "investing", "finance", "ico", "fortune", "millionaire", "billionaire", "blockchain", "economy", "payment", "trick", "profit"]'
+    }, {
+      url: 'http://fastcashmoneyplus.biz/success'
+    , img: 'https://previews.123rf.com/images/belchonock/belchonock1801/belchonock180130743/95161261-elegant-man-in-suit-holding-money-isolated-on-white.jpg'
+    , content: `SEE WHAT SUCCESS TASTES LIKE`
+    , targetTags: '[]'
+    , primaryTags: '["success"]'
+    , tags: '["food", "taste", "money", "cash", "profit", "suit", "wealth"]'
+    }, {
+      url: 'https://www.amazon.com/Quick-Turn-Real-Estate-Millionaire/dp/B005ZOBAS2'
+    , img: 'https://images-na.ssl-images-amazon.com/images/I/61G83WP73VL._SX258_BO1,204,203,200_.jpg'
+    , content: `YOU CAN BECOME THE NEXT MILLIONAIRE`
+    , targetTags: '[]'
+    , primaryTags: '["millionaire", "billionaire"]'
+    , tags: '["fast", "cash", "money", "rich", "wealth", "suit"]'
+    }, {
+      url: 'http://fastcashmoneyplus.biz'
+    , img: 'https://www.oneworldnews.com/wp-content/uploads/2017/12/57.jpg'
+    , content: `ACHIEVE YOUR FINANCIAL DREAMS TODAY`
+    , targetTags: '[]'
+    , primaryTags: '["dream", "dreams", "sleep", "pillow"]'
+    , tags: '["fastcash", "fastcashmoneyplus", "fastcashmoneyplusbiz", "fastcashmoneybiz", "moneybucks", "bucks", "fast", "cash", "money", "rich", "wealth", "saving", "savings", "invest", "investing", "finance", "fortune", "millionaire", "profit"]'
+    }, {
+      url: 'http://fastcashmoneyplus.biz'
+    , img: 'https://media.brstatic.com/2017/09/25112945/family-showing-young-member-piggy-bank-savings-getty_573x300.jpg'
+    , content: `SAVE MORE MONEY WITH THIS WEIRD TRICK`
+    , targetTags: '[]'
+    , primaryTags: '["weird"]'
+    , tags: '["fastcash", "fastcashmoneyplus", "money", "savings", "saving", "family"]'
+    }, {
+      url: 'http://fastcashmoneyplus.biz'
+    , img: 'https://waterfm.com/wp-content/uploads/money-vortex.jpg'
+    , content: `DON''T GET SUCKED INTO THIS MONEY VORTEX`
+    , targetTags: '[]'
+    , primaryTags: '["vortex"]'
+    , tags: '["fastcash", "fastcashmoneyplus", "fastcashmoneyplusbiz", "fastcashmoneybiz", "moneybucks", "bucks", "fast", "cash", "money", "rich", "wealth", "saving", "savings", "invest", "investing", "finance", "fortune", "millionaire", "profit"]'
+    }, {
+      url: 'http://fakebullshit.news'
+    , img: 'https://i.imgur.com/94L6Q6X.jpg'
+    , content: `UH OH... WHAT DID SHILLARY DO THIS TIME?!`
+    , targetTags: '[]'
+    , primaryTags: '["hillary", "clinton"]'
+    , tags: '["politics", "political", "government", "democrats", "republicans", "gop", "liberal", "liberals", "conservative", "conservatives", "libtards", "cucks", "cuck","clinton","socialist", "socialism", "shillary", "sjw", "sjws", "social", "justice", "warriors"]'
+    }, {
+      url: 'https://www.dr-pedre-md.com/unq-pedre/'
+    , img: 'http://www.ub.edu/microbiologia_virology/sites/default/files/Presentaci%C3%B3n3_1.jpg'
+    , content: `YOULL NEVER BELIEVE WHAT SCIENTISTS ARE FINDING IN YOUR FOOD`
+    , targetTags: '[]'
+    , primaryTags: '[]'
+    , tags: '["food", "science", "chemicals", "chemtrails"]'
+    }, {
+      url: 'https://target.com'
+    , img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c5/Target_Corporation_logo_%28vector%29.svg/1200px-Target_Corporation_logo_%28vector%29.svg.png'
+    , content: `TARGET: EXPECT MORE PAY LESS`
+    , targetTags: '[]'
+    , primaryTags: '["target", "targeted", "targeting"]'
+    , tags: '[]'
+    }, {
+      url: 'http://steviep.xyz'
+    , img: 'https://www.consciouslifestylemag.com/wp-content/uploads/2016/04/chakra-diagram-in-the-body.jpg'
+    , content: `CLEANSE YOUR CHAKRAS WITH THESE 7 SOUND BATH TECHNIQUES`
+    , targetTags: '["woo"]'
+    , primaryTags: '["cleanse"]'
+    , tags: '["woo", "spirit", "mental", "spirituality", "god", "chakra", "chakras", "sound", "meditation", "reality", "dream", "dreams", "hypnosis", "mantra", "mantras", "technique", "energy", "karma", "cleanse", "vegan", "ascend", "ascension", "newage", "consciousness"]'
+    }, {
+      url: 'http://steviep.xyz'
+    , img: 'https://targetedindividualscanada.files.wordpress.com/2011/01/psycho-electronic-weapon-effects-pic1.jpg'
+    , content: `THE GOVERNMENT JUST FREAKED ABOUT NEW INFO LEAKING`
+    , targetTags: '[]'
+    , primaryTags: '[]'
+    , tags: '["ti", "targeted", "individual", "target", "targeting", "tracking", "conspiracy", "nuclear", "drone", "5g", "radiation", "alien", "aliens", "ufo", "ufos", "roswell", "brain", "mind-control", "chemtrails", "tracking"]'
+    }, {
+      url: 'http://steviep.xyz'
+    , img: 'https://targetedindividualscanada.files.wordpress.com/2011/11/brain-inplants.jpg'
+    , content: `WHAT YOU DONT KNOW ABOUT YOUR BRAIN MAY KILL YOU`
+    , targetTags: '[]'
+    , primaryTags: '[]'
+    , tags: '["sad", "depressed", "melencholy", "anxious", "anxiety", "depression", "anhedonia", "motivation", "happy", "mental", "brain", "suicide", "suicidal", "ocd", "obsessed", "scared", "fear", "emptiness", "cbd", "antidepressant"]'
+    }, {
+      url: 'http://steviep.xyz'
+    , img: 'https://www.healthyplace.com/sites/default/files/images/stories/seroquel/1-internet-addiction-online-addiction-healthyplace.jpg'
+    , content: `ARE YOU ADDICTED TO THE INTERNET`
+    , targetTags: '[]'
+    , primaryTags: '["addicted", "addicting", "addiction", "internet"]'
+    , tags: '["sad", "depressed", "melencholy", "anxious", "anxiety", "depression", "anhedonia", "motivation", "happy", "mental", "brain", "suicide", "suicidal", "ocd", "obsessed", "scared", "fear", "emptiness", "cbd", "antidepressant"]'
+    }, {
+      url: 'http://www.heavensgate.com/'
+    , img: 'https://www.chantellerenee.org/wp-content/uploads/2018/06/light-dimensions-ascension-1.jpg'
+    , content: `EVACUATE THE PLANET BEFORE ITS TOO LATE`
+    , targetTags: '["woo"]'
+    , primaryTags: '["evacuate", "planet"]'
+    , tags: '["spirit", "spirituality", "god", "meditation", "energy", "karma", "ascend", "ascension", "newage"]'
+    }, {
+      url: 'http://steviep.xyz'
+    , img: 'https://a57.foxnews.com/a57.foxnews.com/static.foxnews.com/foxnews.com/content/uploads/2018/09/640/320/1862/1048/adacbcf6-640_brain.jpg'
+    , content: `IS SOMETHING WRONG WITH YOUR BRAIN? FIND OUT NOW`
+    , targetTags: '[]'
+    , primaryTags: '[]'
+    , tags: '["brain", "wrong", "psychology", "sad", "anhedonia", "depressed", "anxious", "anxiety"]'
+    }, {
+      url: 'http://steviep.xyz'
+    , img: 'https://3c1703fe8d.site.internapcdn.net/newman/csz/news/800/2018/20-neuroscienti.jpg'
+    , content: `ARE YOU FORGETTING TO REMEMBER?`
+    , targetTags: '[]'
+    , primaryTags: '[]'
+    , tags: '["brain", "remember", "forget", "forgetting"]'
+    }, {
+      url: 'https://organicfungusnuker.com/'
+    , img: 'https://corespirit.com/api/Containers/corespirit-static/download/size_1200_880ab40a-c7be-43be-9223-49fea6bfeb8e.jpg'
+    , content: `FIND OUT WHAT HAPPENS TO PEOPLE WITH THIS STRAIN OF TONAIL FUNGUS`
+    , targetTags: '[]'
+    , primaryTags: '[]'
+    , tags: '["foot", "death", "toenail", "nail", "fungus", "feet", "elderly", "organic"]'
+    }, {
+      url: 'https://0ms.co/fdWr3.html'
+    , img: 'https://i.pinimg.com/originals/fc/a3/18/fca31854ca2e944467184d58a381d8ec.jpg'
+    , content: `YOUR BACK PAIN MIGHT NOT BE SO SIMPLE`
+    , targetTags: '[]'
+    , primaryTags: '[]'
+    , tags: '["back", "pain", "organ", "organs", "accupuncture", "intestine", "liver", "heart"]'
+    }, {
+      url: 'https://secure.ngagelive.com/chat/index.aspx?websiteid=92-90-134-193-83-0-152-30&alt=false&wl=false&loc=https%3A//wegrowhair.com/&mode=AutoEngage&visitorId=a422fd99-ab43-4b5a-a8bc-aa1d00368c4c'
+    , img: 'http://3.bp.blogspot.com/-SWo3Fi7Kb5I/Ue9EP7ITfJI/AAAAAAAAD6A/5xacI3uWLLQ/s1600/h9991572_001.jpg'
+    , content: `PREVENT UGLY HAIR LOSS NOW`
+    , targetTags: '["male", "man"]'
+    , primaryTags: '[]'
+    , tags: '["male", "man", "testosterone", "hair", "loss", "bald", "balding"]'
+    }, {
+      url: 'https://flatbellyrevolution.com/'
+    , img: 'http://d1nnx3nhddxmeh.cloudfront.net/wp-content/uploads/2018/05/01122237/Overweight-Problems-Heres-How-to-Reset-Your-Melt-Fat-Hormones.jpg'
+    , content: `GET THAT BIKINI BODY FAST`
+    , targetTags: '["woman", "female"]'
+    , primaryTags: '[]'
+    , tags: '["fat", "skinny", "pepper", "hot", "furnace", "drip"]'
+    }, {
+      url: 'https://news.trycapsifit.com/'
+    , img: 'https://i.pinimg.com/originals/fb/99/31/fb9931fc50a7e72fc9a708e960db3935.jpg'
+    , content: `WATCH FAT DRIP OFF YOUR BODY LIKE A FAT MELTING FURNACE`
+    , targetTags: '["man", "male"]'
+    , primaryTags: '[]'
+    , tags: '["fat", "skinny", "pepper", "hot", "furnace", "drip"]'
+    }, {
+      url: 'https://news.trycapsifit.com/'
+    , img: 'http://media1.s-nbcnews.com/i/streams/2012/August/120827/504274-g-tdy-091221-belly-2p.jpg'
+    , content: `WATCH FAT DRIP OFF YOUR BODY LIKE A FAT MELTING FURNACE`
+    , targetTags: '["male"]'
+    , primaryTags: '[]'
+    , tags: '["fat", "skinny", "pepper", "hot", "furnace", "drip"]'
+    }, {
+      url: 'https://www.youtube.com/watch?v=SyvOPXeg4ig'
+    , img: 'https://cdn1.medicalnewstoday.com/content/images/articles/320/320227/cancer-cell.jpg'
+    , content: `STOP CANCER DEAD IN ITS TRACKS`
+    , targetTags: '[]'
+    , primaryTags: '[]'
+    , tags: '["cancer", "stop", "dead", "death", "blood", "cells"]'
+    }, {
+      url: 'https://steviep.xyz#indigo'
+    , img: 'https://i.ytimg.com/vi/Bey3c8kVm7M/maxresdefault.jpg'
+    , content: `ARE YOU AN INDIGO CHILD? FIND OUT NOW`
+    , targetTags: '["woo"]'
+    , primaryTags: '[]'
+    , tags: '["add", "indigo", "child", "children", "chakra", "special", "energy", "collective"]'
+    }, {
+      url: 'https://weliveinamadworld.com/5g-and-intelligent-connectivity-a-plague-to-consume-humanity/'
+    , img: 'https://weliveinamadworld.com/wp-content/uploads/2019/02/5g.jpg'
+    , content: `5G AND THE COMING PLAGUE TO CONSUME HUMANITY`
+    , targetTags: '[]'
+    , primaryTags: '[]'
+    , tags: '["illuminati", "5g", "holocaust", "internet-of-things", "iot", "vr", "virtual", "reality", "individuality"]'
+    }, {
+      url: 'https://renegadevids.com/category/jews/'
+    , img: 'http://www.conspirazzi.com/wp-content/uploads/2010/06/eternal-jew-illuminati.jpg'
+    , content: `SEMETIC SUBLIMINALS AND THE JEWISH QUESTION`
+    , targetTags: '[]'
+    , primaryTags: '["jew", "jews", "jewish"]'
+    , tags: '["semetic", "subliminal", "illuminati"]'
+    }, {
+      url: 'http://universeinsideyou.net/experiments-proving-astral-projection-is-real/'
+    , img: 'https://cdn.shopify.com/s/files/1/0823/4911/products/CD260-3_1024x1024.jpg'
+    , content: `Are you curious to see where your spirit travels unrestrained from your body?`
+    , targetTags: '["woo"]'
+    , primaryTags: '[]'
+    , tags: '["astral", "projection", "subliminal", "chakra", "energy", "sound", "light", "healing", "consciousness", "dream", "sleep"]'
+    }, {
+      url: 'https://www.youtube.com/watch?v=ZOvk1DfLO6c'
+    , img: 'https://i.ytimg.com/vi/ZOvk1DfLO6c/hqdefault.jpg'
+    , content: `DONT LET YOUR LUCK RUN OUT`
+    , targetTags: '[]'
+    , primaryTags: '[]'
+    , tags: '["luck", "clover", "horseshoe", "subliminal", "sexy", "vortex", "fortune"]'
+    }, {
+      url: 'https://www.youtube.com/watch?v=OK40AYHL97I'
+    , img: 'https://www.institutobernabeu.com/foro/en/files/2014/02/021.jpg'
+    , content: `INCREASE YOUR SPERM COUNT WITHOUT TOUCHING A BUTTON`
+    , targetTags: '["male", "man"]'
+    , primaryTags: '[]'
+    , tags: '["binaural", "beats", "music", "sperm", "seamen", "sex"]'
+    }, {
+      url: 'https://www.crystalinks.com/reality.html'
+    , img: 'https://www.crystalinks.com/binarycodebrain350.jpg'
+    , content: `REALITY MAY NOT BE WHAT YOU THINK! CLICK HERE TO FIND OUT`
+    , targetTags: '[]'
+    , primaryTags: '[]'
+    , tags: '["reality", "digital", "consciousness", "brain", "hologram", "simulation", "illusion", "dream", "numbers", "numeric", "dna", "information"]'
+    }, {
+      url: 'http://steviep.xyz'
+    , img: 'https://www.scienceabc.com/wp-content/uploads/2016/01/shutterstock_338992685.jpg'
+    , content: `WHAT''S SO FUNNY?`
+    , targetTags: '[]'
+    , primaryTags: '[]'
+    , tags: '["funny", "laugh", "laughing", "lol", "haha"]'
+    }, {
+      url: 'http://steviep.xyz#your-computer-is-infected'
+    , img: 'https://i.ytimg.com/vi/-HE3jj5Ah2M/maxresdefault.jpg'
+    , content: `CLICK THE KITTY`
+    , targetTags: '[]'
+    , primaryTags: '[]'
+    , tags: '["kitty", "kitten", "cat", "meow", "laugh", "happy", "virus", "infected", "scared"]'
+    }, {
+      url: 'https://www.youtube.com/watch?v=luN8xx2LG8g'
+    , img: 'https://i1.wp.com/www.indianinthemachine.com/wp-content/uploads/2016/07/ashtar-semjase.jpg'
+    , content: `A MESSAGE FROM OUR COSMIC BROTHERS/SISTERS`
+    , targetTags: '[]'
+    , primaryTags: '[]'
+    , tags: '["pleiadians", "ufo", "alien", "aliens", "ufos", "space", "physics"]'
+    }, {
+      url: 'https://www.atlassurvivalshelters.com/'
+    , img: 'https://www.veteranstoday.com/wp-content/uploads/2015/04/08/nuke-nyc.jpg'
+    , content: `ARE YOU READY FOR THE NUCLEAR EVENT?`
+    , targetTags: '[]'
+    , primaryTags: '["bunker", "atlas"]'
+    , tags: '["nuke", "nuclear", "war", "disaster", "apocalypse", "bomb", "survival", "shelter"]'
+    }, {
+      url: 'https://0ms.co/cnst.html'
+    , img: 'https://st2.depositphotos.com/1345122/5547/i/950/depositphotos_55471531-stock-photo-female-large-intestine-anatomy.jpg'
+    , content: `"TOP DRs RECCOMEND THIS ONE DRUG TO COMPLETELY FLUSH YOUR BOWELS"`
+    , targetTags: '["woman", "female", "girl"]'
+    , primaryTags: '[]'
+    , tags: '["doctor", "bowels", "shit", "poop", "constipated", "intestine"]'
+    }, {
+      url: 'https://steviep.xyz#your-computer-is-infected'
+    , img: 'https://pmdvod.nationalgeographic.com/NG_Video/940/191/47574_1_1280x720_640x360_177143875948.jpg'
+    , content: `YOU''LL NEVER BELIEVE WHAT THIS WOMAN FOUND UNDER HER SINK`
+    , targetTags: '[]'
+    , primaryTags: '["octopus"]'
+    , tags: '[]'
+    }, {
+      url: 'https://steviep.xyz'
+    , img: 'https://images2.minutemediacdn.com/image/upload/c_fill,g_auto,h_1248,w_2220/f_auto,q_auto,w_1100/v1555930491/shape/mentalfloss/434arms_6.jpg'
+    , content: `HOW FAST CAN YOU SOLVE THIS PUZZLE?`
+    , targetTags: '[]'
+    , primaryTags: '["octopus", "puzzle"]'
+    , tags: '[]'
+    }, {
+      url: 'https://steviep.xyz#puzzle'
+    , img: 'https://pi.tedcdn.com/r/talkstar-assets.s3.amazonaws.com/production/playlists/playlist_468/overcome_fears_1200x627.jpg'
+    , content: `OH NO, YOU''RE NOT GOING TO BELIEVE THIS`
+    , targetTags: '[]'
+    , primaryTags: '[]'
+    , tags: '["fear", "anxiety", "scared"]'
+    }, {
+      url: 'https://steviep.xyz'
+    , img: 'https://andreabeaman.com/wp-content/uploads/2015/09/ascaris-worm-parasite.jpg'
+    , content: `GOT PARASITES IN YOUR BODY?`
+    , targetTags: '[]'
+    , primaryTags: '["parasite", "parasites", "surgery"]'
+    , tags: '[]'
+    }, {
+      url: 'https://steviep.xyz#ti'
+    , img: 'http://discovermagazine.com/~/media/Images/Issues/2015/may/DBSgraphic.jpg'
+    , content: `TRY DEEP BRAIN STIMULATION THERAPY`
+    , targetTags: '[]'
+    , primaryTags: '["stimulation", "electrode", "dbs"]'
+    , tags: '["deep", "brain", "therapy", "depressed", "depression", "targeted", "scanners", "scanner", "tracker", "target", "targeted", "individual", "ti"]'
+    }, {
+      url: 'https://www.liftandtighten.com/v_02.php'
+    , img: 'http://www.ccplasticsurgery.com/media/site_assets/f61261e989d144a40e5578c1743298b1/assets/woman_sketched.jpg'
+    , content: `ARE YOU UGLY?`
+    , targetTags: '["female"]'
+    , primaryTags: '["beauty", "ugly"]'
+    , tags: '["surgery", "plastic"]'
+    }, {
+      url: 'https://0ms.co/cnst.html'
+    , img: 'https://cdn.images.express.co.uk/img/dynamic/11/590x/Worms-in-humans-845437.jpg'
+    , content: `CONSTIPATED??`
+    , targetTags: '[]'
+    , primaryTags: '["constipated", "constipation", "constipate"]'
+    , tags: '["shit", "poop", "poo",  "intestine"]'
+    }, {
+      url: 'https://www.youtube.com/watch?v=q-Oq_NUiA88&feature=youtu.be'
+    , img: 'https://cdn-images-1.medium.com/max/1200/0*i9Ff80qVKtQP_K4J.jpg'
+    , content: `WATCH OUT FOR THESE 12 THINGS THAT CAN RUIN YOUR DAY`
+    , targetTags: '[]'
+    , primaryTags: '[]'
+    , tags: '["sad", "depressed", "melencholy", "anxious", "anxiety", "depression", "anhedonia", "motivation", "happy", "mental", "brain", "suicide", "suicidal", "ocd", "obsessed", "scared", "fear", "emptiness", "cbd", "antidepressant"]'
+    }, {
+      url: 'https://0ms.co/fdWr3.html'
+    , img: 'http://dailyvibes.co/wp-content/uploads/2018/03/shutterstock_336693212.jpg'
+    , content: `YOU JUST READ MY MIND`
+    , targetTags: '["female"]'
+    , primaryTags: '["telepathy"]'
+    , tags: '["mind-control", "subliminal"]'
+    }, {
+      url: 'https://0ms.co/fdWr3.html'
+    , img: 'http://tall-white-aliens.com/wp-content/uploads/2017/10/Human-to-Human-Telepathic-Communication.jpg'
+    , content: `YOU JUST READ MY MIND`
+    , targetTags: '["male"]'
+    , primaryTags: '["telepathy"]'
+    , tags: '["mind-control", "subliminal"]'
+    }, {
+      url: 'https://prepareforchange.net/2018/12/16/secret-darpa-mind-control-project-revealed-leaked-document/'
+    , img: 'https://upload.wikimedia.org/wikipedia/commons/d/d1/IAO-logo.png'
+    , content: `DARPA MIND CONTROL SECRET DOCUMENT LEAKED`
+    , targetTags: '[]'
+    , primaryTags: '["darpa"]'
+    , tags: '["mind", "control", "5g", "ti", "targeted", "individual"]'
+    }, {
+      url: 'https://trylifestreamlabs.com/gummies/v1.5/desktop/'
+    , img: 'https://www.incredmed.com/wp-content/uploads/2018/07/cbd_science_placeholder.jpg'
+    , content: `SOLVE YOUR PAIN WITH CBD OIL`
+    , targetTags: '[]'
+    , primaryTags: '["cbd"]'
+    , tags: '["pot", "weed", "drugs", "marijuana", "pain"]'
+    }, {
+      url: 'https://steviep.xyz/#7-steps'
+    , img: 'https://purepng.com/public/uploads/large/purepng.com-men-in-suitmanpeoplepersonsmalesuit-1121525121301szwqf.png'
+    , content: `I WANT TO SHOW YOU THE SEVEN STEPS TO DATING SUCCESS`
+    , targetTags: '["male"]'
+    , primaryTags: '["seduction", "dating"]'
+    , tags: '["romance", "sex"]'
+    }, {
+      url: 'https://steviep.xyz/#sexy-singles'
+    , img: 'https://trippadvice.com/wp-content/uploads/2016/07/Depositphotos_8346080_m-2015-500x334.jpg'
+    , content: `FIND SEXY SINGLES IN YOUR AREA`
+    , targetTags: '["female"]'
+    , primaryTags: '["sex"]'
+    , tags: '["sexy", "dating", "singles"]'
+    }, {
+      url: 'http://www.anusha.com/'
+    , img: 'https://images.chesscomfiles.com/uploads/v1/images_users/tiny_mce/faridmusayev/phpBe26Fu.png'
+    , content: `Sam Sloan doesn''t play politics as usual`
+    , targetTags: '[]'
+    , primaryTags: '["chess", "666"]'
+    , tags: '["2016", "hillary"]'
+    }, {
+      url: 'https://www.amazon.in/Freemasonry-666-Universal-Emperor-Months/dp/0954310152'
+    , img: 'https://images-na.ssl-images-amazon.com/images/I/51HvZ2-sqGL._SX348_BO1,204,203,200_.jpg'
+    , content: `The Freemasonry {666) Universal Emperor for 42 Months: 666, 999, Miracle Hell, Genesis, Symbol of Freemasonry`
+    , targetTags: '[]'
+    , primaryTags: '["freemasonry", "666"]'
+    , tags: '["universal", "emperor", "42", "miracle", "hell", "genesis"]'
+    }, {
+      url: 'http://obeyjesus.org'
+    , img: 'https://www.thespruceeats.com/thmb/9n3YM4RVKSWyUWQ0JCl7BwHrl1U=/4288x2848/filters:fill{auto,1)/loaf-of-bread-182835505-58a7008c5f9b58a3c91c9a14.jpg'
+    , content: `JESUS is the BREAD of LIFE`
+    , targetTags: '[]'
+    , primaryTags: '["bread", "jesus"]'
+    , tags: '["christianity", "god", "sandwich", "miracle", "hell", "genesis", "bible"]'
+    }, {
+      url: 'https://steviep.xyz#virus'
+    , img: 'http://www.soidergi.com/wp-content/uploads/ph/photostock-vector-man-silhouette-isolated-on-white-background-in-falling-pose.jpg'
+    , content: `DONT FALL FOR THIS ONE TRICK`
+    , targetTags: '[]'
+    , primaryTags: '[]'
+    , tags: '["safe", "safety", "virus", "spyware", "malware", "security"]'
+    }, {
+      url: 'http://www.radiationdangers.com/cell-phones/how-big-technology-companies-control-the-minds-of-the-masses-through-smart-phone-addiction/'
+    , img: 'http://www.radiationdangers.com/wp-content/uploads/2018/08/Screen-Shot-2018-08-12-at-1.41.56-PM-768x453.png'
+    , content: `HOW BIG TECH IS CONTROLLING YOU`
+    , targetTags: '[]'
+    , primaryTags: '["5g", "addiction"]'
+    , tags: '["5g", "internet", "addiction", "mind", "control", "towers", "smartphone"]'
+    }, {
+      url: 'https://askclaudia.com/voice-god-weaponized-mind-control-frequency-technology-2/'
+    , img: 'https://www.theblackvault.com/documentarchive/wp-content/uploads/2015/02/Mind-Control-731x411.jpg'
+    , content: `VOICE GOD WEAPONIZED MIND CONTROL FREQUENCY TECHNOLOGY`
+    , targetTags: '[]'
+    , primaryTags: '["weaponized"]'
+    , tags: '["5g", "internet", "addiction", "mind", "control", "towers", "smartphone", "digital", "thoughts", "ti", "targeted"]'
+    }, {
+      url: 'https://www.wanttoknow.info/mindcontrolinformation'
+    , img: 'https://www.wanttoknow.info/mk/nsa-images/scalartech12_03.gif'
+    , content: `YOU''VE NEVER SEEN COGNITIVE MAPPING KNOWLEDGE-PROCESSING LIKE THIS`
+    , targetTags: '[]'
+    , primaryTags: '["cognitive", "knowledge", "processing"]'
+    , tags: '["radio", "transmission", "mind", "control", "nsa", "microwave", "frequency", "ti", "targeted"]'
+    }, {
+      url: 'http://www.torturedinamerica.org/'
+    , img: 'http://www.torturedinamerica.org/nonwo.jpg'
+    , content: ``
+    , targetTags: '["politics"]'
+    , primaryTags: '["nwo"]'
+    , tags: '["new", "world", "order", "deep", "state", "politics", "corruption", "ti", "targeted"]'
+    }, {
+      url: 'http://fastcashmoneyplus.biz'
+    , img: 'https://i.imgur.com/BzrG85K.png'
+    , content: `GOT MONEY ON THE BRAIN?`
+    , targetTags: '[""]'
+    , primaryTags: '["x-ray"]'
+    , tags: '["money", "brain", "cash", "skull", "rich", "profit", "dopamine", "wealth", "fastcash"]'
+    }, {
+      url: 'https://steviep.xyz#self-help'
+    , img: 'https://d3b3by4navws1f.cloudfront.net/iStock-629568880.jpg'
+    , content: `ARE YOU SICK OF GOING TO WORK?`
+    , targetTags: '[""]'
+    , primaryTags: '["driving"]'
+    , tags: '["depressed", "sad", "anxious", "anxiety", "muscle", "work", "hate"]'
+    }, {
+      url: 'https://pathtoawakening.net/emf-balancing-technique/'
+    , img: 'https://i.imgur.com/zIOEsMZ.jpg'
+    , content: `HOW ARE YOU USING YOUR ENERGY?`
+    , targetTags: '["woo"]'
+    , primaryTags: '["emf", "electromagnetic"]'
+    , tags: '["relationship", "cocreate", "relationships", "chakra", "energy", "therapy", "electo", "magnetic", "intuition", "happy", "depressed", "soul"]'
+    }, {
+      url: 'http://ascendedhealer.com/'
+    , img: 'http://ascendedhealer.com/images/hypnosis-cds2.jpg'
+    , content: `THERE IS NO REASON FOR YOU TO SUFFER WITH ANYTHING EVER AGAIN FOR THE REST OF YOUR LIFE`
+    , targetTags: '["woo"]'
+    , primaryTags: '["dream", "dreams", "dreaming"]'
+    , tags: '["lucid", "therapy", "woo", "hypnosis", "suffering", "depressed"]'
+    }, {
+      url: 'https://www.lifeenergysolutions.com/'
+    , img: 'https://newagora.ca/wp-content/uploads/2019/04/orgonite.jpg'
+    , content: `Protect yourself from EMF''s! {Electro-magnetic Frequencies)`
+    , targetTags: '["woo"]'
+    , primaryTags: '["emf"]'
+    , tags: '["5g", "electromagnetic", "jewelry", "electric", "cancer", "jewelry"]'
+    }, {
+      url: 'https://www.shambhalahealingtools.com/'
+    , img: 'https://www.shambhalahealingtools.com/v/vspfiles/assets/images/donation-ewt-2t.jpg'
+    , content: `Maitreya Solar Crosses {TM): Spiritual Awakening That Radiate Higher Harmonics`
+    , targetTags: '["woo"]'
+    , primaryTags: '["buddha"]'
+    , tags: '["healing", "moon", "jesus", "christ", "blessing", "buddhism", "harmony", "harmonics", "spirit", "spiritual", "spirituality"]'
+    }, {
+      url: 'https://unariansunited.com/who-we-are/'
+    , img: 'https://unariansunited.com/wp-content/uploads/Pic-2-Venus-high-plane.jpg'
+    , content: `Explore past-life therapy to achieve a Higher Self`
+    , targetTags: '["woo"]'
+    , primaryTags: '["unarius"]'
+    , tags: '["spirit", "spiritual", "spirituality", "god", "therapy", "venus", "mars"]'
+    }, {
+    url:  'https://st2.depositphotos.com/3782659/11737/i/950/depositphotos_117378280-stock-photo-young-asian-woman-thumbs-up.jpg'
+    , img: 'http://www.kenho-products.com/kenho/admin/src/images/learn2.PNG'
+    , content: `IMPROVE YOUR LIFE WITH HEALTHY HYDROGEN WATER`
+    , targetTags: '["woo"]'
+    , primaryTags: '["water", "hydrogen"]'
+    , tags: '["ion", "acidic", "alkaline", "radicals", "health", "h20", "infinity", "oasis", "ph"]'
+    }, {
+      url: 'https://www.implanet.net/'
+    , img: 'https://i.imgur.com/7hoZ1bt.jpg'
+    , content: `I COULDN''T BELIEVE THEY WEREN''T REAL TEETH!`
+    , targetTags: '[]'
+    , primaryTags: '["teeth", "tooth"]'
+    , tags: '["dental", "dentist", "implants", "implant", "cavity", "mouth", "gums", "dentures"]'
+    }, {
+      url: 'https://www.hypnosiswow.com/'
+    , img: 'https://www.wayoflife.org/reports/beware-of-hypnosis_files/hypnosis-copy.jpg'
+    , content: `take control of your sex life`
+    , targetTags: '["woo"]'
+    , primaryTags: '["hypnosis"]'
+    , tags: '["therapy", "depression", "anxiety", "weight", "quantum", "motivation", "motivaitonal", "phobia"]'
+    }, {
+      url: 'https://0ms.co/'
+    , img: 'https://iedunote.com/img/10964/what-is-transactions-types-of-accounting-transactions.jpg'
+    , content: `WE WILL HELP YOU SELL YOUR PRODUCT`
+    , targetTags: '[""]'
+    , primaryTags: '["ad", "ads", "advertisement", "advertisements"]'
+    , tags: '["sponsored", "marketing", "sales", "optimization"]'
+    }
+  ]
+
+  const container = document.getElementById('content')
+  ads.forEach(ad => container.innerHTML += `
+    <div class="ad">
+      <a href="${ad.url}">
+        <img src="${ad.img}">
+        <div>${ad.content}</div>
+      </a>
+      <pre>${JSON.stringify(ad, null, 3)}</pre>
+    </div>
+  `)
+</script>
+</html>
+

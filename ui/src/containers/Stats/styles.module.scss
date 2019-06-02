@@ -1,3 +1,46 @@
 .stats {
+  h1 {
+    font-size: 30px;
+    margin-bottom: 20px;
+  }
 
+  h2 {
+    font-size: 20px;
+    margin-bottom: 5px;
+    text-align: center;
+  }
+
+  li {
+    line-height: 1.2;
+  }
+
+  .statSection {
+    display: inline-block;
+    margin-right: 10px;
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  td, th {
+    border: 1px solid;
+    padding: 3px;
+    text-align: left;
+  }
+}
+
+.sectionContainer {
+  display: flex;
+  justify-content: space-around;
+  max-width: 900px;
+  margin: auto;
+}
+
+
+@media(max-width: 540px) {
+  .sectionContainer {
+    flex-direction: column;
+    align-items: center;
+  }
 }

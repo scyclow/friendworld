@@ -69,7 +69,7 @@ const ThreadPost = ({ thread }: { thread: Thread }) => {
 const Forum: React.SFC<{}> = () => {
   const { isMobile, isDesktop } = useResponsive(540)
   const [{ fetching, error, data }] = useQuery<ThreadQuery>({ query: threadQuery })
-  const { ads, fetchingAds } = useAds(4, { restricted: true })
+  const { ads, fetchingAds } = useAds(4)
   const showMobileAd = (i: number) => {
     if (!isMobile) return false
     if ((i + 1) % 6) return false

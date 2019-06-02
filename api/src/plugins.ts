@@ -44,7 +44,7 @@ type AutomatedPostInfo = {
 }
 
 const users = {
-  steve_p: '0a04ff42-a2c6-4e1f-bda9-80c493abefea',
+  steve: '0a04ff42-a2c6-4e1f-bda9-80c493abefea',
   dumbotheclown: '0a04ff42-a2c6-4e1f-bda9-80c493abefee',
   fuckface99: '0a04ff42-a2c6-4e1f-bda9-80c493abefab',
   vinceslickson: '0a04ff42-a2c6-4e1f-bda9-80c493abefeb',
@@ -57,6 +57,7 @@ const automatedPosts: Array<AutomatedPostInfo> = [
   { content: 'Interesting!', userUuid: users.dumbotheclown },
   { content: `Hmm, I've never thought of that before!`, userUuid: users.dumbotheclown },
   { content: `Wow!`, userUuid: users.dumbotheclown },
+  { content: `Wow, what a great post!`, userUuid: users.dumbotheclown },
   { content: `What a discussion!`, userUuid: users.dumbotheclown },
 
   // fuckface99
@@ -77,7 +78,7 @@ const createResolve = (resolveInfo: any, context: any) => (mutation: string, inp
 
 
 
-const getAutomatedPost = (
+const getTriggerededPost = (
   content: string,
   authorUsername: string,
   tags: Tags,
@@ -99,14 +100,14 @@ const getAutomatedPost = (
   }
 
   if (tags.includes('fastcash')) return {
-    chance: 0.5,
-    content: `Hey @${authorUsername} If you're looking for a deal on that fastcash, let's talk. I've got a hookup that you wont't want to pass up.`,
+    chance: 0.4,
+    content: `Hey @${authorUsername} If you're looking for a deal on that fastcash, then shoot my a DM. I've got a hookup that you wont't want to pass up.`,
     userUuid: users.vinceslickson,
     usernames: [authorUsername],
     tags: ['fastcash']
   }
 
-  return _.sample(automatedPosts) as AutomatedPostInfo
+  return null
 }
 
 
@@ -117,15 +118,22 @@ const createAutomatedPost = async (args: any, context: any, resolveInfo: any) =>
   const result = await context.pgClient.query(`select username from friendworld.users where id = '${authorUserId}';`)
   const authorUsername = result.rows[0].username
 
-  const post = getAutomatedPost(
+  const triggeredPost = getTriggerededPost(
     content,
     authorUsername,
     JSON.parse(tags) as Tags,
     JSON.parse(usernames) as Usernames,
   )
+
+  const randomPost = _.sample(automatedPosts)
+
+  const post = triggeredPost || randomPost || null
+
+  if (!post || (Math.random() > (post.chance || 0.1))) return
+
+
   const resolve = createResolve(resolveInfo, context)
 
-  if (!post || (Math.random() < (post.chance || 0.7))) return
 
   try {
     await setUserUuid(context, post.userUuid)
@@ -166,19 +174,19 @@ const sendAutomatedMessage = async (args: any, context: any, resolveInfo: any) =
       where friendworld.posts.author_id = '${authorUserId}'
       group by username;
     `)
-    const postCount = result.rows[0].post_count
+    const postCount = Number(result.rows[0].post_count)
     const toUsername = result.rows[0].username
 
-    // if (Number(postCount) === 3) {
-    //   return k.raw(`
-    //     begin;
-    //       set local jwt.claims.user_id to '${users.heatherhot6}';
-    //       select friendworld.create_message('${toUsername}', 'hey');
-    //     commit;
-    //   `)
 
     const execute = createResolve(resolveInfo, context)
     if (postCount === 3) {
+      await setUserUuid(context, users.dumbotheclown)
+      return execute(createMessageMutation, {
+        input: { toUsername, content: `Hi!` }
+      })
+    }
+
+    if (postCount === 10) {
       await setUserUuid(context, users.heatherhot6)
       return execute(createMessageMutation, {
         input: { toUsername, content: `hey` }
@@ -193,25 +201,25 @@ const sendAutomatedMessage = async (args: any, context: any, resolveInfo: any) =
 
 const heatherHotMessages = [
   {
-    content: `Hi my real name is Amanda, I'm 21/f and pretty bored searching for some1 2 talk too... how old are you\\?`
+    content: `Hi my real name is Amanda, I'm 21/f and pretty bored searching for some1 2 talk too... how old are you?`
   }, {
-    content: `I love chatting with horny people.. Would you like to have a conversation today\\?`,
+    content: `I love chatting with horny people.. Would you like to have a conversation today?`,
     followUp: {
       wait: 1000,
-      content: `Where are you from\\?\\?`
+      content: `Where are you from??`
     }
   }, {
-    content: `Im frm new york, Please answer my next  quest\\?`
+    content: `Im frm new york, Please answer my next  quest?`
   }, {
-    content: `Do you like big booty women with big boobs\\? LMAO but for real cuz thats what i am/have..Is that too much for you to handle\\?`
+    content: `Do you like big booty women with big boobs? LMAO but for real cuz thats what i am/have..Is that too much for you to handle?`
   }, {
-    content: `Have you ever heard of a whooty\\? Would you like to watch me i'll show you my Whooty....`
+    content: `Have you ever heard of a whooty? Would you like to watch me i'll show you my Whooty....`
   }, {
     content: `lol Whooty is a White Girl with a big BOOTY!`
   }, {
     content: `i wanna show u mine...`
   }, {
-    content: `ok let me set up my camera for you sweetheart..ok\\?`
+    content: `ok let me set up my camera for you sweetheart..ok?`
   }, {
     content: `um go to this website FNGirl dot com and you'll see me.  all you have to do is click Accept Invite on the bottom left!, if the page doesn't load then use your phone or computer`,
     followUp: {
@@ -224,46 +232,6 @@ const heatherHotMessages = [
     content: `ok i'm ready for you now`
   }
 ]
-const handleHeatherhotMessage = async (senderId: string) => {
-  try {
-    const result = await k.raw(`
-      select username, count(*) as message_count
-      from friendworld.messages
-      left join friendworld.users on friendworld.users.id = friendworld.messages.from_id
-      where friendworld.messages.from_id = '${senderId}'and friendworld.messages.to_id = '${users.heatherhot6}'
-      group by username;
-    `)
-
-    if (!result.rows.length) return
-    const toUsername = result.rows[0].username
-    const messageCount = result.rows[0].message_count - 1
-
-    const msg = heatherHotMessages[messageCount]
-
-    if (!msg) return
-    await new Promise(res => setTimeout(res, Math.random() * 3000))
-    const { content, followUp } = msg
-    await k.raw(`
-      commit;
-      begin;
-        set local jwt.claims.user_id to '${users.heatherhot6}';
-        select friendworld.create_message('${toUsername}', '${content.replace(/'/g, "''")}');
-      commit;
-    `)
-    if (followUp) {
-      await new Promise(res => setTimeout(res, Math.random() * 3000 + followUp.wait))
-      await k.raw(`
-        begin;
-          set local jwt.claims.user_id to '${users.heatherhot6}';
-          select friendworld.create_message('${toUsername}', '${followUp.content.replace(/'/g, "''")}');
-        commit;
-      `)
-    }
-
-  } catch (e) {
-    console.log(e)
-  }
-}
 
 
 const dumboMessages = [
@@ -275,14 +243,58 @@ const dumboMessages = [
   { content: `Interesting! I never thought of it like that before. All of my other friends said the exact opposite... But I guess that's what makes https://friendworld.social such a special place! Where else would I be introduced to a unique perspective like that?` },
   { content: `I'm really glad I made a new friend today. Thank you for the conversation! I have to go now. Good bye.` },
   { content: `So long!` },
+  { content: `Bye bye!` },
+  { content: `Adiós!` },
+  { content: `Sayonara!` },
+  { content: `Arrivederci!` },
 ]
-const handleDumboMessage = async (senderId: string) => {
+
+const fuckfaceMessages = [
+  { content: `HI THERE, WHAT'S YOUR NAME?` },
+  { content: `WHO GIVES A SHIT? HAHAHA. YOU KNOW WHAT? YOU'RE A COMPLETE AND TOTAL LOSER, AND YOU'LL NEVER AMOUNT TO ANYTHING. WHAT ARE YOU EVEN DOING WASTING YOUR LIFE ON THIS STUPID WEBSITE? DON'T YOU HAVE ANYTHING BETTER TO DO?` },
+  { content: `LOOK, I'M SORRY. I WAS JUST KIDDING. WE ALL GET STRESSED OUT SOMETIMES, RIGHT? TO BE TOTALLY HONEST, I'VE BEEN FEELING PRETTY DOWN THE LAST COUPLE OF MONTHS. BEING AGGRESSIVE ON SOCIAL MEDIA HAS BEEN A GOOD OUTLET FOR MY ANXIETY, BUT I KNOW THAT IT ISN'T SUSTAINABLE. ALL I'M DOING IS BRINGING OTHER PEOPLE DOWN WITH ME :(` },
+  { content: `YEAH, THANKS. I APPRECIATE IT. BUT I'M GLAD YOU ASKED. I'VE ACTUALLY BEEN THINKING ABOUT GOING TO THERAPY, OR ENGAGING IN SOME SORT OF SELF-HELP PROGRAM. IF YOU HEAR OF ANY GOOD ONES, THEN LET ME KNOW. ` },
+  { content: `ANYHOW, I HAVE TO GO, BUT THANKS FOR REACHING OUT. IT REALLY MEANT A LOT TO ME.` },
+  { content: `SERIOUSLY, I HAVE THINGS TO DO, SO GO AWAY.` },
+  { content: `YOU KNOW WHAT? I THINK YOU COULD BENEFIT FROM SOME THERAPY AND SELF HELP YOURSELF! YOU NEED TO LEARN TO GET YOUR KICKS FROM WAYS OTHER THAN TROLLING STRANGERS ON THE INTERNET` },
+]
+const fuckfaceBackupMessages = ['FUCK OFF', 'I DON\'T CARE', 'GO AWAY', 'SHUT UP']
+
+
+const vinceSlicksonMessages = [
+  { content: `Hey pal, are you ready to make some money?` },
+  { content: `Haha, I bet you are! You sound like a real go-getter ;)` },
+  { content: `Okay, okay. I can tell you're anxious to get started! You remind me of myself when I was your age: young, hungry, ready to fuck anything that moved, and most importantly: always on the look out to make a quick buck. But before we get started, I'm going to need to ask you a few questions. I'm very selective in who I choose to work with, so I need to make sure I'm not wasting my time with you. Gabich?` },
+  { content: `Ha, don't worry buddy, I'll make it quick. First question: In the last six months, are you dissatisfied with your current level of income?` },
+  { content: `Hmm, I see. And what is your income now, if you don't mind me asking?` },
+  { content: `Okay, okay. Not terrible, but I think we can do a little better than that!`,
+    followUp: {
+      wait: 1000,
+      content: `Oh yeah, by the way, do you have any high-income friends or relatives?`
+    }
+  },
+  { content: `Oh, I just wanted to get a sense of what your motivations are. Knowing rich people can be a great motivator for generating wealth for yourself. Additionally, they can open doors for you down the line that wouldn't normally be there for poorer folks. Anyhow, moving on: Are you content making money slowly and steadily over the course of years... or maybe even decades? Or, do you prefer to make your money all at once?` },
+  { content: `Great! That's what I like to hear! I have a few opportunities in mind for you, so I just have a couple more questions for you to help use narrow things down; What's your opinion on the government tracking payments as a way to both monitor citizens' behavior?` },
+  { content: `Yeah, I totally agree with you there. I think I know what would work for you: Have you heard of crypto currencies? I think they would be a great investment opportunity for you. They really check all the boxes: They're fast, safe, anyone can buy them, AND the pesky government can't keep track of what you're spending them on! They've only gone up in value, and I'm dead certain that they'll continue for the forseeable future.` },
+  { content: `I knew you'd ask that!  There are a lot of bogus cryptos out there, so I wouldn't just buy anything. But lucky for you, I happen to be an expert in the space. There's one crypto in particular that I think you'll like. It's called FastCashMoneyPlus, and it's the real hot ticket right now. It's a pretty safe bet, but it won't last forever. So don't sleep on it. Head on over to http://fastcashmoneyplus.biz/?ref=buzzDYNAMIC_PLUSIVZ7MwNjKyMVLy98H  COPY and get in NOW` },
+  { content: `Well, if I were you I'd buy as much as I could now. They're going fast, so you don't want to leave money on the table.` },
+]
+
+
+async function createMessageHandler(
+  username: keyof (typeof users),
+  senderId: string,
+  messages: Array<{ content: string, followUp?: { content: string, wait: number }}>,
+  backupMessages?: Array<string>
+) {
+  const botId = users[username]
+
   try {
     const result = await k.raw(`
       select username, count(*) as message_count
       from friendworld.messages
       left join friendworld.users on friendworld.users.id = friendworld.messages.from_id
-      where friendworld.messages.from_id = '${senderId}'and friendworld.messages.to_id = '${users.dumbotheclown}'
+      where friendworld.messages.from_id = '${senderId}'and friendworld.messages.to_id = '${botId}'
       group by username;
     `)
 
@@ -290,109 +302,51 @@ const handleDumboMessage = async (senderId: string) => {
     const toUsername = result.rows[0].username
     const messageCount = result.rows[0].message_count - 1
 
-    const msg = dumboMessages[messageCount]
+    const msg = messages[messageCount] || (backupMessages ? { content: _.sample(backupMessages) } as any : null)
 
-    if (!msg) return
+    if (!msg || !msg.content) return
     await new Promise(res => setTimeout(res, Math.random() * 3000))
-    const { content } = msg
+    const { content, followUp } = msg
     const cleaned = content.replace(/'/g, "''").replace(/\?/g, '\\?')
+
     await k.raw(`
       commit;
       begin;
-        set local jwt.claims.user_id to '${users.dumbotheclown}';
+        set local jwt.claims.user_id to '${botId}';
         select friendworld.create_message('${toUsername}', '${cleaned}');
       commit;
     `)
+    if (followUp) {
+      await new Promise(res => setTimeout(res, Math.random() * 3000 + followUp.wait))
+      const cleanedFollowup = followUp.content.replace(/'/g, "''").replace(/\?/g, '\\?')
 
+      await k.raw(`
+        begin;
+          set local jwt.claims.user_id to '${botId}';
+          select friendworld.create_message('${toUsername}', '${cleanedFollowup}');
+        commit;
+      `)
+    }
 
   } catch (e) {
     console.log(e)
   }
 }
-
-
-const fuckfaceMessages = [
-  'HI THERE, WHAT\'S YOUR NAME?',
-  'WHO GIVES A SHIT? HAHAHA. YOU KNOW WHAT? YOU\'RE A COMPLETE AND TOTAL LOSER, AND YOU\'LL NEVER AMOUNT TO ANYTHING. WHAT ARE YOU EVEN DOING WASTING YOUR LIFE ON THIS STUPID WEBSITE? DON\'T YOU HAVE ANYTHING BETTER TO DO?',
-  'LOOK, I\'M SORRY. I WAS JUST KIDDING. WE ALL GET STRESSED OUT SOMETIMES, RIGHT? TO BE TOTALLY HONEST, I\'VE BEEN FEELING PRETTY DOWN THE LAST COUPLE OF MONTHS. BEING AGGRESSIVE ON SOCIAL MEDIA HAS BEEN A GOOD OUTLET FOR MY ANXIETY, BUT I KNOW THAT IT ISN\'T SUSTAINABLE. ALL I\'M DOING IS BRINGING OTHER PEOPLE DOWN WITH ME :(',
-  'YEAH, THANKS. I APPRECIATE IT. BUT I\'M GLAD YOU ASKED. I\'VE ACTUALLY BEEN THINKING ABOUT GOING TO THERAPY, OR ENGAGING IN SOME SORT OF SELF-HELP PROGRAM. IF YOU HEAR OF ANY GOOD ONES, THEN LET ME KNOW. ',
-  'ANYHOW, I HAVE TO GO, BUT THANKS FOR REACHING OUT. IT REALLY MEANT A LOT TO ME.',
-  'SERIOUSLY, I HAVE THINGS TO DO, SO GO AWAY.',
-  'YOU KNOW WHAT? I THINK YOU COULD BENEFIT FROM SOME THERAPY AND SELF HELP YOURSELF! YOU NEED TO LEARN TO GET YOUR KICKS FROM WAYS OTHER THAN TROLLING STRANGERS ON THE INTERNET!'
-]
-const handleFuckfaceMessage = async (resolveInfo: any, context: any) => {
-  const execute = createResolve(resolveInfo, context)
-  const senderId = context.jwtClaims.user_id
-
-  try {
-    const result = await context.pgClient.query(`
-      select username, count(*) as message_count
-      from friendworld.messages
-      left join friendworld.users on friendworld.users.id = friendworld.messages.from_id
-      where friendworld.messages.from_id = '${senderId}'and friendworld.messages.to_id = '${users.fuckface99}'
-      group by username;
-    `)
-    const toUsername = result.rows[0].username
-    const messageCount = result.rows[0].message_count - 1
-
-    const content = fuckfaceMessages[messageCount] || _.sample(['FUCK OFF', 'I DON\'T CARE', 'GO AWAY', 'SHUT UP'])
-
-    await setUserUuid(context, users.fuckface99)
-    return execute(createMessageMutation, {
-      input: { toUsername, content }
-    })
-  } catch (e) {
-    console.log(e)
-  }
-}
-
-const vinceSlicksonMessage = [
-  'Hey pal, are you ready to make some money?',
-  'Haha, I bet you are! You sound like a real go-getter ;)',
-  `Okay, okay. I can tell you're anxious to get started! You remind me of myself when I was your age: young, hungry, ready to fuck anything that moved, and most importantly: always on the look out to make a quick buck. But before we get started, I'm going to need to ask you a few questions. I'm very selective in who I choose to work with, so I need to make sure I'm not wasting my time with you. Gabich?`,
-  `Ha, don't worry buddy, I'll make it quick. First question: In the last six months, have you been dissatisfied with your current level of income?`,
-  `Hmm, I see. And what is your income now, if you don't mind me asking?`,
-  `Okay, okay. Not terrible, but I think we can do a little better than that! Oh yeah, by the way, do you have any high-income friends or relatives?`,
-  `Oh, I just wanted to get a sense of what your motivations are. Knowing rich people can be a great motivator for generating wealth for yourself. Additionally, they can open doors for you down the line that wouldn't normally be there for poorer folks. Anyhow, moving on: Are you content making money slowly and steadily over the course of years... or maybe even decades? Or, do you prefer to make your money all at once?`,
-  `Great! That's what I like to hear! I have a few opportunities in mind for you, so I just have a couple more questions for you to help use narrow things down; What's your opinion on the government tracking payments as a way to both monitor citizens' behavior?`,
-  `Yeah, I totally agree with you there. I think I know what would work for you: Have you heard of crypto currencies? I think they would be a great investment opportunity for you. They really check all the boxes: They're fast, safe, anyone can buy them, AND the pesky government can't keep track of what you're spending them on! They've only gone up in value, and I'm dead certain that they'll continue for the forseeable future.`,
-  `I knew you'd ask that!  There are a lot of bogus cryptos out there, so I wouldn't just buy anything. But lucky for you, I happen to be an expert in the space. There's one crypto in particular that I think you'll like. It's called FastCashMoneyPlus, and it's the real hot ticket right now. It's a pretty safe bet, but it won't last forever. So don't sleep on it. Head on over to http://fastcashmoneyplus.biz/?ref=buzzDYNAMIC_PLUSIVZ7MwNjKyMVLy98H  COPY and get in NOW`,
-  `Well, if I were you I'd buy as much as I could now. They're going fast, so you don't want to leave money on the table.`
-]
-const handleVinceSlicksonMessage = async (resolveInfo: any, context: any) => {
-  const execute = createResolve(resolveInfo, context)
-  const senderId = context.jwtClaims.user_id
-
-  try {
-    const result = await context.pgClient.query(`
-      select username, count(*) as message_count
-      from friendworld.messages
-      left join friendworld.users on friendworld.users.id = friendworld.messages.from_id
-      where friendworld.messages.from_id = '${senderId}'and friendworld.messages.to_id = '${users.vinceslickson}'
-      group by username;
-    `)
-    const toUsername = result.rows[0].username
-    const messageCount = result.rows[0].message_count - 1
-
-    const content = vinceSlicksonMessage[messageCount]
-    if (!content) return
-
-    await setUserUuid(context, users.vinceslickson)
-    return execute(createMessageMutation, {
-      input: { toUsername, content }
-    })
-  } catch (e) {
-    console.log(e)
-  }
-}
-
 const sendBotMessage = async (args: any, context: any, resolveInfo: any) => {
   const { toUsername } = args.input
 
-  if (toUsername.toLowerCase() === 'heatherhot6') handleHeatherhotMessage(context.jwtClaims.user_id)
-  if (toUsername.toLowerCase() === 'dumbotheclown') handleDumboMessage(context.jwtClaims.user_id)
-  if (toUsername.toLowerCase() === 'fuckface99') return handleFuckfaceMessage(resolveInfo, context)
-  if (toUsername.toLowerCase() === 'vinceslickson') return handleVinceSlicksonMessage(resolveInfo, context)
+  if (toUsername.toLowerCase() === 'heatherhot6') {
+    createMessageHandler('heatherhot6', context.jwtClaims.user_id, heatherHotMessages)
+  }
+  if (toUsername.toLowerCase() === 'dumbotheclown') {
+    createMessageHandler('dumbotheclown', context.jwtClaims.user_id, dumboMessages)
+  }
+  if (toUsername.toLowerCase() === 'fuckface99') {
+    createMessageHandler('fuckface99', context.jwtClaims.user_id, fuckfaceMessages, fuckfaceBackupMessages)
+  }
+  if (toUsername.toLowerCase() === 'vinceslickson') {
+    createMessageHandler('vinceslickson', context.jwtClaims.user_id, vinceSlicksonMessages)
+  }
 }
 
 
@@ -417,19 +371,14 @@ export const sendWelcomMessagePlugin = makeWrapResolversPlugin({
       const { username } = args.input
 
       try {
-        await setUserUuid(context, users.steve_p)
+        await setUserUuid(context, users.steve)
 
         await execute(createMessageMutation, {
           input: {
             toUsername: username,
             content: `Hi, ${username}! Welcome to Friendworld!
-            I'm really glad you decided to sign up. Friendworld truely has a one-of-a-kind community with unique, intelligent, and thoughtful members. Here on Friendworld, we
-
-            I'm sure that you'll help contribute to the community, and I'm really looking forward to reading you posts :)
-            Unlike all of the other mainstream social networks, I'll *never* collect or sell any of you personal data. So feel free to let loose and be your honest and true self. For once, you can be whoever you want to be.
-
-            Best,
-            Steve
+            I'm really glad you decided to sign up. Friendworld truely has a one-of-a-kind community with unique, intelligent, and thoughtful members. I'm sure that you'll help contribute to the community, and I'm really looking forward to reading you posts :)
+            S
             P.S. If you have any questions or concerns, please let me know. I'm always looking to make your experience better, so I'm always be happy to see a bug report or feature request in my inbox.
             `,
           }

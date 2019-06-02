@@ -600,6 +600,21 @@ $$ language sql stable;
 grant execute on function friendworld.user_stats()
   to friendworld_user, friendworld_anonymous;
 
+create function friendworld.user_ad_clicks()
+  returns table (
+    username    text
+  , ad_clicks  bigint
+) as $$
+  select username, count(*) as post_count
+  from friendworld.ad_clicks
+  join friendworld.users on users.id = friendworld.ad_clicks.user_id
+  group by username
+  order by post_count
+  desc;
+$$ language sql stable;
+
+grant execute on function friendworld.user_ad_clicks()
+  to friendworld_user, friendworld_anonymous;
 
 -- log_ad_click
 create function friendworld.log_ad_click(

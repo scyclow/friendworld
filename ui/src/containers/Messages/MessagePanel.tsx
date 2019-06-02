@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect, useMemo } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { useQuery, useMutation } from 'urql'
 import { Link, Redirect } from 'react-router-dom'
 import orderBy from 'lodash/orderBy'
@@ -118,7 +118,6 @@ export default function MessagePanel ({ username }: Props) {
   const $sentMessages = useRef<any>(null)
   const [messageToSend, setMessageToSend] = useState<string>('')
   const [{ error, data }, executeQuery] = useQuery<RequestedUserQuery>({
-  // const [{ error, data }] = useQuery<RequestedUserQuery>({
     query: requestedUserQuery,
     variables: { username: username || '' }
   })
@@ -129,17 +128,22 @@ export default function MessagePanel ({ username }: Props) {
 
   useInterval(() => {
     if (!document.hidden) {
-      console.log('executing', Date.now())
       executeQuery({ requestPolicy: 'network-only' })
     }
   }, 1000)
 
-  useMemo(() => {
+  const memoized = [
+    data
+    && data.requestedUser
+    && data.requestedUser.received && data.requestedUser.sent
+    && data.requestedUser.received.length + data.requestedUser.sent.length
+  ]
+
+  useEffect(() => {
     if ($sentMessages.current) {
       $sentMessages.current.scrollTop = $sentMessages.current.scrollHeight
     }
-  // eslint-disable-next-line
-  }, [data])
+  }, memoized) // eslint-disable-line
 
 
   const sendMessage = (keyPressed?: string) => {

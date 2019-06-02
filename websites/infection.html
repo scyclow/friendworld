@@ -9,7 +9,9 @@
   <body>
     <button id="a">click</button>
     <div class="result"></div>
+
     <div class="output"></div>
+    add to chrome: https://www.horoscopefinder.co/0hin5?&t1=120914&t2=294506
 
     <script src="https://threejs.org/build/three.js"></script>
     <script>
@@ -93,7 +95,7 @@ function testSpeech() {
 
   var recognition = new SpeechRecognition();
   var speechRecognitionList = new SpeechGrammarList();
-  speechRecognitionList.addFromString(grammar, 1);
+  // speechRecognitionList.addFromString(grammar, 1);
   recognition.grammars = speechRecognitionList;
   recognition.lang = 'en-US';
   recognition.interimResults = false;
@@ -171,5 +173,8 @@ function testSpeech() {
 
 testBtn.addEventListener('click', testSpeech);
     </script>
+
+
+
   </body>
 </html>

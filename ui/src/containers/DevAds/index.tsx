@@ -33,7 +33,7 @@ function DevAds() {
     <div>
       <h1>Total Ads: {data.stats.totalCount}</h1>
       {data.ads.map((ad: any) =>
-        <div key={ad.id} style={{ border: '1px solid black', padding: '5px', margin: '10px' }}>
+        <div key={ad.id} style={{ border: '1px solid', padding: '5px', margin: '10px' }}>
           <div style={{ maxWidth: '400px' }}>
             <Ad {...ad} />
           </div>

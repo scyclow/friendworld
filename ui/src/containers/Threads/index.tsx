@@ -121,7 +121,7 @@ const Threads: React.SFC<{ id: number }> = ({ id }) => {
     ? data.thread.posts.flatMap(p => JSON.parse(p.tags))
     : []
   )
-  const { ads, fetchingAds } = useAds(4, { tags, restricted: false })
+  const { ads, fetchingAds } = useAds(4, { tags })
 
   // const refetch = useCallback(
   //   () => executeQuery({ requestPolicy: 'network-only' }),

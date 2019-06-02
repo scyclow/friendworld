@@ -10,12 +10,20 @@ const statsQuery = `{
     username
     postCount
   }
+  userAdClicksList {
+    username
+    adClicks
+  }
 }`
 
 type StatsQuery = {
   userStatsList: Array<{
     username: string
     postCount: string
+  }>
+  userAdClicksList: Array<{
+    username: string
+    adClicks: string
   }>
 }
 
@@ -34,14 +42,50 @@ function Stats() {
   return (
     <section className={styles.stats}>
       <h1>User Stats</h1>
-      <h2>Top Posters:</h2>
-      <ol>
-        {data.userStatsList.map((stat, i) => (
-          <li key={i}>
-            {i + 1}. {stat.username}: {stat.postCount}
-          </li>
-        ))}
-      </ol>
+      <div className={styles.sectionContainer}>
+        <div className={styles.statSection}>
+          <h2>Top Posters:</h2>
+          <table>
+            <thead>
+              <tr>
+                <th></th>
+                <th>Username</th>
+                <th>Posts</th>
+              </tr>
+            </thead>
+            <tbody>
+              {data.userStatsList.map((stat, i) => (
+                <tr key={i}>
+                  <td>{i + 1}.</td>
+                  <td>{stat.username}</td>
+                  <td>{stat.postCount}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        <div className={styles.statSection}>
+          <h2>Sponsored Content Engagements:</h2>
+          <table>
+            <thead>
+              <tr>
+                <th></th>
+                <th>Username</th>
+                <th>Engagements</th>
+              </tr>
+            </thead>
+            <tbody>
+              {data.userAdClicksList.map((stat, i) => (
+                <tr key={i}>
+                  <td>{i + 1}.</td>
+                  <td>{stat.username}</td>
+                  <td>{stat.adClicks}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
     </section>
   )
 }
