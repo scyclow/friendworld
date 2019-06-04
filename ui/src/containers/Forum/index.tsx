@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom'
 import styles from './styles.module.scss'
 import useResponsive from 'utils/useResponsive'
 import profanityFilter from 'utils/profanityFilter'
+import partition from 'lodash/partition'
 
 import DisplayError from 'components/DisplayError'
 import Loading from 'components/Loading'
@@ -30,7 +31,7 @@ const threadQuery = `{
 }`
 
 type Thread = {
-  id: string,
+  id: number,
   title: string,
   latestPostTime: string,
   posts: Array<{ author: { username: string } }>
@@ -65,6 +66,7 @@ const ThreadPost = ({ thread }: { thread: Thread }) => {
   )
 }
 
+const stickiedThreads = [1]
 
 const Forum: React.SFC<{}> = () => {
   const { isMobile, isDesktop } = useResponsive(540)
@@ -82,6 +84,11 @@ const Forum: React.SFC<{}> = () => {
       </div>
     )
   }
+
+  const partitioned:[Array<Thread>, Array<Thread>] = data && data.threads
+    ? partition(data.threads, thread => stickiedThreads.includes(thread.id))
+    : [[], []]
+
 
   return (
     <section className={styles.forum}>
@@ -104,7 +111,10 @@ const Forum: React.SFC<{}> = () => {
                 Start A Thread!
               </Link>
             </header>
-            {data.threads.map((thread, i) =>
+            <div style={{ border: '1px dashed', padding: '3px', paddingBottom: 0, marginBottom: '10px'}}>
+              <ThreadPost thread={partitioned[0][0]} />
+            </div>
+            {partitioned[1].length && partitioned[1].map((thread, i) =>
               <React.Fragment key={thread.id}>
                 {showMobileAd(i)}
                 <ThreadPost thread={thread} />

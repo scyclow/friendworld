@@ -106,7 +106,7 @@ insert into friendworld.ads (url, img, content, weight, target_tags, primary_tag
   , 1
   , '[]'
   , '["hillary", "clinton"]'
-  , '["politics", "political", "government", "democrats", "republicans", "gop", "liberal", "liberals", "conservative", "conservatives", "libtards", "cucks", "cuck","clinton","socialist", "socialism", "shillary", "sjw", "sjws", "social", "justice", "warriors"]'
+  , '["politics", "political", "government", "democrats", "republicans", "gop", "liberal", "liberals", "conservative", "conservatives", "libtards", "cucks", "cuck","clinton","socialist", "socialism", "shillary", "sjw", "sjws", "warriors"]'
   , true
   )
 , (

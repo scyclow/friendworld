@@ -11,9 +11,11 @@ type PostQuery = {
   post?: PostType
 }
 
+const queryType = process.env.NODE_ENV === 'production' ? 'post' : 'postById'
+
 const postQuery = `
-query postById ($id: Int!){
-  post: postById (id: $id) {
+query ${queryType} ($id: Int!){
+  post: ${queryType} (id: $id) {
     id
     createdAt
     content

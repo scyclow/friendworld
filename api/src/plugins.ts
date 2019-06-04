@@ -44,11 +44,11 @@ type AutomatedPostInfo = {
 }
 
 const users = {
-  steve: '0a04ff42-a2c6-4e1f-bda9-80c493abefea',
-  dumbotheclown: '0a04ff42-a2c6-4e1f-bda9-80c493abefee',
-  fuckface99: '0a04ff42-a2c6-4e1f-bda9-80c493abefab',
-  vinceslickson: '0a04ff42-a2c6-4e1f-bda9-80c493abefeb',
-  heatherhot6: '0a04ff42-a2c6-4e1f-bda9-80c493abefad',
+  steve: 'd2aad2b5-4aba-484e-91f0-5dfdcf1b2ec9',
+  dumbotheclown: '43913166-4f0b-4181-b5cf-07da8440cb7c',
+  fuckface99: 'abf1bc3f-f23f-4ba5-aec4-637053ebee6a',
+  vinceslickson: '0534b28d-5fa8-4c81-99c9-cf76fab5b861',
+  heatherhot6: '0e622956-5ece-42d4-8926-faf880743d72',
 }
 
 const automatedPosts: Array<AutomatedPostInfo> = [

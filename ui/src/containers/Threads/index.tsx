@@ -25,9 +25,10 @@ type ThreadQuery = {
   }
 }
 
+const queryType = process.env.NODE_ENV === 'production' ? 'thread' : 'threadById'
 const threadQuery = `
-query threadById ($id: Int!) {
-  thread: threadById (id: $id) {
+query ${queryType} ($id: Int!) {
+  thread: ${queryType} (id: $id) {
     id
     title
     posts: postsList {
@@ -112,14 +113,15 @@ const AddPost: React.SFC<AddPostProps> = ({ threadId, disabled }) => {
   )
 }
 
-
+const stickiedThreads = [1]
 const Threads: React.SFC<{ id: number }> = ({ id }) => {
   const { isMobile, isDesktop } = useResponsive(820)
   const [{ data, error, fetching }] = useQuery<ThreadQuery>({ query: threadQuery, variables: { id } })
 
-  const tags = (data && data.thread
-    ? data.thread.posts.flatMap(p => JSON.parse(p.tags))
-    : []
+  const tags = (
+    !stickiedThreads.includes(id) && data && data.thread
+      ? data.thread.posts.flatMap(p => JSON.parse(p.tags))
+      : []
   )
   const { ads, fetchingAds } = useAds(4, { tags })
 
