@@ -146,7 +146,7 @@ insert into friendworld.ads (url, img, content, weight, target_tags, primary_tag
   , 1
   , '[]'
   , '[]'
-  , '["foot", "death", "toenail", "nail", "fungus", "feet", "elderly", "organic"]'
+  , '["foot", "death", "toenail", "nail", "fungus", "feet", "elderly", "organic", "pain"]'
   , true
   )
 , (
@@ -366,7 +366,7 @@ insert into friendworld.ads (url, img, content, weight, target_tags, primary_tag
   , 1
   , '[]'
   , '["freemasonry", "666"]'
-  , '["universal", "emperor", "42", "miracle", "hell", "genesis"]'
+  , '["universal", "emperor", "42", "genesis"]'
   , false
   )
 , (
@@ -416,7 +416,7 @@ insert into friendworld.ads (url, img, content, weight, target_tags, primary_tag
   , 1
   , '["politics"]'
   , '["nwo"]'
-  , '["new", "world", "order", "deep", "state", "politics", "corruption", "ti", "targeted"]'
+  , '["new", "world", "order", "deep", "state", "politics", "corruption", "ti", "targeted", "illuminati"]'
   , false
   )
 , (
@@ -475,7 +475,7 @@ insert into friendworld.ads (url, img, content, weight, target_tags, primary_tag
   , 'Explore past-life therapy to achieve a Higher Self'
   , 1
   , '["woo"]'
-  , '["unarius"]'
+  , '["unarius", "past-life"]'
   , '["spirit", "spiritual", "spirituality", "god", "therapy", "venus", "mars"]'
   , true
   )
@@ -496,7 +496,7 @@ insert into friendworld.ads (url, img, content, weight, target_tags, primary_tag
   , 1
   , '[]'
   , '["teeth", "tooth"]'
-  , '["dental", "dentist", "implants", "implant", "cavity", "mouth", "gums", "dentures"]'
+  , '["dental", "dentist", "implants", "implant", "cavity", "mouth", "gums", "dentures", "pain"]'
   , true
   )
 , (

@@ -19,6 +19,9 @@ const config = {
   ENV: process.env.NODE_ENV || 'development',
   JWT_SECRET: process.env.JWT_SECRET || 'blah',
   SQL_PASSWORD: process.env.SQL_PASSWORD || '',
+  HOST_URL: isDev
+    ? 'http://localhost:5000/graphql'
+    : 'https://friendworld.appspot.com/graphql',
   DB_URL: isDev
     ? 'postgres:///friendworld'
     : {
@@ -49,7 +52,7 @@ export const pgConfig = {
   graphiql: isDev,
   enhanceGraphiql: isDev,
   watchPg: isDev,
-  disableQueryLog: true,//!isDev,
+  disableQueryLog: !isDev,
   additionalGraphQLContextFromRequest: async (req: any) => ({ req }),
 
   appendPlugins: [

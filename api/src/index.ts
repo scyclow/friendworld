@@ -36,6 +36,10 @@ app.get('/health', (req, res) => {
   res.send('ok')
 })
 
+app.get('/test', (req, res) => {
+  res.send(process.env.TEST)
+})
+
 // app.get('/test', async (req, res) => {
 //   try {
 //     const result = await k.select('username').from('friendworld.users')

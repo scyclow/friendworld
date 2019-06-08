@@ -5,6 +5,7 @@ import {
 } from 'graphile-utils'
 import _ from 'lodash'
 import knex from 'knex'
+import { sendWelcomeMessage } from './bots'
 
 export const knexConnection = process.env.ENV === 'production'
   ? { user: 'postgres', password: process.env.SQL_PASSWORD, database: 'postgres', host: `/cloudsql/friendworld:us-central1:paget` }
@@ -44,32 +45,51 @@ type AutomatedPostInfo = {
 }
 
 const users = {
-  steve: 'd2aad2b5-4aba-484e-91f0-5dfdcf1b2ec9',
-  dumbotheclown: '43913166-4f0b-4181-b5cf-07da8440cb7c',
-  fuckface99: 'abf1bc3f-f23f-4ba5-aec4-637053ebee6a',
-  vinceslickson: '0534b28d-5fa8-4c81-99c9-cf76fab5b861',
-  heatherhot6: '0e622956-5ece-42d4-8926-faf880743d72',
+  steve: {
+    uuid: 'd2aad2b5-4aba-484e-91f0-5dfdcf1b2ec9',
+    jwt: process.env.STEVE_JWT
+  },
+  dumbotheclown: {
+    uuid: '43913166-4f0b-4181-b5cf-07da8440cb7c',
+    jwt: process.env.DUMBO_JWT
+  },
+  fuckface99: {
+    uuid: 'abf1bc3f-f23f-4ba5-aec4-637053ebee6a',
+    jwt: process.env.FUCKFACE_JWT
+  },
+  vinceslickson: {
+    uuid: '0534b28d-5fa8-4c81-99c9-cf76fab5b861',
+    jwt: process.env.VINCE_JWT
+  },
+  heatherhot6: {
+    uuid: '0e622956-5ece-42d4-8926-faf880743d72',
+    jwt: process.env.HEATHER_JWT
+  },
 }
 
 const automatedPosts: Array<AutomatedPostInfo> = [
   // DumboThe Clown
-  { content: `Wow, that's a really interesting comment!`, userUuid: users.dumbotheclown },
-  { content: 'Interesting!', userUuid: users.dumbotheclown },
-  { content: `Hmm, I've never thought of that before!`, userUuid: users.dumbotheclown },
-  { content: `Wow!`, userUuid: users.dumbotheclown },
-  { content: `Wow, what a great post!`, userUuid: users.dumbotheclown },
-  { content: `What a discussion!`, userUuid: users.dumbotheclown },
+  { content: `Wow, that's a really interesting comment!`, userUuid: users.dumbotheclown.uuid },
+  { content: 'Interesting!', userUuid: users.dumbotheclown.uuid },
+  { content: `Hmm, I've never thought of that before!`, userUuid: users.dumbotheclown.uuid },
+  { content: `Wow!`, userUuid: users.dumbotheclown.uuid },
+  { content: `Wow, what a great post!`, userUuid: users.dumbotheclown.uuid },
+  { content: `What a discussion!`, userUuid: users.dumbotheclown.uuid },
 
   // fuckface99
-  { content: `LOL`, userUuid: users.fuckface99 },
-  { content: `WOW`, userUuid: users.fuckface99 },
-  { content: `WHAT ARE YOU EVEN TALKING ABOUT??`, userUuid: users.fuckface99 },
-  { content: `THIS GUY IS SUCH A FREAKING IDIOT ^`, userUuid: users.fuckface99 },
+  { content: `LOL`, userUuid: users.fuckface99.uuid },
+  { content: `WOW`, userUuid: users.fuckface99.uuid },
+  { content: `WHAT ARE YOU EVEN TALKING ABOUT??`, userUuid: users.fuckface99.uuid },
+  { content: `THIS GUY IS SUCH A FREAKING IDIOT ^`, userUuid: users.fuckface99.uuid },
 
 ]
 
 const setUserUuid = async (context: any, uuid: string) => {
-  context.jwtClaims.user_id = uuid
+  if (context.jwtClaims) {
+    context.jwtClaims.user_id = uuid
+  } else {
+    context.jwtClaims = { user_id: uuid }
+  }
   return context.pgClient.query(`set local jwt.claims.user_id to '${uuid}';`)
 }
 
@@ -88,13 +108,13 @@ const getTriggerededPost = (
   // TODO - 'WHAT DID YOU CALL ME?'
   if (usernames.includes('fuckface99')) return {
     content: 'WHAT DID YOU JUST CALL ME?',
-    userUuid: users.fuckface99,
+    userUuid: users.fuckface99.uuid,
     chance: 0.9
   }
 
   if (usernames.includes('vinceslickson')) return {
     content: `Haha, nice one. But seriously, if you ever want to make some *real* money, give me a shout.`,
-    userUuid: users.vinceslickson,
+    userUuid: users.vinceslickson.uuid,
     tags: ['money'],
     chance: 0.9
   }
@@ -102,7 +122,7 @@ const getTriggerededPost = (
   if (tags.includes('fastcash')) return {
     chance: 0.4,
     content: `Hey @${authorUsername} If you're looking for a deal on that fastcash, then shoot my a DM. I've got a hookup that you wont't want to pass up.`,
-    userUuid: users.vinceslickson,
+    userUuid: users.vinceslickson.uuid,
     usernames: [authorUsername],
     tags: ['fastcash']
   }
@@ -180,14 +200,14 @@ const sendAutomatedMessage = async (args: any, context: any, resolveInfo: any) =
 
     const execute = createResolve(resolveInfo, context)
     if (postCount === 3) {
-      await setUserUuid(context, users.dumbotheclown)
+      await setUserUuid(context, users.dumbotheclown.uuid)
       return execute(createMessageMutation, {
         input: { toUsername, content: `Hi!` }
       })
     }
 
     if (postCount === 10) {
-      await setUserUuid(context, users.heatherhot6)
+      await setUserUuid(context, users.heatherhot6.uuid)
       return execute(createMessageMutation, {
         input: { toUsername, content: `hey` }
       })
@@ -289,6 +309,8 @@ async function createMessageHandler(
 ) {
   const botId = users[username]
 
+  console.log('>>>>>>>>>>>>>>>>> creating message handler ', botId)
+
   try {
     const result = await k.raw(`
       select username, count(*) as message_count
@@ -297,6 +319,7 @@ async function createMessageHandler(
       where friendworld.messages.from_id = '${senderId}'and friendworld.messages.to_id = '${botId}'
       group by username;
     `)
+    console.log('>>>>>>>>>>>>>>>>> previous conversations: ', result.rows.length)
 
     if (!result.rows.length) return
     const toUsername = result.rows[0].username
@@ -304,8 +327,10 @@ async function createMessageHandler(
 
     const msg = messages[messageCount] || (backupMessages ? { content: _.sample(backupMessages) } as any : null)
 
+    console.log('>>>>>>>>>>>>>>>>> next msg: ', msg)
     if (!msg || !msg.content) return
     await new Promise(res => setTimeout(res, Math.random() * 3000))
+    console.log('>>>>>>>>>>>>>>>>> waited')
     const { content, followUp } = msg
     const cleaned = content.replace(/'/g, "''").replace(/\?/g, '\\?')
 
@@ -316,6 +341,7 @@ async function createMessageHandler(
         select friendworld.create_message('${toUsername}', '${cleaned}');
       commit;
     `)
+    console.log('>>>>>>>>>>>>>>>>> sending msg: ')
     if (followUp) {
       await new Promise(res => setTimeout(res, Math.random() * 3000 + followUp.wait))
       const cleanedFollowup = followUp.content.replace(/'/g, "''").replace(/\?/g, '\\?')
@@ -334,11 +360,12 @@ async function createMessageHandler(
 }
 const sendBotMessage = async (args: any, context: any, resolveInfo: any) => {
   const { toUsername } = args.input
-
+  console.log('>>>>>>>>>>>>>>>>> sending bot message')
   if (toUsername.toLowerCase() === 'heatherhot6') {
     createMessageHandler('heatherhot6', context.jwtClaims.user_id, heatherHotMessages)
   }
   if (toUsername.toLowerCase() === 'dumbotheclown') {
+    console.log('>>>>>>>>>>>>>>>>> sending dumbo message')
     createMessageHandler('dumbotheclown', context.jwtClaims.user_id, dumboMessages)
   }
   if (toUsername.toLowerCase() === 'fuckface99') {
@@ -366,23 +393,10 @@ export const sendWelcomMessagePlugin = makeWrapResolversPlugin({
   Mutation: {
     async signup(resolve, source, args, context, resolveInfo: any) {
       const response = await resolve(source, args, context, resolveInfo)
-      const execute = createResolve(resolveInfo, context)
-
       const { username } = args.input
 
       try {
-        await setUserUuid(context, users.steve)
-
-        await execute(createMessageMutation, {
-          input: {
-            toUsername: username,
-            content: `Hi, ${username}! Welcome to Friendworld!
-            I'm really glad you decided to sign up. Friendworld truely has a one-of-a-kind community with unique, intelligent, and thoughtful members. I'm sure that you'll help contribute to the community, and I'm really looking forward to reading you posts :)
-            S
-            P.S. If you have any questions or concerns, please let me know. I'm always looking to make your experience better, so I'm always be happy to see a bug report or feature request in my inbox.
-            `,
-          }
-        })
+        sendWelcomeMessage(username)
         return response
       } catch (e) {
         console.log(e)
@@ -397,6 +411,7 @@ export const createMessageBotPlugin = makeWrapResolversPlugin({
     async createMessage(resolve, source, args, context, resolveInfo: any) {
       const response = await resolve(source, args, context, resolveInfo)
       setTimeout(() => sendBotMessage(args, context, resolveInfo), 200)
+      console.log('>>>>>>>>>>>>>>>>>>> creating message!')
       return response
     }
   },
