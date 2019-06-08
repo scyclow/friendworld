@@ -6,7 +6,7 @@ import DisplayError from 'components/DisplayError'
 // import Loading from 'components/Loading'
 import ParsedText from 'components/ParsedText'
 import styles from './styles.module.scss'
-
+import useInterval from 'utils/useInterval'
 
 const requestedUserQuery = `query messagesByUsername ($username: UsernameDomain!) {
   currentUser {
@@ -94,25 +94,7 @@ type Props = {
   username?: string | null
 }
 
-function useInterval(callback: Function, delay: number) {
-  const savedCallback = useRef<any>(null)
 
-  // Remember the latest callback.
-  useEffect(() => {
-    savedCallback.current = callback;
-  }, [callback]);
-
-  // Set up the interval.
-  useEffect(() => {
-    function tick() {
-      savedCallback.current();
-    }
-    if (delay !== null) {
-      let id = setInterval(tick, delay);
-      return () => clearInterval(id);
-    }
-  }, [delay]);
-}
 
 export default function MessagePanel ({ username }: Props) {
   const $sentMessages = useRef<any>(null)

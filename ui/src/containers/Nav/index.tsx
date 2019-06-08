@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import cx from 'classnames'
 import { useQuery, useMutation } from 'urql'
 import useResponsive from 'utils/useResponsive'
+import useInterval from 'utils/useInterval'
 
 
 import styles from './styles.module.scss'
@@ -74,7 +75,7 @@ export type State = {
 
 function Nav(props: Props) {
   const [dropdownState, setDropdownState] = useState<State['dropdownState']>(null)
-  const [{ data, fetching }] = useQuery<CurrentUserQuery>({ query: currentUserQuery })
+  const [{ data, fetching }, executeQuery] = useQuery<CurrentUserQuery>({ query: currentUserQuery })
   const [response, executeReadAlert] = useMutation<ReadAlertResponse, ReadAlertInput>(readAlertMutation) // eslint-disable-line
   const currentUser = (data && data.currentUser) || null
 
@@ -82,6 +83,11 @@ function Nav(props: Props) {
 
   const hideDropdown = () => setDropdownState(null)
   useEffect(() => props.history.listen(hideDropdown))
+  useInterval(() => {
+    if (!document.hidden) {
+      executeQuery({ requestPolicy: 'network-only' })
+    }
+  }, 10000)
 
   return (
     <nav className={cx(styles.container, 'solid')}>
