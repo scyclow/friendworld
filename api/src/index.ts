@@ -37,7 +37,11 @@ app.get('/health', (req, res) => {
 })
 
 app.get('/test', (req, res) => {
-  res.send(process.env.TEST)
+  res.send({
+    steve: {
+      jwt: process.env.TEST
+    }
+  })
 })
 
 // app.get('/test', async (req, res) => {

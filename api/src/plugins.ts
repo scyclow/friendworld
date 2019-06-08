@@ -14,12 +14,12 @@ import {
 
 export const createAutomatedPostPlugin = makeWrapResolversPlugin({
   Mutation: {
-    async createPost(resolve, source, args, context, resolveInfo: any) {
+    async createPost(resolve, source, args, context: any, resolveInfo: any) {
       const response = await resolve(source, args, context, resolveInfo)
       if (context.jwtClaims) {
-        sendAutomatedMessage(context.jwtClaims.user_id)
+        sendAutomatedMessage(context.jwtClaims.user_id, (q: string) => context.pgClient.query(q))
       }
-      createAutomatedPost(args.input, context.jwtClaims.user_id)
+      createAutomatedPost(args.input, context.jwtClaims.user_id, (q: string) => context.pgClient.query(q))
       return response
     }
   },
@@ -28,19 +28,23 @@ export const createAutomatedPostPlugin = makeWrapResolversPlugin({
 
 export const createMessageBotPlugin = makeWrapResolversPlugin({
   Mutation: {
-    async createMessage(resolve, source, args, context, resolveInfo: any) {
-      const response = await resolve(source, args, context, resolveInfo)
-      if (context.jwtClaims) {
-        sendBotMessage(args.input.toUsername, context.jwtClaims.user_id)
+    async createMessage(resolve, source, args, context: any, resolveInfo: any) {
+      try {
+        const response = await resolve(source, args, context, resolveInfo)
+        if (context.jwtClaims) {
+          await sendBotMessage(args.input.toUsername, context.jwtClaims.user_id, (q: string) => context.pgClient.query(q))
+        }
+        return response
+      } catch (e) {
+        console.log(e)
       }
-      return response
     }
   },
 })
 
 export const sendWelcomMessagePlugin = makeWrapResolversPlugin({
   Mutation: {
-    async signup(resolve, source, args, context, resolveInfo: any) {
+    async signup(resolve, source, args, context: any, resolveInfo: any) {
       const response = await resolve(source, args, context, resolveInfo)
       sendWelcomeMessage(args.input.username)
       return response

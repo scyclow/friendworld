@@ -1,16 +1,6 @@
 import { GraphQLClient } from 'graphql-request'
 import _ from 'lodash'
-import knex from 'knex'
 import config from './config'
-
-export const knexConnection = process.env.ENV === 'production'
-  ? { user: 'postgres', password: process.env.SQL_PASSWORD, database: 'postgres', host: `/cloudsql/friendworld:us-central1:paget` }
-  : { user: 'spikelny', database: 'friendworld' }
-
-const k = knex({
-  client: 'pg',
-  connection: knexConnection
-})
 
 function request(bot: keyof typeof bots, query: string, vars: { input: {} }) {
   const client = new GraphQLClient(config.HOST_URL, {
@@ -19,6 +9,9 @@ function request(bot: keyof typeof bots, query: string, vars: { input: {} }) {
     },
   })
   return client.request(query, vars)
+    .catch(e => {
+      console.log(e)
+    })
 }
 
 const createMessageMutation = `
@@ -183,9 +176,10 @@ const getTriggerededPost = (
 
 export async function createAutomatedPost (
   input: { threadId: string, content: string, tags: string, usernames: string},
-  authorUserId: string
+  authorUserId: string,
+  executeQuery: (q: string) => Promise<any>,
 ) {
-  const result = await k.raw(`select username from friendworld.users where id = '${authorUserId}';`)
+  const result = await executeQuery(`select username from friendworld.users where id = '${authorUserId}';`)
   if (!result.rows.length) return
   const authorUsername = result.rows[0].username
   const triggeredPost = getTriggerededPost(
@@ -219,16 +213,17 @@ async function createMessageHandler(
   username: keyof (typeof bots),
   senderId: string,
   messages: Array<{ content: string, followUp?: { content: string, wait: number }}>,
-  backupMessages?: Array<string>
+  backupMessages: Array<string>,
+  executeQuery: (q: string) => Promise<any>,
 ) {
   const botId = bots[username]
 
   try {
-    const result = await k.raw(`
+    const result = await executeQuery(`
       select username, count(*) as message_count
       from friendworld.messages
       left join friendworld.users on friendworld.users.id = friendworld.messages.from_id
-      where friendworld.messages.from_id = '${senderId}'and friendworld.messages.to_id = '${botId.uuid}'
+      where friendworld.messages.from_id = '${senderId}' and friendworld.messages.to_id = '${botId.uuid}'
       group by username;
     `)
 
@@ -260,20 +255,24 @@ async function createMessageHandler(
   }
 }
 
-export async function sendBotMessage (toUsername: string, fromId: string) {
+export async function sendBotMessage (
+    toUsername: string,
+    fromId: string,
+    executeQuery: (q: string) => Promise<any>
+  ) {
   setTimeout(() => {
     switch (toUsername.toLowerCase()) {
       case 'heatherhot6':
-        return createMessageHandler('heatherhot6', fromId, heatherHotMessages)
+        return createMessageHandler('heatherhot6', fromId, heatherHotMessages, [], executeQuery)
 
       case 'dumbotheclown':
-        return createMessageHandler('dumbotheclown', fromId, dumboMessages)
+        return createMessageHandler('dumbotheclown', fromId, dumboMessages, [], executeQuery)
 
       case 'fuckface99':
-        return createMessageHandler('fuckface99', fromId, fuckfaceMessages, fuckfaceBackupMessages)
+        return createMessageHandler('fuckface99', fromId, fuckfaceMessages, fuckfaceBackupMessages, executeQuery)
 
       case 'vinceslickson':
-        return createMessageHandler('vinceslickson', fromId, vinceSlicksonMessages)
+        return createMessageHandler('vinceslickson', fromId, vinceSlicksonMessages, [], executeQuery)
 
       default:
         console.log(toUsername)
@@ -282,9 +281,9 @@ export async function sendBotMessage (toUsername: string, fromId: string) {
   }, 200)
 }
 
-export async function sendAutomatedMessage (authorId: string) {
+export async function sendAutomatedMessage (authorId: string, executeQuery: (q: string) => Promise<any>) {
   try {
-    const result = await k.raw(`
+    const result = await executeQuery(`
       select username, count(*) as post_count
       from friendworld.posts
       join friendworld.users on users.id = '${authorId}'

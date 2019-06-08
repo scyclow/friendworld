@@ -30,13 +30,13 @@ const config = {
       database: 'postgres',
       host: `/cloudsql/friendworld:us-central1:paget`
     }
-    /* for connecting with the proxy:
-    ? {
-      password: process.env.SQL_PASSWORD,
-      user: 'postgres',
-      database: 'postgres',
-    }
-    */
+  // // for connecting with the proxy:
+    // DB_URL: {
+    //   password: process.env.SQL_PASSWORD,
+    //   user: 'postgres',
+    //   database: 'postgres',
+    // }
+
 }
 
 
@@ -52,7 +52,7 @@ export const pgConfig = {
   graphiql: isDev,
   enhanceGraphiql: isDev,
   watchPg: isDev,
-  disableQueryLog: !isDev,
+  disableQueryLog:false,// !isDev,
   additionalGraphQLContextFromRequest: async (req: any) => ({ req }),
 
   appendPlugins: [
