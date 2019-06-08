@@ -73,10 +73,11 @@ const Forum: React.SFC<{}> = () => {
   const [{ fetching, error, data }] = useQuery<ThreadQuery>({ query: threadQuery })
   const { ads, fetchingAds } = useAds(4)
   const showMobileAd = (i: number) => {
+    const adFreq = 4
     if (!isMobile) return false
-    if ((i + 1) % 6) return false
+    if ((i + 1) % adFreq) return false
 
-    const adIx = (((i + 1) / 6) - 1) % ads.length
+    const adIx = (((i + 1) / adFreq) - 1) % ads.length
 
     return (
       <div className={styles.adContainer}>

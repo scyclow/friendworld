@@ -1,5 +1,7 @@
 import React from 'react';
 import { useQuery } from 'urql'
+import { Link } from 'react-router-dom'
+
 import DisplayError from 'components/DisplayError'
 import Loading from 'components/Loading'
 import styles from './styles.module.scss'
@@ -57,7 +59,9 @@ function Stats() {
               {data.userStatsList.map((stat, i) => (
                 <tr key={i}>
                   <td>{i + 1}.</td>
-                  <td>{stat.username}</td>
+                  <td>
+                    <Link to={`/users/${stat.username}`}>{stat.username}</Link>
+                  </td>
                   <td>{stat.postCount}</td>
                 </tr>
               ))}
@@ -78,7 +82,9 @@ function Stats() {
               {data.userAdClicksList.map((stat, i) => (
                 <tr key={i}>
                   <td>{i + 1}.</td>
-                  <td>{stat.username}</td>
+                  <td>
+                    <Link to={`/users/${stat.username}`}>{stat.username}</Link>
+                  </td>
                   <td>{stat.adClicks}</td>
                 </tr>
               ))}

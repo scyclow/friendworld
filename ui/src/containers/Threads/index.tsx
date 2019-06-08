@@ -125,10 +125,6 @@ const Threads: React.SFC<{ id: number }> = ({ id }) => {
   )
   const { ads, fetchingAds } = useAds(4, { tags })
 
-  // const refetch = useCallback(
-  //   () => executeQuery({ requestPolicy: 'network-only' }),
-  //   []
-  // );
   const showMobileAd = (i: number) => {
     if (!isMobile) return false
     if ((i + 1) % 4) return false

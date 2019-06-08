@@ -33,10 +33,15 @@ function Signup() {
   const [username, setUsername] = useState<string>('')
   const [password, setPassword] = useState<string>('')
   const [passwordConfirm, setPasswordConfirm] = useState<string>('')
+  const [betaCode, setBetaCode] = useState<string>('')
   const [errorText, setErrorText] = useState<string>('')
   const [{ error, fetching, data }, executeSignup] = useMutation<SignupResponse, SignupInput>(signupMutation)
 
   const signup = () => {
+    if (betaCode !== 'beta') {
+      setErrorText('Incorrect beta code')
+      return
+    }
     if (!username || !password) {
       setErrorText('Must include username and password.')
       return
@@ -90,6 +95,13 @@ function Signup() {
               placeholder="Password Confirmation"
               value={passwordConfirm}
               onChange={(e) => setPasswordConfirm(e.target.value)}
+            />
+            <input
+              type="password"
+              name="beta_code"
+              placeholder="Beta Code"
+              value={betaCode}
+              onChange={(e) => setBetaCode(e.target.value)}
             />
           </div>
 
