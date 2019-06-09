@@ -10,7 +10,7 @@
     "start": "node ./build/index.js",
     "start:dev": "rm -rf ./dev/build && webpack --config ./webpack/webpack.dev.config.js",
     "build": "rm -rf ./build && webpack --config ./webpack/webpack.prod.config.js",
-    "deploy": "npm run build && (yes | gcloud app deploy)",
+    "deploy": "(yes | gcloud app deploy)",
     "proxy": "./cloud_sql_proxy -instances=friendworld:us-central1:paget=tcp:5432"
   },
   "author": "",

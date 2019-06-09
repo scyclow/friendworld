@@ -1,13 +1,15 @@
 import { GraphQLClient } from 'graphql-request'
 import _ from 'lodash'
 import config from './config'
+require('dotenv').config()
+
 
 function request(bot: keyof typeof bots, query: string, vars: { input: {} }) {
-  const client = new GraphQLClient(config.HOST_URL, {
-    headers: {
-      authorization: `Bearer ${bots[bot].jwt}`,
-    },
-  })
+  const headers = {
+    authorization: `Bearer ${bots[bot].jwt}`,
+  }
+
+  const client = new GraphQLClient(config.HOST_URL, { headers })
   return client.request(query, vars)
     .catch(e => {
       console.log(e)
