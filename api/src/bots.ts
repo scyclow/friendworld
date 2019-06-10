@@ -158,7 +158,7 @@ const getTriggerededPost = (
     chance: 0.9
   }
 
-  if (usernames.includes('vinceslickson')) return {
+  if (usernames.includes('vinceslickson') && authorUsername !== 'vinceslickson') return {
     content: `Haha, nice one. But seriously, if you ever want to make some *real* money, give me a shout.`,
     botName: 'vinceslickson',
     tags: ['money'],

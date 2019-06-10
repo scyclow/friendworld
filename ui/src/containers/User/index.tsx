@@ -153,6 +153,7 @@ const User: React.SFC<Props> = ({ username }) => {
           <InfoSection title="Birthday" info={user.birthday} />
           <InfoSection title="About Me" info={user.bio} />
           <InfoSection title="Occupation" info={user.job} />
+          <InfoSection title="Interests" info={user.interests} />
           <InfoSection title="Favorite Websites" info={user.websites} />
           <InfoSection title="Favorite Movies, TV shows, and Music" info={user.media} />
           <InfoSection title="Religious Views" info={user.religion} />
