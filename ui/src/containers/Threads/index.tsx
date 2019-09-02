@@ -2,6 +2,7 @@ import React, { Fragment } from 'react';
 import { useMutation, useQuery } from 'urql'
 import { Link } from 'react-router-dom'
 import cx from 'classnames'
+import flatMap from 'lodash/flatMap'
 import styles from './styles.module.scss'
 import AdContainer, { useAds } from '../AdContainer'
 import Post, { PostType } from 'components/Post'
@@ -120,7 +121,7 @@ const Threads: React.SFC<{ id: number }> = ({ id }) => {
 
   const tags = (
     !stickiedThreads.includes(id) && data && data.thread
-      ? data.thread.posts.flatMap(p => JSON.parse(p.tags))
+      ? flatMap(data.thread.posts, p => JSON.parse(p.tags))
       : []
   )
   const { ads, fetchingAds } = useAds(4, { tags })

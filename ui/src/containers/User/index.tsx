@@ -36,7 +36,7 @@ query userByUsername ($username: UsernameDomain!) {
     adClicks {
       totalCount
     }
-    posts: authoredPostsList (first: 10, orderBy: [CREATED_AT_DESC]) {
+    posts: authoredPostsList (orderBy: [CREATED_AT_DESC]) {
       id
       content
       createdAt

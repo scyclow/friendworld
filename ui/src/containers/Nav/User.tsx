@@ -13,14 +13,33 @@ const logout = () => {
   window.location.reload()
 }
 
+const getCurrentUser = () => {
+  try {
+    return JSON.parse(localStorage.__JWT__).__currentUser__
+  } catch (e) {
+    console.log(e)
+    return ''
+  }
+
+}
+
 export const UserDropdown: React.SFC<{}> = () => {
   const alternativeUsers = jwt.getInnactiveUserList()
+  const currentUser = getCurrentUser()
 
   return (
     <ul className={styles.userDropdown}>
-      <a href="#logout" onClick={logout}>
-        <li>Logout</li>
-      </a>
+      <Link to={`/users/${currentUser}`}>
+        <li>
+          <div>View Profile</div>
+        </li>
+      </Link>
+
+      <Link to="/profile">
+        <li>
+          <div>Update Profile</div>
+        </li>
+      </Link>
 
       <Link to="/messages">
         <li>
@@ -28,9 +47,13 @@ export const UserDropdown: React.SFC<{}> = () => {
         </li>
       </Link>
 
-      <Link to="/profile">
+      <a href="#logout" onClick={logout}>
+        <li>Logout</li>
+      </a>
+
+      <Link to="/login">
         <li>
-          <div>Update Profile</div>
+          <div>Login</div>
         </li>
       </Link>
 

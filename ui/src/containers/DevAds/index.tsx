@@ -24,7 +24,6 @@ const adQuery = `{
 
 function DevAds() {
   const [{ data, fetching, error }] = useQuery({ query: adQuery })
-  if (process.env.NODE_ENV !== 'development') return 'ads'
   if (error) return <DisplayError error={error} />
   if (fetching) return <Loading />
   if (!data) return 'no data'

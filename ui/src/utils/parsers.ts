@@ -2,7 +2,7 @@ import keywords, { gender } from './keywords'
 import intersection from 'lodash/intersection'
 
 const externalLinkTest = /^(http|https):\/\/.+\..+/
-const imageTest = /(\.jpg$)|(\.jpeg$)|(\.png$)|(\.gif$)|(\.svg$)/
+const imageTest = /\.(jpg|jpeg|png|PNG|gif|svg)$/
 const userTest = /^@.+/
 const hashtagTest = /^#.+/
 const postTest = /^\/posts\/.+/

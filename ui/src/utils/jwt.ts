@@ -76,6 +76,7 @@ const getTrackingToken = (): string => localStorage.getItem(TRACKING_TOKEN) || '
 
 export default {
   get,
+  getMapping,
   getCurrentUser,
   getInnactiveUserList,
   getTrackingToken,

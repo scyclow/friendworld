@@ -1,6 +1,6 @@
 insert into friendworld.ads (url, img, content, weight, target_tags, primary_tags, tags, is_generic) values
 
-, (
+  (
     'http://steviep.xyz'
   , 'https://www.consciouslifestylemag.com/wp-content/uploads/2016/04/chakra-diagram-in-the-body.jpg'
   , 'CLEANSE YOUR CHAKRAS WITH THESE 7 SOUND BATH TECHNIQUES'
@@ -62,38 +62,10 @@ insert into friendworld.ads (url, img, content, weight, target_tags, primary_tag
   , true
   )
 
-, (
-    ''
-  , 'https://i.pinimg.com/originals/fc/a3/18/fca31854ca2e944467184d58a381d8ec.jpg'
-  , 'YOUR BACK PAIN MIGHT NOT BE SO SIMPLE'
-  , 1
-  , '[]'
-  , '[]'
-  , '["back", "pain", "organ", "organs", "accupuncture", "intestine", "liver", "heart"]'
-  , true
-  )
 
-, (
-    'https://steviep.xyz#indigo'
-  , 'https://i.ytimg.com/vi/Bey3c8kVm7M/maxresdefault.jpg'
-  , 'ARE YOU AN INDIGO CHILD? FIND OUT NOW'
-  , 1
-  , '["woo"]'
-  , '[]'
-  , '["add", "indigo", "child", "children", "chakra", "special", "energy", "collective"]'
-  , true
-  )
 
-, (
-    'http://steviep.xyz'
-  , 'https://www.scienceabc.com/wp-content/uploads/2016/01/shutterstock_338992685.jpg'
-  , 'WHAT''S SO FUNNY?'
-  , 1
-  , '[]'
-  , '[]'
-  , '["funny", "laugh", "laughing", "lol", "haha"]'
-  , true
-  )
+
+
 , (
     'http://steviep.xyz#your-computer-is-infected'
   , 'https://i.ytimg.com/vi/-HE3jj5Ah2M/maxresdefault.jpg'
@@ -157,26 +129,7 @@ insert into friendworld.ads (url, img, content, weight, target_tags, primary_tag
   , '["sad", "depressed", "melencholy", "anxious", "anxiety", "depression", "anhedonia", "motivation", "happy", "mental", "brain", "suicide", "suicidal", "ocd", "obsessed", "scared", "fear", "emptiness", "cbd", "antidepressant"]'
   , true
   )
-, (
-    ''
-  , 'http://dailyvibes.co/wp-content/uploads/2018/03/shutterstock_336693212.jpg'
-  , 'YOU JUST READ MY MIND'
-  , 1
-  , '["female"]'
-  , '["telepathy"]'
-  , '["mind-control", "subliminal"]'
-  , false
-  )
-, (
-    ''
-  , 'http://tall-white-aliens.com/wp-content/uploads/2017/10/Human-to-Human-Telepathic-Communication.jpg'
-  , 'YOU JUST READ MY MIND'
-  , 1
-  , '["male"]'
-  , '["telepathy"]'
-  , '["mind-control", "subliminal"]'
-  , false
-  )
+
 
 , (
     'https://steviep.xyz/#7-steps'

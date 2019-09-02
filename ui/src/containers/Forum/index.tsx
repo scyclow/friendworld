@@ -18,6 +18,7 @@ const threadQuery = `{
   threads: threadsList (orderBy: [LATEST_POST_TIME_DESC]) {
     id
     title
+    hidden
     latestPostTime
     postStats: posts {
       totalCount
@@ -33,6 +34,7 @@ const threadQuery = `{
 type Thread = {
   id: number,
   title: string,
+  hidden: boolean
   latestPostTime: string,
   posts: Array<{ author: { username: string } }>
   postStats: {
@@ -71,7 +73,7 @@ const stickiedThreads = [1]
 const Forum: React.SFC<{}> = () => {
   const { isMobile, isDesktop } = useResponsive(540)
   const [{ fetching, error, data }] = useQuery<ThreadQuery>({ query: threadQuery })
-  const { ads, fetchingAds } = useAds(4)
+  const { ads, fetchingAds } = useAds(7)
   const showMobileAd = (i: number) => {
     const adFreq = 4
     if (!isMobile) return false
@@ -118,7 +120,9 @@ const Forum: React.SFC<{}> = () => {
             {partitioned[1].length && partitioned[1].map((thread, i) =>
               <React.Fragment key={thread.id}>
                 {showMobileAd(i)}
-                <ThreadPost thread={thread} />
+                {!thread.hidden &&
+                  <ThreadPost thread={thread} />
+                }
               </React.Fragment>
             )}
           </>
