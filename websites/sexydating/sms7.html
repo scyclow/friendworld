@@ -1,0 +1,330 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset='utf8'>
+  <meta name="HandheldFriendly" content="true">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+
+  <title>Secure Text Message</title>
+
+</head>
+
+<style>
+  * {
+    font-family: sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #fff;
+    box-sizing: border-box;
+  }
+
+
+  header {
+    text-align: center;
+    font-style: italic;
+    background-color: #e0e6f5;
+    font-family: "Georgia", serif;
+    border-bottom: 1px solid;
+    padding: 5px;
+  }
+
+  .content {
+    max-width: 600px;
+    margin: auto;
+    border: 2px solid;
+    height: 100vh;
+  }
+
+  #start {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: calc(100% - 32px);
+  }
+
+  #start span {
+    width: 200px;
+    text-align: center;
+    text-decoration: underline;
+    padding: 10px;
+    border: 1px dashed;
+  }
+
+  #chat {
+    overflow: scroll;
+    padding: 5px;
+    height: calc(100% - 32px);
+  }
+
+  .center {
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+  }
+
+  .continue {
+    font-size: 25px;
+    padding: 12px 24px;
+    border-radius: 4px;
+    display: inline-block;
+    text-decoration: none;
+    border: 1px solid #46b8da;
+    background-color: #5bc0de;
+    color: #fff;
+    text-align: center;
+  }
+
+  .time {
+    text-align: center;
+    font-style: italic;
+    margin-top: 10px;
+    margin-bottom: 5px;
+  }
+
+  .name {
+    font-weight: bold;
+    display: block;
+    margin-top: 10px;
+  }
+
+  .right {
+    text-align: right;
+  }
+
+  #listen-text, #read-text {
+    display: block;
+    margin: auto;
+    cursor: pointer;
+    margin-top: 15px;
+  }
+
+  img {
+    width: 300px;
+  }
+
+</style>
+
+<body>
+  <div class="content">
+    <header>Secure Message App</header>
+    <div id="start">
+      <div>
+        <span id="read-text">Text Mandy</span>
+        <span id="listen-text">Text Mandy with sound</span>
+      </div>
+    </div>
+
+    <div id="chat" style="display:none"></div>
+
+  </div>
+</body>
+
+<script>
+  let ix = 0;
+  let blocked = false
+  let cleared = false
+  const allMessages = [
+    { actor: `time`, wait: 1000, content: `Saturday 7:22pm` },
+    { actor: `You`, wait: 0, content: `You didn't show up!` },
+    { actor: `You`, wait: 0, content: `What the fuck?` },
+    { actor: `You`, wait: 0, content: `I'm so mad` },
+    { actor: `Mandy`, wait: 300, content: `You made me not to` },
+    { actor: `Mandy`, wait: 100, content: `I'm also mad at you` },
+    { actor: `time`, wait: 1000, content: `Sunday 5:05pm` },
+    { actor: `Mandy`, wait: 500, content: `Hey` },
+    { actor: `You`, wait: 500, content: `I don't want to talk to you` },
+    { actor: `Mandy`, wait: 500, content: `Ok!!` },
+    { actor: `Mandy`, wait: 500, content: `Bye` },
+    { actor: `time`, wait: 1000, content: `Friday 7:35am` },
+    { actor: `Mandy`, wait: 300, content: `Hey!!` },
+    { actor: `You`, wait: 300, content: `What do you want? I'm still mad at you!` },
+    { actor: `Mandy`, wait: 300, content: `Ok!!` },
+    { actor: `Mandy`, wait: 100, content: `What do you want me to do` },
+    { actor: `You`, wait: 1000, content: `Grab a drink with me` },
+    { actor: `You`, wait: 0, content: `Tonight!` },
+    { actor: `Mandy`, wait: 300, content: `Ok!!` },
+    { actor: `Mandy`, wait: 100, content: `I will have to fix a date` },
+    { actor: `You`, wait: 100, content: `Ok` },
+    { actor: `Mandy`, wait: 0, content: `Because I'm having some issues I'm solving with my bank` },
+    { actor: `Mandy`, wait: 0, content: `So you will have to bear with me` },
+    // { actor: `You`, wait: 300, content: `No problem :)`, voice: `No problem smile` },
+    { actor: `Mandy`, wait: 300, content: `Thanks for understanding me!!` },
+    { actor: `Mandy`, wait: 100, content: `I really appreciate 😘😘`, voice: `I really appreaciate kissy face kissy face` },
+    { actor: `Mandy`, wait: 100, content: `Can I see your picture?? Please` },
+    { actor: `You`, wait: 700, content: ``, img: './bodega.jpg' },
+    { actor: `Mandy`, wait: 300, content: `I've seen this before!!` },
+    { actor: `Mandy`, wait: 100, content: `I want new ones like recent one` },
+    { actor: `You`, wait: 300, content: `Sorry babe, I'm at work and can't be taking pictures` },
+    { actor: `You`, wait: 100, content: `Maybe we can take some pictures later together ;)`, voice: `Maybe we can take some pictures later together wink` },
+    { actor: `Mandy`, wait: 300, content: `Ok!!` },
+    { actor: `time`, wait: 500, content: `Friday 9:13pm` },
+    { actor: `You`, wait: 300, content: `Hey where are you??` },
+    { actor: `time`, wait: 500, content: `Saturday 5:02pm` },
+    { actor: `Mandy`, wait: 100, content: `In the bank` },
+    { actor: `You`, wait: 300, content: `What are you doing at the bank?` },
+    { actor: `Mandy`, wait: 300, content: `Thought I told you I have issues with my bank` },
+    { actor: `Mandy`, wait: 100, content: `I was told to transfer $20,000 or more` },
+    { actor: `Mandy`, wait: 0, content: `But I didn't so my account if frozen now!!` },
+    { actor: `You`, wait: 100, content: `Oh no! that sounds aweful!` },
+    { actor: `You`, wait: 100, content: `I'm so sorry` },
+    { actor: `You`, wait: 100, content: `Why did you have to withdraw so much?` },
+    { actor: `You`, wait: 100, content: `Which bank do you have?` },
+    { actor: `Mandy`, wait: 100, content: `Yes I didn't have any one I can transfer my money to that's why!!` },
+    { actor: `Mandy`, wait: 100, content: `Chase` },
+    { actor: `Mandy`, wait: 0, content: `And wast Fargo` },
+    { actor: `Mandy`, wait: 100, content: `My manager explained something to me that the money in my account is getting much` },
+    { actor: `Mandy`, wait: 0, content: `That I have to reduce it or it will get me into trouble!!` },
+    { actor: `You`, wait: 200, content: `That sounds bad` },
+    { actor: `You`, wait: 100, content: `What are you going to do??` },
+    { actor: `Mandy`, wait: 200, content: `I don't know` },
+    { actor: `Mandy`, wait: 0, content: `Will you help??` },
+    { actor: `You`, wait: 300, content: `Oh mandy, I don't know what to do with you! One second I think I know you and love you, and then you stand me up for our big date! And now you need my help. I don't know what to do` },
+    { actor: `Mandy`, wait: 1000, content: `Follow your heart` },
+    { actor: `Mandy`, wait: 800, content: `If you can help me I will be glad and happy` },
+    { actor: `Mandy`, wait: 300, content: `Then I will be chanced to reschedule our date` },
+    { actor: `You`, wait: 1000, content: `Ok` },
+    { actor: `You`, wait: 100, content: `How can I help?` },
+    { actor: `Mandy`, wait: 0, content: `Ok!` },
+    { actor: `Mandy`, wait: 0, content: `Do you have a bank!!` },
+    { actor: `You`, wait: 100, content: `I do!` },
+    { actor: `Mandy`, wait: 100, content: `Ok what's your bank name and account name` },
+    { actor: `You`, wait: 100, content: `I bank with chase` },
+    { actor: `Mandy`, wait: 1000, content: `Ok!!` },
+    { actor: `Mandy`, wait: 2000, content: `What's your account name?` },
+    { actor: `You`, wait: 300, content: `Jesus, calm the fuck down, Mandy!` },
+    { actor: `You`, wait: 0, content: `I'm getting the account name!` },
+    { actor: `You`, wait: 0, content: `You always rush me!` },
+    { actor: `Mandy`, wait: 100, content: `Sorry!!` },
+    { actor: `You`, wait: 300, content: `You know what? Forget it` },
+    { actor: `You`, wait: 0, content: `You haven't changed one bit` },
+    { actor: `Mandy`, wait: 300, content: `It's ok` },
+    { actor: `Mandy`, wait: 100, content: `That's my nature` },
+    { actor: `You`, wait: 200, content: `Don't think I don't know what you're going to spend that money on, either!` },
+    { actor: `You`, wait: 100, content: `You have a problem` },
+    { actor: `Mandy`, wait: 100, content: `I don't like someone to be delayed` },
+    { actor: `Mandy`, wait: 750, content: `What do you think I'm gonna spend the money on?` },
+    { actor: `You`, wait: 200, content: `Don't play coy` },
+    { actor: `You`, wait: 0, content: `I know you better than you think` },
+    { actor: `Mandy`, wait: 0, content: `I'm not darling` },
+    { actor: `You`, wait: 0, content: `It's always about money and gift cards with you` },
+    { actor: `You`, wait: 0, content: `And never about my needs and my wants` },
+    { actor: `Mandy`, wait: 0, content: `Lol that's not me!!!` },
+    { actor: `You`, wait: 0, content: `Don't lol at me` },
+    { actor: `You`, wait: 0, content: `I deserve better!` },
+    { actor: `Mandy`, wait: 1000, content: `That's was just a test but you failed it!!` },
+    { actor: `Mandy`, wait: 100, content: `I never wanted to tell you when I asked you to get me a voucher` },
+    { actor: `Mandy`, wait: 100, content: `It was to test your loyalty and love for me!!` },
+    { actor: `You`, wait: 500, content: `I'm sorry` },
+    { actor: `You`, wait: 500, content: `You're right` },
+    { actor: `You`, wait: 1000, content: `I love you Mandy` },
+  ]
+
+  const $start = document.getElementById('start')
+  const $read = document.getElementById('read-text')
+  const $listen = document.getElementById('listen-text')
+  const $chat = document.getElementById('chat')
+
+  $listen.addEventListener('click', () => {
+    $chat.style.display = 'inherit'
+    $start.style.display = 'none'
+    listenToMessages()
+  })
+
+  $read.addEventListener('click', () => {
+    $chat.style.display = 'inherit'
+    $start.style.display = 'none'
+    viewAllMessages()
+  })
+
+
+  function viewAllMessages() {
+    blocked = true
+    for (; ix < allMessages.length; ix++) {
+      const message = allMessages[ix]
+      renderMessage(message)
+    }
+  }
+
+  async function listenToMessages() {
+    const allVoices = await getVoices()
+    const voices = {
+      You: allVoices[17],
+      Mandy: allVoices[0], //0,46
+      time: allVoices[22]
+    }
+
+    const interval = setInterval(() => {
+      if (ix === allMessages.length) {
+        clearInterval(interval)
+        return
+      }
+      nextMessage(voices)
+    }, 50)
+  }
+
+  function getVoices() {
+    return new Promise(res => {
+      const interval = setInterval(() => {
+        const voices = window.speechSynthesis.getVoices()
+        if (voices.length) {
+          clearInterval(interval)
+          res(voices)
+        }
+      }, 100)
+    })
+  }
+
+  function scrollToBottom() {
+    $chat.scrollTop = $chat.scrollHeight
+  }
+
+  function renderMessage(msg) {
+    if (msg.actor === 'time') {
+      $chat.innerHTML += `<div class="time">${msg.content}</div>`
+    } else {
+      $chat.innerHTML += `<div><span class="name">${msg.actor}</span> ${msg.content}</div>`
+    }
+    if (msg.img) {
+      $chat.innerHTML += `<img src="${msg.img}">`
+    }
+  }
+
+  function nextMessage (voices) {
+    if (blocked || window.speechSynthesis.speaking) return
+
+    const nextMessage = allMessages[ix]
+
+    if (nextMessage.wait && !cleared) {
+      blocked = true
+      return setTimeout(() => {
+        blocked = false
+        cleared = true
+      }, nextMessage.wait)
+    }
+    cleared = false
+
+    const utterance = new window.SpeechSynthesisUtterance(nextMessage.voice || nextMessage.content);
+    if (nextMessage.actor === 'You') {
+      utterance.voice = voices.You
+    } else if (nextMessage.actor === 'Mandy') {
+      utterance.voice = voices.Mandy
+      utterance.pitch = 1.2
+    } else {
+      utterance.voice = voices.time
+    }
+
+    window.speechSynthesis.speak(utterance)
+
+    renderMessage(nextMessage)
+    scrollToBottom()
+
+    ix++
+    setTimeout(() => {
+      scrollToBottom()
+    }, 20)
+  }
+
+</script>
+</html>
+

@@ -1,0 +1,281 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset='utf8'>
+  <meta name="HandheldFriendly" content="true">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+
+  <title>Sexy Dating App Messages</title>
+
+</head>
+
+<style>
+  * {
+    font-family: sans-serif;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  body {
+    background-color: #edd;
+  }
+
+
+  header {
+    text-align: center;
+    font-style: italic;
+    background-color: #fef;
+    font-family: "Georgia", serif;
+    border-bottom: 1px solid;
+    padding: 5px;
+  }
+
+  .content {
+    max-width: 600px;
+    margin: auto;
+    border: 2px solid;
+    height: 100vh;
+    background-color: #fffdfd;
+  }
+
+  #start {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    height: calc(100% - 32px);
+  }
+
+  #start span {
+    width: 200px;
+    text-align: center;
+    text-decoration: underline;
+    padding: 10px;
+    border: 1px dashed;
+  }
+
+  #chat {
+    overflow: scroll;
+    padding: 5px;
+    height: calc(100% - 32px);
+  }
+
+  .center {
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+  }
+
+  .continue {
+    font-size: 25px;
+    padding: 12px 24px;
+    border-radius: 4px;
+    display: inline-block;
+    text-decoration: none;
+    border: 1px solid #46b8da;
+    background-color: #5bc0de;
+    color: #fff;
+    text-align: center;
+  }
+
+  .time {
+    text-align: center;
+    font-style: italic;
+    margin-top: 10px;
+    margin-bottom: 5px;
+  }
+
+  .name {
+    font-weight: bold;
+  }
+
+  #listen-text, #read-text {
+    display: block;
+    margin: auto;
+    margin-top: 15px;
+    cursor: pointer;
+  }
+
+  .matched {
+    margin-bottom: 15px;
+    text-align: center;
+  }
+
+</style>
+
+<body>
+  <div class="content">
+    <header>Sexy Dating App</header>
+    <div id="start">
+      <h2 class="matched">You've matched with Mandy Rose!</h2>
+      <div>
+        <span id="listen-text">Start conversation with audio</span>
+        <span id="read-text">Start conversation without audio</span>
+      </div>
+    </div>
+
+    <div id="chat" style="display:none"></div>
+
+  </div>
+</body>
+
+<script>
+  let ix = 0;
+  let blocked = false
+  let cleared = false
+  const allMessages = [
+    { actor: `time`, wait: 0, content: `Saturday 8:43pm` },
+    { actor: `You`, wait: 300, content: `Mandy Rose! You're my favorite!` },
+    { actor: `Mandy`, wait: 500, content: `Hi` },
+    { actor: `You`, wait: 500, content: `Hey, how's it going?` },
+    { actor: `You`, wait: 300, content: `Are you on the road at the moment, or back in NY?`, voice: `Are you on the road at the moment, or back in New York?`},
+    { actor: `Mandy`, wait: 300, content: `Back in NY`, voice: 'back in new york' },
+
+    { actor: `time`, wait: 2000, content: `Monday 12:18pm` },
+    { actor: `You`, wait: 300, content: `What do you like to do for fun?` },
+    { actor: `Mandy`, wait: 500, content: `Go out with my friends` },
+    { actor: `You`, wait: 1500, content: `Would you like to grab a drink sometime?` },
+
+    { actor: `time`, wait: 1000, content: `Tuesday 2:05am` },
+    { actor: `Mandy`, wait: 500, content: `So what are you up to?` },
+    { actor: `You`, wait: 300, content: `Not much, just went bowling with some friends and am about to go to sleep. How about you?` },
+    { actor: `Mandy`, wait: 200, content: `Hanging out at home` },
+    { actor: `You`, wait: 1000, content: `Do you want to grab a drink?` },
+    { actor: `time`, wait: 1000, content: `Tuesday 10:10am` },
+    { actor: `Mandy`, wait: 300, content: `Ok!!` },
+    { actor: `You`, wait: 300, content: `Great, how about Sunday?` },
+    { actor: `Mandy`, wait: 0, content: `No` },
+    { actor: `Mandy`, wait: 0, content: `Sunday is not good` },
+    { actor: `Mandy`, wait: 0, content: `Let's do Saturday` },
+    { actor: `You`, wait: 300, content: `Ok` },
+    { actor: `Mandy`, wait: 300, content: `Ok!!` },
+
+    { actor: `time`, wait: 500, content: `Thursday 3:25pm` },
+    { actor: `Mandy`, wait: 100, content: `Ok what is your number so I can call you` },
+    { actor: `You`, wait: 300, content: `I'm actually at work and might not be able to talk. Can you text me first?` },
+  ]
+
+  const $start = document.getElementById('start')
+  const $read = document.getElementById('read-text')
+  const $listen = document.getElementById('listen-text')
+  const $chat = document.getElementById('chat')
+
+  $listen.addEventListener('click', () => {
+    $chat.style.display = 'inherit'
+    $start.style.display = 'none'
+    listenToMessages()
+  })
+
+  $read.addEventListener('click', () => {
+    $chat.style.display = 'inherit'
+    $start.style.display = 'none'
+    viewAllMessages()
+  })
+
+
+  function viewAllMessages() {
+    blocked = true
+    for (; ix < allMessages.length; ix++) {
+      const message = allMessages[ix]
+      renderMessage(message)
+    }
+    renderNextButton()
+  }
+
+  async function listenToMessages() {
+    const allVoices = await getVoices()
+    const voices = {
+      You: allVoices[17],
+      Mandy: allVoices[0], //0,46
+      time: allVoices[22]
+    }
+
+    const interval = setInterval(() => {
+      if (ix === allMessages.length) {
+        clearInterval(interval)
+        setTimeout(() => {
+          renderNextButton()
+          scrollToBottom()
+        }, 1000)
+        return
+      }
+      nextMessage(voices)
+    }, 50)
+  }
+
+  function getVoices() {
+    return new Promise(res => {
+      const interval = setInterval(() => {
+        const voices = window.speechSynthesis.getVoices()
+        if (voices.length) {
+          clearInterval(interval)
+          res(voices)
+        }
+      }, 100)
+    })
+  }
+
+  function scrollToBottom() {
+    $chat.scrollTop = $chat.scrollHeight
+  }
+
+  function renderMessage(msg) {
+    if (msg.actor === 'time') {
+      $chat.innerHTML += `<div class="time">${msg.content}</div>`
+    } else {
+      $chat.innerHTML += `<div><span class="name">${msg.actor}:</span> ${msg.content}</div>`
+    }
+    if (msg.img) {
+      $chat.innerHTML += `<img src="${msg.img}">`
+    }
+  }
+
+  function renderNextButton() {
+    $chat.innerHTML += `
+      <div class="center">
+        <a class="continue" href="./sms1.html">Give Mandy Your Number</a>
+      </div>
+    `
+  }
+
+  function nextMessage (voices) {
+    if (blocked || window.speechSynthesis.speaking) return
+
+    const nextMessage = allMessages[ix]
+
+    if (nextMessage.wait && !cleared) {
+      blocked = true
+      return setTimeout(() => {
+        blocked = false
+        cleared = true
+      }, nextMessage.wait)
+    }
+    cleared = false
+
+    const utterance = new window.SpeechSynthesisUtterance(nextMessage.voice || nextMessage.content);
+    if (nextMessage.actor === 'You') {
+      utterance.voice = voices.You
+    } else if (nextMessage.actor === 'Mandy') {
+      utterance.voice = voices.Mandy
+      utterance.pitch = 1.2
+    } else {
+      utterance.voice = voices.time
+    }
+
+    window.speechSynthesis.speak(utterance)
+
+    renderMessage(nextMessage)
+    scrollToBottom()
+
+    ix++
+    setTimeout(() => {
+      scrollToBottom()
+    }, 20)
+  }
+
+
+</script>
+</html>
+

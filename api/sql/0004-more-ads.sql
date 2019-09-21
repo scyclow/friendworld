@@ -50,5 +50,14 @@ insert into friendworld.ads (url, img, content, weight, target_tags, primary_tag
   , '["back", "pain", "organ", "organs", "accupuncture", "intestine", "liver", "heart"]'
   , true
   )
-
+, (
+    'https://0ms.co/sexydating'
+  , 'https://vignette.wikia.nocookie.net/velesk-games/images/b/b1/Intro02_jpg.jpg/revision/latest?cb=20171008084733'
+  , 'FIND SEXY SINGLES IN YOUR AREA'
+  , 1
+  , '[]'
+  , '["sex", "wwe"]'
+  , '["sexy", "dating", "singles"]'
+  , true
+  )
 ;

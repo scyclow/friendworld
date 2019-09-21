@@ -141,16 +141,7 @@ insert into friendworld.ads (url, img, content, weight, target_tags, primary_tag
   , '["romance", "sex"]'
   , false
   )
-, (
-    'https://steviep.xyz/#sexy-singles'
-  , 'https://vignette.wikia.nocookie.net/velesk-games/images/b/b1/Intro02_jpg.jpg/revision/latest?cb=20171008084733'
-  , 'FIND SEXY SINGLES IN YOUR AREA'
-  , 1
-  , '["female"]'
-  , '["sex"]'
-  , '["sexy", "dating", "singles"]'
-  , false
-  )
+
 
 , (
     'https://steviep.xyz#virus'
