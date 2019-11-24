@@ -3,13 +3,13 @@ begin;
 -------------------
 -- reset
 -------------------
-drop schema friendworld cascade;
-drop schema friendworld_private cascade;
-drop domain username_domain;
--- drop domain tag_store;
-drop role friendworld_root;
-drop role friendworld_anonymous;
-drop role friendworld_user;
+-- drop schema friendworld cascade;
+-- drop schema friendworld_private cascade;
+-- drop domain username_domain;
+-- -- drop domain tag_store;
+-- drop role friendworld_root;
+-- drop role friendworld_anonymous;
+-- drop role friendworld_user;
 
 
 -------------------
