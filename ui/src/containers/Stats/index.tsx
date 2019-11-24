@@ -1,46 +1,12 @@
 import React from 'react';
-import { useQuery } from 'urql'
 import { Link } from 'react-router-dom'
 
-import DisplayError from 'components/DisplayError'
-import Loading from 'components/Loading'
 import styles from './styles.module.scss'
-
-
-const statsQuery = `{
-  userStatsList {
-    username
-    postCount
-  }
-  userAdClicksList {
-    username
-    adClicks
-  }
-}`
-
-type StatsQuery = {
-  userStatsList: Array<{
-    username: string
-    postCount: string
-  }>
-  userAdClicksList: Array<{
-    username: string
-    adClicks: string
-  }>
-}
+import usersData from 'data/users.json'
 
 
 
 function Stats() {
-  const [{ error, fetching, data }] = useQuery<StatsQuery>({ query: statsQuery })
-
-  if (error) {
-    debugger
-    return <DisplayError error={error} />
-  }
-  if (fetching) return <Loading />
-  if (!data) return null
-
   return (
     <section className={styles.stats}>
       <h1>User Stats</h1>
@@ -56,15 +22,18 @@ function Stats() {
               </tr>
             </thead>
             <tbody>
-              {data.userStatsList.map((stat, i) => (
-                <tr key={i}>
-                  <td>{i + 1}.</td>
-                  <td>
-                    <Link to={`/users/${stat.username}`}>{stat.username}</Link>
-                  </td>
-                  <td>{stat.postCount}</td>
-                </tr>
-              ))}
+              {usersData
+                .sort((a, b) => b.postStats.totalCount - a.postStats.totalCount)
+                .map((stat, i) => (
+                  <tr key={i}>
+                    <td>{i + 1}.</td>
+                    <td>
+                      <Link to={`/users/${stat.username}`}>{stat.username}</Link>
+                    </td>
+                    <td>{stat.postStats.totalCount}</td>
+                  </tr>
+                ))
+              }
             </tbody>
           </table>
         </div>
@@ -79,15 +48,18 @@ function Stats() {
               </tr>
             </thead>
             <tbody>
-              {data.userAdClicksList.map((stat, i) => (
-                <tr key={i}>
-                  <td>{i + 1}.</td>
-                  <td>
-                    <Link to={`/users/${stat.username}`}>{stat.username}</Link>
-                  </td>
-                  <td>{stat.adClicks}</td>
-                </tr>
-              ))}
+              {usersData
+                .sort((a, b) => b.adClicks.totalCount - a.adClicks.totalCount)
+                .map((stat, i) => (
+                  <tr key={i}>
+                    <td>{i + 1}.</td>
+                    <td>
+                      <Link to={`/users/${stat.username}`}>{stat.username}</Link>
+                    </td>
+                    <td>{stat.adClicks.totalCount}</td>
+                  </tr>
+                ))
+              }
             </tbody>
           </table>
         </div>

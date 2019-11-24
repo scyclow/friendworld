@@ -1,26 +1,8 @@
 import React, { useState } from 'react';
-import { useMutation } from 'urql'
 import jwt from 'utils/jwt'
 import DisplayError from 'components/DisplayError'
-import Loading from 'components/Loading'
 import styles from './styles.module.scss'
 
-const signupMutation = `
-mutation($input: SignupInput!) {
-  signup(input: $input) {
-    jwtToken
-  }
-}`
-
-
-type SignupInput = {
-  input: {
-    username: string,
-    password: string
-  }
-}
-
-type SignupResponse = { signup: { jwtToken: string }}
 
 type Props = {}
 
@@ -34,7 +16,6 @@ function Signup() {
   const [password, setPassword] = useState<string>('')
   const [passwordConfirm, setPasswordConfirm] = useState<string>('')
   const [errorText, setErrorText] = useState<string>('')
-  const [{ error, fetching, data }, executeSignup] = useMutation<SignupResponse, SignupInput>(signupMutation)
 
   const signup = () => {
     if (!username || !password) {
@@ -45,21 +26,12 @@ function Signup() {
       setErrorText('Password must match Password Confirmation')
       return
     }
-    executeSignup({ input: { username, password } })
-  }
 
-  const displayErrorText = error
-    ? error.message.includes('violates unique constraint')
-      ? 'That username is already taken. Please try again'
-      : error.message
-    : errorText
-      ? errorText
-      : ''
-
-  if (data && !error) {
-    jwt.set(username, data.signup.jwtToken)
-    jwt.setCurrentUser(username)
-    window.location.href = '/onboarding'
+    if (jwt.hasAccounts()) {
+      setErrorText('This device is not eligable to create a Friendworld account because previous accounts have violated the Friendworld terms of service')
+    } else {
+      setErrorText('This device is not eligable to create a Friendworld account')
+    }
   }
 
   return (
@@ -93,19 +65,16 @@ function Signup() {
             />
           </div>
 
-          {displayErrorText && <DisplayError error={displayErrorText} />}
-          {fetching && <Loading />}
-          {!fetching && (
-            <button
-              className={styles.submitButton}
-              onClick={(e) => {
-                e.preventDefault()
-                signup()
-              }}
-            >
-              Submit
-            </button>
-          )}
+          {errorText && <DisplayError error={errorText} />}
+          <button
+            className={styles.submitButton}
+            onClick={(e) => {
+              e.preventDefault()
+              signup()
+            }}
+          >
+            Submit
+          </button>
         </form>
       </div>
     </section>

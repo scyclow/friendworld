@@ -15,6 +15,11 @@ const getMapping = (): JwtMap => {
   return stored ? JSON.parse(stored) : { __currentUser__: '' }
 }
 
+const hasAccounts = (): boolean => {
+  const mapping = getMapping()
+  return Object.keys(mapping).length > 1
+}
+
 const get = (): string| void => {
   const mapping = getMapping()
   return mapping[mapping.__currentUser__]
@@ -83,5 +88,6 @@ export default {
   setTrackingToken,
   set,
   setCurrentUser,
-  clearCurrentUser
+  clearCurrentUser,
+  hasAccounts
 }

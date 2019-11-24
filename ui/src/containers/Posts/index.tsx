@@ -1,43 +1,14 @@
 import * as React from 'react';
-import { useQuery } from 'urql'
+import find from 'lodash/find'
 import { Link } from 'react-router-dom'
 import styles from './styles.module.scss'
-import Post, { PostType } from 'components/Post'
-import DisplayError from 'components/DisplayError'
-import Loading from 'components/Loading'
+import Post from 'components/Post'
 
-
-type PostQuery = {
-  post?: PostType
-}
-
-const queryType = process.env.NODE_ENV === 'production' ? 'post' : 'postById'
-
-const postQuery = `
-query ${queryType} ($id: Int!){
-  post: ${queryType} (id: $id) {
-    id
-    createdAt
-    content
-    author {
-      id
-      username
-      avatarUrl
-      postStats: authoredPosts {
-        totalCount
-      }
-    }
-    thread {
-      id
-      title
-    }
-  }
-}`
+import postData from 'data/posts.json'
 
 
 const Posts: React.SFC<{ id: number }> = ({ id }) => {
-  const [{ error, fetching, data }] = useQuery<PostQuery>({ query: postQuery, variables: { id } })
-
+  const post = find(postData, { id })
   return (
     <section>
       <div className={styles.back}>
@@ -45,13 +16,10 @@ const Posts: React.SFC<{ id: number }> = ({ id }) => {
       </div>
 
       <div className={styles.left}>
-        {error && <DisplayError error={error} />}
-        {fetching && <Loading />}
-        {data && (
-          data.post
-            ? <Post post={data.post}/>
-            : 'This post does not exist!'
-        )}
+        {post
+          ? <Post post={post}/>
+          : 'This post does not exist!'
+        }
       </div>
     </section>
 

@@ -3,23 +3,23 @@ import { Link } from 'react-router-dom'
 import cx from 'classnames'
 import ParsedText from '../ParsedText'
 import profanityFilter from 'utils/profanityFilter'
-import styles from './styles.module.scss';
+import styles from './styles.module.scss'
 
 
 export type PostType = {
-  id: string,
-  createdAt: string,
-  content: string,
+  id: number | string
+  createdAt: string
+  content: string
   author?: {
-    id: string,
+    id: string
     username: string
     avatarUrl?: string
     postStats?: {
       totalCount: number
     }
-  } | null,
+  } | null
   thread?: {
-    id: string,
+    id: number | string
     title: string
   }
 }

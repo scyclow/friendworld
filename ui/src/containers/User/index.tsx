@@ -1,90 +1,16 @@
 import React from 'react';
-import { useQuery } from 'urql'
+import find from 'lodash/find'
+import orderBy from 'lodash/orderBy'
 import styles from './styles.module.scss'
 import { Link } from 'react-router-dom'
 import Post from 'components/Post'
-import DisplayError from 'components/DisplayError'
 import ParsedText from 'components/ParsedText'
-import Loading from 'components/Loading'
 import useResponsive from 'utils/useResponsive'
 
+import adData from 'data/ads.json'
+import userData from 'data/users.json'
+import postData from 'data/posts.json'
 
-const userQuery = `
-query userByUsername ($username: UsernameDomain!) {
-  ads {
-    totalCount
-  }
-  user: userByUsername (username: $username) {
-    id
-    createdAt
-    username
-    avatarUrl
-    email
-    gender
-    birthday
-    bio
-    job
-    interests
-    websites
-    media
-    religion
-    politics
-    trackingInfo
-    postStats: authoredPosts {
-      totalCount
-    }
-    adClicks {
-      totalCount
-    }
-    posts: authoredPostsList (orderBy: [CREATED_AT_DESC]) {
-      id
-      content
-      createdAt
-      thread {
-        id
-        title
-      }
-    }
-  }
-}`
-
-type UserQuery = {
-  ads: {
-    totalCount: number
-  }
-  user: {
-    id: string
-    createdAt: string
-    username: string
-    avatarUrl: string | null
-    email: string | null
-    gender: string | null
-    birthday: string | null
-    bio: string | null
-    job: string | null
-    interests: string | null
-    websites: string | null
-    media: string | null
-    religion: string | null
-    politics: string | null
-    postStats: {
-      totalCount: number
-    }
-    adClicks: {
-      totalCount: number
-    }
-    posts: Array<{
-      id: string
-      content: string
-      createdAt: string
-      thread: {
-        id: string
-        title: string
-      }
-
-    }>
-  } | null
-}
 
 const InfoSection = ({ title, info }: { title: string, info: any }) => (
   info && (
@@ -110,18 +36,18 @@ const formatDate = (date: string) => new Date(date).toLocaleString('en-US', {
 })
 
 const User: React.SFC<Props> = ({ username }) => {
-  const [{ error, fetching, data }] = useQuery<UserQuery>({ query: userQuery, variables: { username } })
   const { isMobile, isDesktop } = useResponsive(540)
 
-  if (error) return <DisplayError error={error} />
-  if (fetching) return <Loading />
-  if (!data || !data.user) return (
+  const ads = { totalCount: adData.length }
+  const user = find(userData, { username })
+
+  if (!user) return (
     <div style={{ margin: '20px 0', textAlign: 'center' }}>
       {username} is not an active Friendworld user!
     </div>
   )
 
-  const { user, ads } = data
+  const userPosts = orderBy(postData.filter(post => post.author.id === user.id), 'createdAt', 'desc')
 
   const header = (
     <header className={styles.header}>
@@ -161,9 +87,9 @@ const User: React.SFC<Props> = ({ username }) => {
 
           </div>
           <div className={styles.recentPosts}>
-            {user.posts.length ? (<>
+            {userPosts.length ? (<>
               <h2>Recent posts by {user.username}:</h2>
-              {user.posts.map(post => (
+              {userPosts.map((post: any) => (
                 <div className={styles.postContainer} key={post.id}>
                   <Post post={post} />
                 </div>
