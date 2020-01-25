@@ -1,5 +1,21 @@
 [
   {
+    "id": 62,
+    "title": "Friendworld IN THE NEWS",
+    "hidden": false,
+    "latestPostTime": "2019-12-30T18:19:23.721596",
+    "postStats": {
+      "totalCount": 2
+    },
+    "posts": [
+      {
+        "author": {
+          "username": "steve"
+        }
+      }
+    ]
+  },
+  {
     "id": 2,
     "title": "The \"what are you doin right now\" thread",
     "hidden": false,
