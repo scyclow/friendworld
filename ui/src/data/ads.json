@@ -759,7 +759,50 @@
     "tags": "[\"ti\", \"targeted\", \"individual\", \"target\", \"targeting\", \"tracking\", \"conspiracy\", \"nuclear\", \"drone\", \"5g\", \"radiation\", \"alien\", \"aliens\", \"ufo\", \"ufos\", \"roswell\", \"brain\", \"mind-control\", \"chemtrails\", \"tracking\"]",
     "isGeneric": false
   }
-
+, {
+    "id": "16",
+    "url": "https://ronamerch.co",
+    "img": "https://ronamerch.co/images/ronamerch-mask-0.jpeg",
+    "content": "HOTTEST RONA MERCH ON THE WEB",
+    "weight": 1,
+    "targetTags": "[]",
+    "primaryTags": "[]",
+    "tags": "[\"mask\", \"face\"]",
+    "isGeneric": true
+  }
+, {
+    "id": "17",
+    "url": "https://ronamerch.co/hoax",
+    "img": "https://ronamerch.co/images/hoax-1.jpeg",
+    "content": "DONT LEAVE HOME WITHOUT IT",
+    "weight": 1,
+    "targetTags": "[]",
+    "primaryTags": "[]",
+    "tags": "[\"mask\", \"face\"]",
+    "isGeneric": true
+  }
+, {
+    "id": "18",
+    "url": "https://ronamerch.co/items/usa",
+    "img": "https://ronamerch.co/images/usa-1.jpeg",
+    "content": "REAL AMERICANS WEAR FACE MASKS",
+    "weight": 1,
+    "targetTags": "[]",
+    "primaryTags": "[]",
+    "tags": "[\"mask\", \"face\", \"USA\"]",
+    "isGeneric": true
+  }
+, {
+    "id": "19",
+    "url": "https://ronamerch.co/items/5g-bad",
+    "img": "https://ronamerch.co/images/5g-bad.jpeg",
+    "content": "GET 5G PROTECTED NOW",
+    "weight": 1,
+    "targetTags": "[]",
+    "primaryTags": "[]",
+    "tags": "[\"mask\", \"face\", \"5g\"]",
+    "isGeneric": true
+  }
 
 
 
@@ -889,8 +932,6 @@
     "tags": "[\"safe\", \"safety\", \"virus\", \"spyware\", \"malware\", \"security\"]",
     "isGeneric": true
   }
-
-
 
 
 ]
