@@ -6,7 +6,7 @@ function DevAds() {
   return (
     <div>
       <h1>Total Ads: {adData.length}</h1>
-      {adData.filter(ad => ad.dev).map((ad: any) =>
+      {adData.map((ad: any) =>
         <div key={ad.id} style={{ border: '1px solid', padding: '5px', margin: '10px' }}>
           <div style={{ maxWidth: '400px' }}>
             <Ad {...ad} />
