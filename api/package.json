@@ -25,7 +25,7 @@
     "express": "^4.16.4",
     "graphile-utils": "^4.3.1",
     "graphql-request": "^1.8.2",
-    "knex": "^0.16.3",
+    "knex": "^2.4.0",
     "lodash": "^4.17.11",
     "morgan": "^1.9.1",
     "postgraphile": "^4.4.1"
