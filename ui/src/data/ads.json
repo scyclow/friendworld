@@ -60,7 +60,7 @@
     "img": "/images/plastic-surgery.jpg",
     "content": "ARE YOU UGLY?",
     "tags": "[\"surgery\",\"plastic\"]",
-    "isGeneric": false,
+    "isGeneric": true,
     "weight": 1,
     "targetTags": "[\"female\"]",
     "primaryTags": "[\"beauty\",\"ugly\"]"
@@ -71,7 +71,7 @@
     "img": "https://cdn.images.express.co.uk/img/dynamic/11/590x/Worms-in-humans-845437.jpg",
     "content": "CONSTIPATED??",
     "tags": "[\"shit\",\"poop\",\"poo\",\"intestine\"]",
-    "isGeneric": false,
+    "isGeneric": true,
     "weight": 1,
     "targetTags": "[]",
     "primaryTags": "[\"constipated\",\"constipation\",\"constipate\"]"
@@ -93,7 +93,7 @@
     "img": "https://tall-white-aliens.com/wp-content/uploads/2017/10/Human-to-Human-Telepathic-Communication.jpg",
     "content": "YOU JUST READ MY MIND",
     "tags": "[\"mind-control\",\"subliminal\"]",
-    "isGeneric": false,
+    "isGeneric": true,
     "weight": 1,
     "targetTags": "[\"male\"]",
     "primaryTags": "[\"telepathy\"]"
@@ -148,7 +148,7 @@
     "img": "https://web.archive.org/web/20250928071004if_/https://www.theblackvault.com/documentarchive/wp-content/uploads/2015/02/Mind-Control-731x411.jpg",
     "content": "VOICE GOD WEAPONIZED MIND CONTROL FREQUENCY TECHNOLOGY",
     "tags": "[\"5g\",\"internet\",\"addiction\",\"mind\",\"control\",\"towers\",\"smartphone\",\"digital\",\"thoughts\",\"ti\",\"targeted\"]",
-    "isGeneric": false,
+    "isGeneric": true,
     "weight": 1,
     "targetTags": "[]",
     "primaryTags": "[\"weaponized\"]"
@@ -159,7 +159,7 @@
     "img": "https://www.crystalinks.com/binarycodebrain350.jpg",
     "content": "REALITY MAY NOT BE WHAT YOU THINK! CLICK HERE TO FIND OUT",
     "tags": "[\"reality\",\"digital\",\"consciousness\",\"brain\",\"hologram\",\"simulation\",\"illusion\",\"dream\",\"numbers\",\"numeric\",\"dna\",\"information\"]",
-    "isGeneric": false,
+    "isGeneric": true,
     "weight": 1,
     "targetTags": "[]",
     "primaryTags": "[]"
@@ -170,7 +170,7 @@
     "img": "/images/5g-virus.jpg",
     "content": "5G AND THE COMING PLAGUE TO CONSUME HUMANITY",
     "tags": "[\"illuminati\",\"5g\",\"holocaust\",\"internet-of-things\",\"iot\",\"vr\",\"virtual\",\"reality\",\"individuality\"]",
-    "isGeneric": false,
+    "isGeneric": true,
     "weight": 1,
     "targetTags": "[]",
     "primaryTags": "[]"
@@ -203,7 +203,7 @@
     "img": "https://iedunote.com/img/10964/what-is-transactions-types-of-accounting-transactions.jpg",
     "content": "WE WILL HELP YOU SELL YOUR PRODUCT",
     "tags": "[\"sponsored\",\"marketing\",\"sales\",\"optimization\"]",
-    "isGeneric": false,
+    "isGeneric": true,
     "weight": 1,
     "targetTags": "[]",
     "primaryTags": "[\"ad\",\"ads\",\"advertisement\",\"advertisements\"]"
@@ -269,7 +269,7 @@
     "img": "/images/nonwo.jpg",
     "content": "",
     "tags": "[\"new\",\"world\",\"order\",\"deep\",\"state\",\"politics\",\"corruption\",\"ti\",\"targeted\",\"illuminati\"]",
-    "isGeneric": false,
+    "isGeneric": true,
     "weight": 1,
     "targetTags": "[\"politics\"]",
     "primaryTags": "[\"nwo\",\"illuminati\"]"
@@ -302,7 +302,7 @@
     "img": "https://3.bp.blogspot.com/-SWo3Fi7Kb5I/Ue9EP7ITfJI/AAAAAAAAD6A/5xacI3uWLLQ/s1600/h9991572_001.jpg",
     "content": "PREVENT UGLY HAIR LOSS NOW",
     "tags": "[\"male\",\"man\",\"testosterone\",\"hair\",\"loss\",\"bald\",\"balding\"]",
-    "isGeneric": false,
+    "isGeneric": true,
     "weight": 1,
     "targetTags": "[\"male\",\"man\"]",
     "primaryTags": "[]"
@@ -313,7 +313,7 @@
     "img": "https://images-na.ssl-images-amazon.com/images/I/51HvZ2-sqGL._SX348_BO1,204,203,200_.jpg",
     "content": "The Freemasonry (666) Universal Emperor for 42 Months: 666, 999, Miracle Hell, Genesis, Symbol of Freemasonry",
     "tags": "[\"universal\",\"emperor\",\"42\",\"genesis\"]",
-    "isGeneric": false,
+    "isGeneric": true,
     "weight": 1,
     "targetTags": "[]",
     "primaryTags": "[\"freemasonry\",\"666\"]"
@@ -324,7 +324,7 @@
     "img": "https://i.pinimg.com/originals/fb/99/31/fb9931fc50a7e72fc9a708e960db3935.jpg",
     "content": "WATCH FAT DRIP OFF YOUR BODY LIKE A FAT MELTING FURNACE",
     "tags": "[\"fat\",\"skinny\",\"pepper\",\"hot\",\"furnace\",\"drip\"]",
-    "isGeneric": false,
+    "isGeneric": true,
     "weight": 1,
     "targetTags": "[\"man\",\"male\"]",
     "primaryTags": "[]"
@@ -412,7 +412,7 @@
     "img": "https://www.radiationdangers.com/wp-content/uploads/2018/08/Screen-Shot-2018-08-12-at-1.41.56-PM-768x453.png",
     "content": "HOW BIG TECH IS CONTROLLING YOU",
     "tags": "[\"5g\",\"internet\",\"addiction\",\"mind\",\"control\",\"towers\",\"smartphone\"]",
-    "isGeneric": false,
+    "isGeneric": true,
     "weight": 1,
     "targetTags": "[]",
     "primaryTags": "[\"5g\",\"addiction\"]"
@@ -434,7 +434,7 @@
     "img": "https://media1.s-nbcnews.com/i/streams/2012/August/120827/504274-g-tdy-091221-belly-2p.jpg",
     "content": "WATCH FAT DRIP OFF YOUR BODY LIKE A FAT MELTING FURNACE",
     "tags": "[\"fat\",\"skinny\",\"pepper\",\"hot\",\"furnace\",\"drip\"]",
-    "isGeneric": false,
+    "isGeneric": true,
     "weight": 1,
     "targetTags": "[\"male\"]",
     "primaryTags": "[]"
@@ -456,7 +456,7 @@
     "img": "https://upload.wikimedia.org/wikipedia/commons/d/d1/IAO-logo.png",
     "content": "DARPA MIND CONTROL SECRET DOCUMENT LEAKED",
     "tags": "[\"mind\",\"control\",\"5g\",\"ti\",\"targeted\",\"individual\"]",
-    "isGeneric": false,
+    "isGeneric": true,
     "weight": 1,
     "targetTags": "[]",
     "primaryTags": "[\"darpa\"]"
@@ -489,7 +489,7 @@
     "img": "https://st2.depositphotos.com/1345122/5547/i/950/depositphotos_55471531-stock-photo-female-large-intestine-anatomy.jpg",
     "content": "\"TOP DRs RECCOMEND THIS ONE DRUG TO COMPLETELY FLUSH YOUR BOWELS\"",
     "tags": "[\"doctor\",\"bowels\",\"shit\",\"poop\",\"constipated\",\"intestine\"]",
-    "isGeneric": false,
+    "isGeneric": true,
     "weight": 1,
     "targetTags": "[\"woman\",\"female\",\"girl\"]",
     "primaryTags": "[]"
@@ -533,7 +533,7 @@
     "img": "https://www.wanttoknow.info/mk/nsa-images/scalartech12_03.gif",
     "content": "YOU'VE NEVER SEEN COGNITIVE MAPPING KNOWLEDGE-PROCESSING LIKE THIS",
     "tags": "[\"radio\",\"transmission\",\"mind\",\"control\",\"nsa\",\"microwave\",\"frequency\",\"ti\",\"targeted\"]",
-    "isGeneric": false,
+    "isGeneric": true,
     "weight": 1,
     "targetTags": "[]",
     "primaryTags": "[\"cognitive\",\"knowledge\",\"processing\"]"
@@ -577,7 +577,7 @@
     "img": "https://web.archive.org/web/20250928070954if_/http://dailyvibes.co/wp-content/uploads/2018/03/shutterstock_336693212.jpg",
     "content": "YOU JUST READ MY MIND",
     "tags": "[\"mind-control\",\"subliminal\"]",
-    "isGeneric": false,
+    "isGeneric": true,
     "weight": 1,
     "targetTags": "[\"female\"]",
     "primaryTags": "[\"telepathy\"]"
@@ -654,7 +654,7 @@
     "img": "https://web.archive.org/web/20190301090555if_/http://d1nnx3nhddxmeh.cloudfront.net/wp-content/uploads/2018/05/01122237/Overweight-Problems-Heres-How-to-Reset-Your-Melt-Fat-Hormones.jpg",
     "content": "GET THAT BIKINI BODY FAST",
     "tags": "[\"fat\",\"skinny\",\"pepper\",\"hot\",\"furnace\",\"drip\"]",
-    "isGeneric": false,
+    "isGeneric": true,
     "weight": 1,
     "targetTags": "[\"woman\",\"female\"]",
     "primaryTags": "[]"
@@ -757,7 +757,7 @@
     "targetTags": "[]",
     "primaryTags": "[]",
     "tags": "[\"ti\", \"targeted\", \"individual\", \"target\", \"targeting\", \"tracking\", \"conspiracy\", \"nuclear\", \"drone\", \"5g\", \"radiation\", \"alien\", \"aliens\", \"ufo\", \"ufos\", \"roswell\", \"brain\", \"mind-control\", \"chemtrails\", \"tracking\"]",
-    "isGeneric": false
+    "isGeneric": true
   }
 , {
     "id": "16",
@@ -843,6 +843,18 @@
     "isGeneric": true
   }
 
+, {
+    "id": "23",
+    "url": "https://dopaminemachines.website",
+    "img": "https://i2c.seadn.io/ethereum/3eb656631b203f8aa1c91ce01e47504a/2f22e77ca412c209d42d9bb1eb8c15/d22f22e77ca412c209d42d9bb1eb8c15.gif",
+    "content": "BUY THIS NFT AND WATCH IT MOON",
+    "weight": 1,
+    "targetTags": "[]",
+    "primaryTags": "[]",
+    "tags": "[\"dopamine\", \"nft\"]",
+    "isGeneric": true
+  }
+
 
 
 
@@ -864,7 +876,7 @@
     "targetTags": "[]",
     "primaryTags": "[]",
     "tags": "[\"sad\", \"depressed\", \"melencholy\", \"anxious\", \"anxiety\", \"depression\", \"anhedonia\", \"motivation\", \"happy\", \"mental\", \"brain\", \"suicide\", \"suicidal\", \"ocd\", \"obsessed\", \"scared\", \"fear\", \"emptiness\", \"cbd\", \"antidepressant\"]",
-    "isGeneric": true
+    "isGeneric": false
   }
 
 , {
@@ -877,7 +889,7 @@
     "targetTags": "[]",
     "primaryTags": "[]",
     "tags": "[\"brain\", \"remember\", \"forget\", \"forgetting\"]",
-    "isGeneric": true
+    "isGeneric": false
   }
 , {
     "id": "7",
@@ -889,7 +901,7 @@
     "targetTags": "[]",
     "primaryTags": "[]",
     "tags": "[\"kitty\", \"kitten\", \"cat\", \"meow\", \"laugh\", \"happy\", \"virus\", \"infected\", \"scared\"]",
-    "isGeneric": true
+    "isGeneric": false
   }
 
 , {
@@ -902,7 +914,7 @@
     "targetTags": "[]",
     "primaryTags": "[\"octopus\"]",
     "tags": "[]",
-    "isGeneric": true
+    "isGeneric": false
   }
 
 , {
@@ -915,7 +927,7 @@
     "targetTags": "[]",
     "primaryTags": "[]",
     "tags": "[\"fear\", \"anxiety\", \"scared\"]",
-    "isGeneric": true
+    "isGeneric": false
   }
 , {
     "id": "10",
@@ -927,7 +939,7 @@
     "targetTags": "[]",
     "primaryTags": "[\"parasite\", \"parasites\", \"surgery\"]",
     "tags": "[]",
-    "isGeneric": true
+    "isGeneric": false
   }
 , {
     "id": "11",
@@ -939,7 +951,7 @@
     "targetTags": "[]",
     "primaryTags": "[\"stimulation\", \"electrode\", \"dbs\"]",
     "tags": "[\"deep\", \"brain\", \"therapy\", \"depressed\", \"depression\", \"targeted\", \"scanners\", \"scanner\", \"tracker\", \"target\", \"targeted\", \"individual\", \"ti\"]",
-    "isGeneric": true
+    "isGeneric": false
   }
 
 , {
@@ -966,12 +978,11 @@
     "targetTags": "[]",
     "primaryTags": "[]",
     "tags": "[\"safe\", \"safety\", \"virus\", \"spyware\", \"malware\", \"security\"]",
-    "isGeneric": true
+    "isGeneric": false
   }
 
 , {
     "id": "150",
-    "dev": true,
     "url": "https://steviep.xyz/momi-activation/upgrade",
     "img": "https://storage.googleapis.com/clio-images/medium_4322_muppets-museum-of-moving-image.jpg",
     "content": "VISIT THE MUSEUM OF THE MOVING IMAGE",

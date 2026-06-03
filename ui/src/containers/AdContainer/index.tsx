@@ -52,7 +52,7 @@ function filterAds(
 
   const remainingAds = [
     ...targetAds,
-    ...allAds.filter(ad => !taggedAds.includes(ad))
+    ...allAds.filter(ad => !taggedAds.includes(ad) && ad.isGeneric)
   ]
 
   return [...taggedAds, ...sampleSize(remainingAds, n - taggedAds.length)]
